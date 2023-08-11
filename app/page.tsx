@@ -1,10 +1,11 @@
 import Image from "next/image";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="w-full h-full flex-grow bg-red-500">
 
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-6 sm:p-6 md:p-8">
+      <div className="w-full h-full flex-grow bg-red-500">
 
       </div>
 
