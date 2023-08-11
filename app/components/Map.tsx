@@ -5,7 +5,8 @@ import {
   useJsApiLoader,
   useLoadScript,
 } from "@react-google-maps/api";
-import { useMemo } from "react";
+import { useEffect } from "react";
+import { fetchAirtableRecords } from "./airtable-helper";
 
 export function MapComponent() {
   const { isLoaded, loadError } = useLoadScript({
@@ -29,16 +30,22 @@ const center = {
 };
 
 function Map() {
-
   // const center = useMemo(() => {center}, [])
-  const mapStyles = {width: '100%', height: '10vh'}
+  const mapStyles = { width: "100%", height: "10vh" };
+
+  useEffect(() => {
+
+    fetchAirtableRecords()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
+    .finally(() => console.log("finally"))
+
+    
+
+  }, []);
 
   return (
-    <GoogleMap 
-    zoom={10} 
-    center={center} 
-    mapContainerClassName='map-container'
-    >
+    <GoogleMap zoom={10} center={center} mapContainerClassName="map-container">
       <Marker position={center} />
     </GoogleMap>
   );
