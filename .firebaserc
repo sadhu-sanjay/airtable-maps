@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "dev1-5b71c"
+  },
+  "targets": {
+    "dev1-5b71c": {
+      "hosting": {
+        "airtable-maps": [
+          "airtable-maps"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

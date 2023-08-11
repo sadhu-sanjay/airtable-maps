@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "out",
+    "target": "airtable-maps",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
