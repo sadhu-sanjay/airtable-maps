@@ -17,11 +17,11 @@ export async function fetchAirtableRecords() {
         },
         body: JSON.stringify({
             // fields: ["name", "address", "lat", "lng", "phone", "website"],
-            fields: ["name"],
-            // view: "Grid view",
-            // filterByFormula: "",
-            // sort: [{ field: "name", direction: "asc" }],
-            // pageSize: 100, 
+            fields: ["name", "lat", "lng", "category"],
+            view: "All Records",
+            filterByFormula: "",
+            sort: [{ field: "name", direction: "asc" }],
+            pageSize: 100, 
         }),
     })
 
