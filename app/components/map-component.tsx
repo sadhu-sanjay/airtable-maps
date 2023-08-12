@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { fetchAirtableRecords } from "./airtable-helper";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MAPS_API_KEY } from "~/app/config";
@@ -23,33 +23,43 @@ export function MapComponent() {
         {/* { selectedRecord && selectedRecord.id } */}
         <List records={records} setSelected={setSelectedRecord} />
         <Wrapper apiKey={MAPS_API_KEY} render={render}>
-          {/* <MyMap  /> */}
-          <Spinner />
+          <MyMap {...mapOptions}  />
         </Wrapper>
       </div>
     </div>
   );
 }
+const mapOptions = {
+  center: { lat: -34.397, lng: 150.644 },
+  zoom: 8,
+};
 
-function MyMap() {
-  const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({
-    lat: -34.397,
-    lng: 150.644,
-  });
+function MyMap({
+  center,
+  zoom,
+}: {
+  center: google.maps.LatLngLiteral;
+  zoom: number;
+}) {
+  const [map, setMap] = useState<google.maps.Map>();
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (map) {
-      // map.setOptions({
-      //   center: center,
-      //   zoom: 8,
-      // });
-      // map.setCenter(center);
-      // map.setZoom(8);
+    if (ref.current) {
+      setMap(
+        new window.google.maps.Map(ref.current, {
+          center,
+          zoom,
+        })
+      );
     }
-  }, [map]);
+  }, []);
 
-  return <div>My Map</div>;
+  return (
+    <>
+      <div ref={ref} className="w-full h-[96dvh] overflow-y-scroll " />;
+    </>
+  );
 }
 
 const render = (status: Status) => {
@@ -59,7 +69,7 @@ const render = (status: Status) => {
     case Status.FAILURE:
       return <div>Error Loading Div</div>;
     case Status.SUCCESS:
-      return <MyMap />;
+      return <MyMap {...mapOptions} />;
   }
 };
 
