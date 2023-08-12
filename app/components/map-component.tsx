@@ -42,13 +42,6 @@ export function MapComponent() {
   };
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-  const filteredRecords = records.filter((record) =>
-    record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   useEffect(() => {
     fetchAirtableRecords().then((res) => setRecords(res.records));
@@ -61,7 +54,7 @@ export function MapComponent() {
      bg-blue-100 shadow-sm rounded-md border "
       >
         {/* { selectedRecord && selectedRecord.id } */}
-        <List setSelectedRecord={setSelectedRecord} records={filteredRecords} />
+        <List setSelectedRecord={setSelectedRecord} records={records} />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -160,23 +153,60 @@ function List({
   records: Record[];
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("");
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCategory(event.target.value);
+  };
+  const filteredRecords = records.filter(
+    (record) =>
+      record.fields.category.includes(category) &&
+      record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="relative sm:w-[40%] w-full  ">
       <div className=" z-20 p-6 gap-2 shadow-sm bg-slate-50 flex flex-col items-stretch justify-between">
-        <h1 className="text-2xl font-bold">Airtable Records</h1>
-        <div className="flex items-center justify-between">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-[100%] p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            // onChange={handleSearchChange}
-          />
+        <h1 className="text-lg font-bold">Airtable Records</h1>
+        <div className="gap-2 flex items-center justify-between">
+          <div className="flex ">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-[100%] p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={handleSearchChange}
+            />
+          </div>
+          <select
+            value={category}
+            onChange={handleCategoryChange}
+            id="countries"
+            className=" bg-gray-50 w-1/2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="">All Categories</option>
+            <option value="Hiking">Hiking</option>
+            <option value="University">University</option>
+            <option value="Restaurant">Restaurant</option>
+          </select>
         </div>
       </div>
 
+      {/* <label
+        htmlFor="countries"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Select an option
+      </label> */}
+
       {records.length > 0 ? (
         <ul className="overflow-y-scroll h-[80dvh] p-4">
-          {records.map((record) => (
+          {filteredRecords.map((record) => (
             <li
               key={record.id}
               onClick={() => setSelectedRecord(record)}
