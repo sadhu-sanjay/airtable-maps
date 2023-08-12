@@ -1,10 +1,27 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { fetchAirtableRecords } from "./airtable-helper";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MAPS_API_KEY } from "~/app/config";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
+interface Record {
+  id: string;
+  fields: {
+    lat: number;
+    lng: number;
+    name: string;
+    category: string;
+  };
+  // Include other fields as needed
+}
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -14,11 +31,17 @@ export function MapComponent() {
       case Status.FAILURE:
         return <div>Error Loading Div</div>;
       case Status.SUCCESS:
-        return <MyMap {...mapOptions} records={records} />;
+        return (
+          <MyMap
+            {...mapOptions}
+            records={records}
+            selectedRecord={selectedRecord}
+          />
+        );
     }
   };
-  const [records, setRecords] = useState<any[]>([]);
-  const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [records, setRecords] = useState<Record[]>([]);
+  const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
 
   useEffect(() => {
     fetchAirtableRecords().then((res) => setRecords(res.records));
@@ -31,7 +54,7 @@ export function MapComponent() {
      bg-blue-100 shadow-sm rounded-md border "
       >
         {/* { selectedRecord && selectedRecord.id } */}
-        <List records={records} setSelected={setSelectedRecord} />
+        <List setSelectedRecord={setSelectedRecord} records={records} />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -46,68 +69,89 @@ function MyMap({
   center,
   zoom,
   records,
+  selectedRecord,
 }: {
   center: google.maps.LatLngLiteral;
   zoom: number;
-  records?: any[];
+  records?: Record[];
+  selectedRecord: Record | null;
 }) {
-  const [map, setMap] = useState<google.maps.Map>();
-  const ref = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<google.maps.Map>();
+  const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      console.log("Setting REf");
-      setMap(
-        new window.google.maps.Map(ref.current, {
-          center,
-          zoom,
-        })
-      );
+    if (divRef.current) {
+      mapRef.current = new window.google.maps.Map(divRef.current, {
+        center,
+        zoom,
+      });
     }
-  }, []);
+  }, [center, zoom]);
+
+  useEffect(() => {
+    if (selectedRecord && mapRef.current) {
+      const { lat, lng } = selectedRecord.fields;
+      mapRef.current.setZoom(8); // ADDED THIS
+      mapRef.current.panTo(new google.maps.LatLng(lat, lng));
+    }
+  }, [selectedRecord]);
 
   return (
-    <>
-      <div ref={ref} className="w-full h-[96dvh] ">
-        {map &&
-          records?.map((record) => (
-            <MyMarker key={record.id} map={map} record={record} />
-          ))}
-      </div>
-    </>
+    <div ref={divRef} className="w-full h-[96dvh]">
+      {mapRef.current &&
+        records?.map((record) => (
+          <MyMarker key={record.id} map={mapRef.current!} record={record} />
+        ))}
+    </div>
   );
 }
 
-function MyMarker({ record, map }: { record: any; map: google.maps.Map }) {
+interface MyMarkerProps {
+  record: Record;
+  map: google.maps.Map;
+}
+
+function MyMarker({ record, map }: MyMarkerProps) {
   var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
-  const category: keyof typeof icons = record.fields.category;
+
+  let category = record.fields.category;
 
   var icons = {
     Hiking: iconBase + "hiker.png",
     University: iconBase + "realestate.png",
     Restaurant: iconBase + "volcano.png",
-  };
+  } as const;
+
   const icon = icons[category];
 
-  const Marker = new window.google.maps.Marker({
-    position: { lat: record.fields.lat, lng: record.fields.lng },
-    animation: window.google.maps.Animation.DROP,
-    icon: {
-      url: icon,
-      scaledSize: new window.google.maps.Size(32, 32),
-    },
-    map: map,
-  });
+  useEffect(() => {
+    const marker = new google.maps.Marker({
+      position: new google.maps.LatLng(record.fields.lat, record.fields.lng),
+      map,
+      title: record.fields.name,
+      icon: {
+        url: icon,
+        scaledSize: new google.maps.Size(32, 32),
+      },
+      animation: google.maps.Animation.DROP,
+    });
 
-  return <> Marker</>;
+    return () => {
+      marker.setMap(null); // this removes the marker
+    };
+  }, [record, map]);
+
+  // You should return null as we're directly mutating the DOM
+  // and the component does not need to render anything itself
+  return null;
 }
 
 function List({
   records,
-  setSelected,
+  setSelectedRecord,
 }: {
-  records: any[];
-  setSelected: Dispatch<SetStateAction<any>>;
+  records: Record[];
+  setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
   return (
     <div className="w-[40%] p-6 h-[96dvh] overflow-y-scroll">
@@ -116,8 +160,8 @@ function List({
         <ul>
           {records.map((record) => (
             <li
-              onClick={() => setSelected(record)}
               key={record.id}
+              onClick={() => setSelectedRecord(record)}
               className="p-4 hover:scale-105 transition-all ease-in-out 1s cursor-pointer
             shadow-sm hover:shadow-md font-mono text-md bg-gray-100 rounded-md m-2 "
             >
