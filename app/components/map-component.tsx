@@ -42,6 +42,13 @@ export function MapComponent() {
   };
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+  const filteredRecords = records.filter((record) =>
+    record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     fetchAirtableRecords().then((res) => setRecords(res.records));
@@ -54,7 +61,7 @@ export function MapComponent() {
      bg-blue-100 shadow-sm rounded-md border "
       >
         {/* { selectedRecord && selectedRecord.id } */}
-        <List setSelectedRecord={setSelectedRecord} records={records} />
+        <List setSelectedRecord={setSelectedRecord} records={filteredRecords} />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -97,7 +104,7 @@ function MyMap({
   }, [selectedRecord]);
 
   return (
-    <div ref={divRef} className="w-full h-[96dvh]">
+    <div ref={divRef} className="w-full h-[50dvh]  sm:h-[96dvh]">
       {mapRef.current &&
         records?.map((record) => (
           <MyMarker key={record.id} map={mapRef.current!} record={record} />
@@ -154,10 +161,21 @@ function List({
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
   return (
-    <div className="w-[40%] p-6 h-[96dvh] overflow-y-scroll">
-      <h1 className="text-2xl font-bold">List of locations</h1>
+    <div className="relative sm:w-[40%] w-full  ">
+      <div className=" z-20 p-6 gap-2 shadow-sm bg-slate-50 flex flex-col items-stretch justify-between">
+        <h1 className="text-2xl font-bold">Airtable Records</h1>
+        <div className="flex items-center justify-between">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-[100%] p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            // onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
       {records.length > 0 ? (
-        <ul>
+        <ul className="overflow-y-scroll h-[80dvh] p-4">
           {records.map((record) => (
             <li
               key={record.id}
