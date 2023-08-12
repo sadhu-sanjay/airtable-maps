@@ -5,10 +5,10 @@ export default function Home() {
   return (
     <main
       className="flex min-h-[100dvh] flex-col items-center 
-    justify-between "
+    justify-between"
     >
       {/* <div className="w-full h-full flex-grow bg-blue-100"> */}
-        <MapComponent />
+      <MapComponent />
       {/* </div> */}
 
       {/* <div>Hi Sanjay Goswami</div> */}

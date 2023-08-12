@@ -16,12 +16,21 @@ export function MapComponent() {
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-
   if (loadError) {
     return <div>Error Loading Map</div>;
   }
 
-  return <Map />;
+  return (
+    <div className="w-full h-full px-2 sm:px-16 pt-2">
+      <div
+        className="w-full h-full flex flex-col-reverse sm:flex-row relative
+     bg-blue-100 shadow-sm rounded-md border "
+      >
+        <List />
+        <Map />
+      </div>
+    </div>
+  );
 }
 
 const center = {
@@ -29,23 +38,32 @@ const center = {
   lng: -104.96915769270834,
 };
 
+function List() {
+  return (
+    <div className="w-1/2 p-6">
+      <strong>List Item</strong>
+      <ul>
+        <li className="text-red-500 p-2">Red</li>
+        <li className="text-blue-500 p-2">Gree</li>
+        <li className="text-yellow-500 p-2">Red</li>
+        <li className="text-brown-500 p-2">Red</li>
+      </ul>
+    </div>
+  );
+}
+
 function Map() {
-  // const center = useMemo(() => {center}, [])
   const mapStyles = { width: "100%", height: "10vh" };
 
   useEffect(() => {
-
     fetchAirtableRecords()
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err))
-    .finally(() => console.log("finally"))
-
-    
-
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+      .finally(() => console.log("finally"));
   }, []);
 
   return (
-    <GoogleMap zoom={10} center={center} mapContainerClassName="map-container">
+    <GoogleMap zoom={10} center={center} mapContainerClassName="w-full h-[60dvh] sm:h-[96dvh]">
       <Marker position={center} />
     </GoogleMap>
   );
