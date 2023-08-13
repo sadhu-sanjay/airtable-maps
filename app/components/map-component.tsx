@@ -34,7 +34,7 @@ export function MapComponent() {
         return (
           <MyMap
             {...mapOptions}
-            records={records}
+            filteredRecords={filteredRecords}
             selectedRecord={selectedRecord}
           />
         );
@@ -42,6 +42,22 @@ export function MapComponent() {
   };
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("");
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCategory(event.target.value);
+  };
+  const filteredRecords = records.filter(
+    (record) =>
+      record.fields.category.includes(category) &&
+      record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     fetchAirtableRecords().then((res) => setRecords(res.records));
@@ -49,11 +65,37 @@ export function MapComponent() {
 
   return (
     <div className="w-full h-full px-2 sm:px-16 pt-2 ">
+      <div className=" z-20 p-4 gap-2 shadow-sm bg-slate-50 flex items-stretch justify-between">
+        <h1 className="self-center text-xl font-bold">Airtable Records</h1>
+        <div className="flex ">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-[100%] p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={handleSearchChange}
+          />
+        </div>
+        <select
+          value={category}
+          onChange={handleCategoryChange}
+          id="countries"
+          className=" bg-gray-50 w-auto border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option value="">All Categories</option>
+          <option value="Hiking">Hiking</option>
+          <option value="University">University</option>
+          <option value="Restaurant">Restaurant</option>
+        </select>
+      </div>
       <div
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-blue-100 shadow-sm rounded-md border "
       >
-        <List setSelectedRecord={setSelectedRecord} records={records} />
+        <List
+          filteredRecords={filteredRecords}
+          setSelectedRecord={setSelectedRecord}
+          records={records}
+        />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -67,12 +109,12 @@ const mapOptions = {
 function MyMap({
   center,
   zoom,
-  records,
+  filteredRecords,
   selectedRecord,
 }: {
   center: google.maps.LatLngLiteral;
   zoom: number;
-  records?: Record[];
+  filteredRecords?: Record[];
   selectedRecord: Record | null;
 }) {
   const mapRef = useRef<google.maps.Map>();
@@ -87,7 +129,6 @@ function MyMap({
     }
   }, [center, zoom]);
 
-
   useEffect(() => {
     if (selectedRecord && mapRef.current) {
       const { lat, lng } = selectedRecord.fields;
@@ -97,9 +138,9 @@ function MyMap({
   }, [selectedRecord]);
 
   return (
-    <div ref={divRef} className="w-full h-[50dvh]  sm:h-[96dvh]">
+    <div ref={divRef} className="w-full h-[50dvh] sm:h-[85dvh]">
       {mapRef.current &&
-        records?.map((record) => (
+        filteredRecords?.map((record) => (
           <MyMarker key={record.id} map={mapRef.current!} record={record} />
         ))}
     </div>
@@ -146,57 +187,17 @@ function MyMarker({ record, map }: MyMarkerProps) {
 
 function List({
   records,
+  filteredRecords,
   setSelectedRecord,
 }: {
   records: Record[];
+  filteredRecords: Record[];
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("");
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setCategory(event.target.value);
-  };
-  const filteredRecords = records.filter(
-    (record) =>
-      record.fields.category.includes(category) &&
-      record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="relative sm:w-[40%] w-full  ">
-      <div className=" z-20 p-6 gap-2 shadow-sm bg-slate-50 flex flex-col items-stretch justify-between">
-        <h1 className="text-lg font-bold">Airtable Records</h1>
-        <div className="gap-2 flex items-center justify-between">
-          <div className="flex ">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-[100%] p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onChange={handleSearchChange}
-            />
-          </div>
-          <select
-            value={category}
-            onChange={handleCategoryChange}
-            id="countries"
-            className=" bg-gray-50 w-1/2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="">All Categories</option>
-            <option value="Hiking">Hiking</option>
-            <option value="University">University</option>
-            <option value="Restaurant">Restaurant</option>
-          </select>
-        </div>
-      </div>
-
       {records.length > 0 ? (
-        <ul className="overflow-y-scroll h-[80dvh] p-4">
+        <ul className="overflow-y-scroll h-[85dvh] p-4">
           {filteredRecords.map((record) => (
             <li
               key={record.id}
