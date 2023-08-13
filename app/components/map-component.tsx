@@ -53,7 +53,6 @@ export function MapComponent() {
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-blue-100 shadow-sm rounded-md border "
       >
-        {/* { selectedRecord && selectedRecord.id } */}
         <List setSelectedRecord={setSelectedRecord} records={records} />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
@@ -87,6 +86,7 @@ function MyMap({
       });
     }
   }, [center, zoom]);
+
 
   useEffect(() => {
     if (selectedRecord && mapRef.current) {
@@ -141,8 +141,6 @@ function MyMarker({ record, map }: MyMarkerProps) {
     };
   }, [record, map]);
 
-  // You should return null as we're directly mutating the DOM
-  // and the component does not need to render anything itself
   return null;
 }
 
@@ -196,13 +194,6 @@ function List({
           </select>
         </div>
       </div>
-
-      {/* <label
-        htmlFor="countries"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        Select an option
-      </label> */}
 
       {records.length > 0 ? (
         <ul className="overflow-y-scroll h-[80dvh] p-4">
