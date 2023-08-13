@@ -1,7 +1,7 @@
 export function Spinner() {
   return (
     <>
-      <div className=" w-full flex justify-center place-items-center ">
+      <div className=" w-full min-h-[86dvh] flex justify-center place-items-center ">
         <div role="status">
           <svg
             aria-hidden="true"
@@ -29,7 +29,7 @@ export function Spinner() {
 export function Spinner2() {
     return (
       <>
-        <div className="h-full w-full flex justify-center place-items-center ">
+        <div className="h-full min-h-[86dvh] w-full flex justify-center place-items-center ">
           <div role="status">
             <svg
               aria-hidden="true"

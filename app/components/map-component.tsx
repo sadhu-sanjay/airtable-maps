@@ -13,7 +13,7 @@ import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MAPS_API_KEY } from "~/app/config";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
-import { calculateBounds } from "~/app/components/map-helper"
+import { calculateBounds } from "~/app/components/map-helper";
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -119,7 +119,12 @@ function MyMap({
         new google.maps.LatLng(bounds.south, bounds.west),
         new google.maps.LatLng(bounds.north, bounds.east)
       );
-      mapRef.current.fitBounds(googleBounds, {top: 50, left: 50, right: 50, bottom: 50})
+      mapRef.current.fitBounds(googleBounds, {
+        top: 50,
+        left: 50,
+        right: 50,
+        bottom: 50,
+      });
     }
   }, [bounds]);
 
@@ -164,7 +169,7 @@ function MyMarker({ record, map }: MyMarkerProps) {
     Hiking: iconBase + "hiker.png",
     University: iconBase + "volcano.png",
     Restaurant: iconBase + "coffee.png",
-  }
+  };
 
   const icon = icons[category];
 
