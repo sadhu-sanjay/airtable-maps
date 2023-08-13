@@ -29,7 +29,7 @@ export function Spinner() {
 export function Spinner2() {
     return (
       <>
-        <div className=" w-full h-full flex justify-center place-items-center ">
+        <div className="bg-red-200 w-full flex justify-center place-items-center ">
           <div role="status">
             <svg
               aria-hidden="true"

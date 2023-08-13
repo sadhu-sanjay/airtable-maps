@@ -12,16 +12,8 @@ import { fetchAirtableRecords } from "./airtable-helper";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MAPS_API_KEY } from "~/app/config";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
-interface Record {
-  id: string;
-  fields: {
-    lat: number;
-    lng: number;
-    name: string;
-    category: string;
-  };
-  // Include other fields as needed
-}
+import { Record } from "~/app/components/types";
+import { calculateBounds } from "~/app/components/map-helper"
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -119,6 +111,17 @@ function MyMap({
 }) {
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
+  const bounds = calculateBounds(selectedRecord, filteredRecords || []);
+
+  useEffect(() => {
+    if (bounds && mapRef.current) {
+      const googleBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(bounds.south, bounds.west),
+        new google.maps.LatLng(bounds.north, bounds.east)
+      );
+      mapRef.current.fitBounds(googleBounds, {top: 50, left: 50, right: 50, bottom: 50})
+    }
+  }, [bounds]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -157,11 +160,11 @@ function MyMarker({ record, map }: MyMarkerProps) {
 
   let category = record.fields.category;
 
-  var icons = {
+  var icons: { [key: string]: string } = {
     Hiking: iconBase + "hiker.png",
-    University: iconBase + "realestate.png",
-    Restaurant: iconBase + "volcano.png",
-  } as const;
+    University: iconBase + "volcano.png",
+    Restaurant: iconBase + "coffee.png",
+  }
 
   const icon = icons[category];
 
