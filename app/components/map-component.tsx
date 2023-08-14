@@ -45,6 +45,7 @@ export function MapComponent() {
   ) => {
     setCategory(event.target.value);
   };
+
   const filteredRecords = records.filter(
     (record) =>
       record.fields.category.includes(category) &&
@@ -75,8 +76,10 @@ export function MapComponent() {
         >
           <option value="">All Categories</option>
           <option value="Hiking">Hiking</option>
-          <option value="University">University</option>
+          <option value="Airport">Airport</option>
           <option value="Restaurant">Restaurant</option>
+          <option value="Lake">Lake</option>
+          <option value="Pub">Pub</option>
         </select>
       </div>
       <div
@@ -167,8 +170,10 @@ function MyMarker({ record, map }: MyMarkerProps) {
 
   var icons: { [key: string]: string } = {
     Hiking: iconBase + "hiker.png",
-    University: iconBase + "volcano.png",
+    Airport: iconBase + "volcano.png",
     Restaurant: iconBase + "coffee.png",
+    Pub: iconBase + "bars.png",
+    Lake: iconBase + "terrain.png",
   };
 
   const icon = icons[category];
