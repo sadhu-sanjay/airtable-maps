@@ -2,29 +2,10 @@
 import { AIRTABLE_ACCESS_TOKEN } from "../config"
 
 const baseUrl = "https://api.airtable.com/v0"
-let baseId = "appHjw2nnIfsNBHTm"
-let tableName = "location30k"
+let baseId = "apptqItGLVMWKG63G"
+let tableName = "Map"
 const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 
-
-
-async function insertRecords(records: any[]) {
-    const insertUrl = `${baseUrl}/${baseId}/${tableName}`;
-    const insertResponse = await fetch(insertUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
-        },
-        body: JSON.stringify({ records: records.map(record => ({ fields: record })) }),
-    });
-
-    if (insertResponse.ok) {
-        console.log(`Inserted ${records.length} records successfully.`);
-    } else {
-        console.error('Failed to insert records:', await insertResponse.text());
-    }
-}
 
 export async function fetchAirtableRecords() {
 
@@ -38,10 +19,11 @@ export async function fetchAirtableRecords() {
         },
         body: JSON.stringify({
             // fields: ["name", "address", "lat", "lng", "phone", "website"],
-            fields: ["name", "lat", "lng", "category"],
+            fields: ["Title", "Coordinates (lat, lng)","Tags", "Region", "State / AAL1", "City", "Country"],
             view: "All Records",
             filterByFormula: "",
-            sort: [{ field: "name", direction: "asc" }],
+            // sort by State Title 
+            // sort: [{ field: "name", direction: "asc" }],
             pageSize: 100, 
         }),
     })
@@ -82,3 +64,22 @@ export async function fetchAirtableRecords() {
 //         }
 //     }
 // }
+
+
+async function insertRecords(records: any[]) {
+    const insertUrl = `${baseUrl}/${baseId}/${tableName}`;
+    const insertResponse = await fetch(insertUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({ records: records.map(record => ({ fields: record })) }),
+    });
+
+    if (insertResponse.ok) {
+        console.log(`Inserted ${records.length} records successfully.`);
+    } else {
+        console.error('Failed to insert records:', await insertResponse.text());
+    }
+}

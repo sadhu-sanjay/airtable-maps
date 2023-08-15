@@ -33,6 +33,7 @@ export function MapComponent() {
     }
   };
   const [records, setRecords] = useState<Record[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("");
@@ -46,20 +47,26 @@ export function MapComponent() {
     setCategory(event.target.value);
   };
 
-  const filteredRecords = records.filter(
-    (record) =>
-      record.fields.category.includes(category) &&
-      record.fields.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredRecords = records
+    ? records.filter((record) =>
+        // record.fields.category.includes(category) &&
+        record.fields.Title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   useEffect(() => {
-    fetchAirtableRecords().then((res) => setRecords(res.records));
+    setIsLoading(true);
+    fetchAirtableRecords()
+      .then((res) => setRecords(res.records))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="w-full h-full px-2 sm:px-16 pt-2 ">
-      <div className=" z-20 p-4 gap-2 shadow-sm bg-slate-50 flex items-stretch justify-between">
-        <h1 className="self-center text-xl font-bold">Airtable Records</h1>
+      <div className="rounded-sm z-20 p-4 gap-2 shadow-sm bg-slate-50 dark:bg-gray-800 flex items-stretch justify-between">
+        <h1 className="self-center text-xl font-bold dark:text-slate-200">
+          Airtable Records
+        </h1>
         <div className="flex ">
           <input
             type="text"
@@ -84,9 +91,10 @@ export function MapComponent() {
       </div>
       <div
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
-     bg-blue-100 shadow-sm rounded-md border "
+     bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
       >
         <List
+          isLoading={isLoading}
           filteredRecords={filteredRecords}
           setSelectedRecord={setSelectedRecord}
           records={records}
@@ -114,22 +122,22 @@ function MyMap({
 }) {
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
-  const bounds = calculateBounds(selectedRecord, filteredRecords || []);
+  // const bounds = calculateBounds(selectedRecord, filteredRecords || []);
 
-  useEffect(() => {
-    if (bounds && mapRef.current) {
-      const googleBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(bounds.south, bounds.west),
-        new google.maps.LatLng(bounds.north, bounds.east)
-      );
-      mapRef.current.fitBounds(googleBounds, {
-        top: 50,
-        left: 50,
-        right: 50,
-        bottom: 50,
-      });
-    }
-  }, [bounds]);
+  // useEffect(() => {
+  //   if (bounds && mapRef.current) {
+  //     const googleBounds = new google.maps.LatLngBounds(
+  //       new google.maps.LatLng(bounds.south, bounds.west),
+  //       new google.maps.LatLng(bounds.north, bounds.east)
+  //     );
+  //     mapRef.current.fitBounds(googleBounds, {
+  //       top: 50,
+  //       left: 50,
+  //       right: 50,
+  //       bottom: 50,
+  //     });
+  //   }
+  // }, [bounds]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -142,9 +150,16 @@ function MyMap({
 
   useEffect(() => {
     if (selectedRecord && mapRef.current) {
-      const { lat, lng } = selectedRecord.fields;
+      // const [lat, lng] = selectedRecord.fields["Coordinates (lat, lng)"]
+      //   .split(",")
+      //   .map(parseFloat);
       mapRef.current.setZoom(8); // ADDED THIS
-      mapRef.current.panTo(new google.maps.LatLng(lat, lng));
+      mapRef.current.panTo(
+        new google.maps.LatLng(
+          selectedRecord.fields.lat,
+          selectedRecord.fields.lng
+        )
+      );
     }
   }, [selectedRecord]);
 
@@ -165,24 +180,32 @@ interface MyMarkerProps {
 
 function MyMarker({ record, map }: MyMarkerProps) {
   var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
+  if (record.fields["Coordinates (lat, lng)"]) {
+    const [lat, lng] = record.fields["Coordinates (lat, lng)"]
+      .split(",")
+      .map(parseFloat);
+    record.fields.lat = lat;
+    record.fields.lng = lng;
+  }
 
-  let category = record.fields.category;
+  let category = record.fields.City;
 
-  var icons: { [key: string]: string } = {
-    Hiking: iconBase + "hiker.png",
-    Airport: iconBase + "volcano.png",
-    Restaurant: iconBase + "coffee.png",
-    Pub: iconBase + "bars.png",
-    Lake: iconBase + "terrain.png",
-  };
+  // var icons: { [key: string]: string } = {
+  //   Hiking: iconBase + "hiker.png",
+  //   Airport: iconBase + "volcano.png",
+  //   Restaurant: iconBase + "coffee.png",
+  //   Pub: iconBase + "bars.png",
+  //   Lake: iconBase + "terrain.png",
+  // };
 
-  const icon = icons[category];
+  // const icon = icons[category];
+  const icon = iconBase + "volcano.png";
 
   useEffect(() => {
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(record.fields.lat, record.fields.lng),
       map,
-      title: record.fields.name,
+      title: record.fields.Title,
       icon: {
         url: icon,
         scaledSize: new google.maps.Size(32, 32),
@@ -199,31 +222,47 @@ function MyMarker({ record, map }: MyMarkerProps) {
 }
 
 function List({
+  isLoading,
   records,
   filteredRecords,
   setSelectedRecord,
 }: {
+  isLoading: boolean;
   records: Record[];
   filteredRecords: Record[];
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
   return (
     <div className="relative sm:w-[40%] w-full  ">
-      {records.length > 0 ? (
+      {isLoading ? (
+        <Spinner2 />
+      ) : records?.length > 0 ? (
         <ul className="overflow-y-scroll h-[85dvh] p-4">
-          {filteredRecords.map((record) => (
+          {filteredRecords.map((record, index) => (
             <li
               key={record.id}
               onClick={() => setSelectedRecord(record)}
               className="p-4 hover:scale-105 transition-all ease-in-out 1s cursor-pointer
-            shadow-sm hover:shadow-md font-mono text-md bg-gray-100 rounded-md m-2 "
+            shadow-sm hover:shadow-md font-mono text-md bg-gray-100 rounded-md m-2 
+            dark:bg-gray-700"
             >
-              {record.fields.name}
+              <strong>
+                {index + 1}
+                {". "}{" "}
+              </strong>
+              {record.fields.Title}
             </li>
           ))}
         </ul>
       ) : (
-        <Spinner2 />
+        <div className="text-center p-5 top-1/4 ">
+          <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
+            No records found 😢
+          </p>
+          <p style={{ fontSize: "1rem", color: "gray" }}>
+            Try adjusting your search criteria.
+          </p>
+        </div>
       )}
     </div>
   );
