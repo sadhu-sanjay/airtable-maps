@@ -1,11 +1,9 @@
-
 import { AIRTABLE_ACCESS_TOKEN } from "../config"
 
 const baseUrl = "https://api.airtable.com/v0"
 let baseId = "apptqItGLVMWKG63G"
 let tableName = "Map"
 const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
-
 
 export async function fetchAirtableRecords() {
 
@@ -19,12 +17,12 @@ export async function fetchAirtableRecords() {
         },
         body: JSON.stringify({
             // fields: ["name", "address", "lat", "lng", "phone", "website"],
-            fields: ["Title", "Coordinates (lat, lng)","Tags", "Region", "State / AAL1", "City", "Country"],
+            fields: ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"],
             view: "All Records",
             filterByFormula: "",
             // sort by State Title 
             // sort: [{ field: "name", direction: "asc" }],
-            pageSize: 100, 
+            pageSize: 100,
         }),
     })
 
@@ -65,21 +63,13 @@ export async function fetchAirtableRecords() {
 //     }
 // }
 
-
-async function insertRecords(records: any[]) {
-    const insertUrl = `${baseUrl}/${baseId}/${tableName}`;
-    const insertResponse = await fetch(insertUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
-        },
-        body: JSON.stringify({ records: records.map(record => ({ fields: record })) }),
-    });
-
-    if (insertResponse.ok) {
-        console.log(`Inserted ${records.length} records successfully.`);
-    } else {
-        console.error('Failed to insert records:', await insertResponse.text());
+export async function fetchsql() {
+    try{
+        const res = await fetch("http://localhost:8000/getData")
+        const data = await res.json()
+        return data
+    }catch(e){
+        console.error(e)
+        return []
     }
 }
