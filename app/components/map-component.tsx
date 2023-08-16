@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { fetchAirtableRecords } from "./airtable-helper";
+import { fetchAirtableRecords, fetchsql } from "./airtable-helper";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { MAPS_API_KEY } from "~/app/config";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
@@ -56,9 +56,33 @@ export function MapComponent() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchAirtableRecords()
-      .then((res) => setRecords(res.records))
-      .finally(() => setIsLoading(false));
+    fetchsql().then((value: any) => {
+
+      const mappedArray: Record[] = value.map((data: any) => ({
+        id: data.Id.toString(), // Convert Id to string
+        createdTime: data.Date, // Assuming Date is the creation time
+        fields: {
+          lat: parseFloat(data.Coordinates.split(',')[0]),
+          lng: parseFloat(data.Coordinates.split(',')[1]),
+          Title: data.Title || '',
+          Region: data.Region.split(','), // Assuming Region is comma-separated
+          City: data.City,
+          "Coordinates (lat, lng)": data.Coordinates,
+          Tags: data.Tags.split(','), // Assuming Tags is comma-separated
+          "State / AAL1": data.State,
+          Country: data.Country
+        }
+      }));
+      
+      console.log(mappedArray);
+
+      setRecords(mappedArray);
+      setIsLoading(false);
+    });
+
+    // fetchAirtableRecords()
+    //   .then((res) => setRecords(res.records))
+    //   .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -257,7 +281,7 @@ function List({
       ) : (
         <div className="text-center p-5 top-1/4 ">
           <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
-            No records found 😢
+            No records found ~!
           </p>
           <p style={{ fontSize: "1rem", color: "gray" }}>
             Try adjusting your search criteria.

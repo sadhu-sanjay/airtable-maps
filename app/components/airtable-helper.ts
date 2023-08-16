@@ -65,7 +65,7 @@ export async function fetchAirtableRecords() {
 
 export async function fetchsql() {
     try{
-        const res = await fetch("http://localhost:8000/getData")
+        const res = await fetch("http://localhost:8080/select-data")
         const data = await res.json()
         return data
     }catch(e){
