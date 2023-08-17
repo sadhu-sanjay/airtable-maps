@@ -11,4 +11,21 @@ console.log("title=> ", Title + '\n' + "description=> ", Description + '\n' + "c
 "city=> ", City + '\n' + "county=> ", County + '\n' + "country=> ", Country + '\n' + "recommendedBy=> ", RecommendedBy + '\n' + "phone=> ", Phone + '\n');
 
 
+const markers = filteredRecords?.map((value) => {
+  const marker = new google.maps.Marker({
+    position: { lat: value.fields.lat, lng: value.fields.lng },
+  });
+  return marker
+});
 
+useEffect(() => {
+  const mc = new MarkerClusterer({
+    markers,
+    map: mapRef.current,
+    algorithm: new SuperClusterAlgorithm({ radius: 200 }),
+  });
+
+  return () => {
+    mc.clearMarkers();
+  };
+}, [markers]);

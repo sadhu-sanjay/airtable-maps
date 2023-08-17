@@ -1,19 +1,16 @@
 "use client";
 
 import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { fetchAirtableRecords, fetchsql } from "./airtable-helper";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import { MAPS_API_KEY } from "~/app/config";
+  MarkerClusterer,
+  SuperClusterAlgorithm,
+} from "@googlemaps/markerclusterer";
+import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
-import { calculateBounds } from "~/app/components/map-helper";
+import { MAPS_API_KEY, clusterThreshHold } from "~/app/config";
+import { fetchsql } from "./airtable-helper";
+import { calculateBounds } from "./map-helper";
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -21,7 +18,7 @@ export function MapComponent() {
       case Status.LOADING:
         return <Spinner />;
       case Status.FAILURE:
-        return <div>Error Loading Div</div>;
+        return <div>Error Loading Map</div>;
       case Status.SUCCESS:
         return (
           <MyMap
@@ -57,24 +54,21 @@ export function MapComponent() {
   useEffect(() => {
     setIsLoading(true);
     fetchsql().then((value: any) => {
-
       const mappedArray: Record[] = value.map((data: any) => ({
         id: data.Id.toString(), // Convert Id to string
         createdTime: data.Date, // Assuming Date is the creation time
         fields: {
-          lat: parseFloat(data.Coordinates.split(',')[0]),
-          lng: parseFloat(data.Coordinates.split(',')[1]),
-          Title: data.Title || '',
-          Region: data.Region.split(','), // Assuming Region is comma-separated
+          lat: parseFloat(data.Coordinates.split(",")[0]),
+          lng: parseFloat(data.Coordinates.split(",")[1]),
+          Title: data.Title || "",
+          Region: data.Region.split(","), // Assuming Region is comma-separated
           City: data.City,
           "Coordinates (lat, lng)": data.Coordinates,
-          Tags: data.Tags.split(','), // Assuming Tags is comma-separated
+          Tags: data.Tags.split(","), // Assuming Tags is comma-separated
           "State / AAL1": data.State,
-          Country: data.Country
-        }
+          Country: data.Country,
+        },
       }));
-      
-      console.log(mappedArray);
 
       setRecords(mappedArray);
       setIsLoading(false);
@@ -117,12 +111,12 @@ export function MapComponent() {
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
       >
-        <List
+        {/* <List
           isLoading={isLoading}
           filteredRecords={filteredRecords}
           setSelectedRecord={setSelectedRecord}
           records={records}
-        />
+        /> */}
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -144,24 +138,20 @@ function MyMap({
   filteredRecords?: Record[];
   selectedRecord: Record | null;
 }) {
+
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
-  // const bounds = calculateBounds(selectedRecord, filteredRecords || []);
+  const bounds = calculateBounds(selectedRecord, filteredRecords || []);
 
-  // useEffect(() => {
-  //   if (bounds && mapRef.current) {
-  //     const googleBounds = new google.maps.LatLngBounds(
-  //       new google.maps.LatLng(bounds.south, bounds.west),
-  //       new google.maps.LatLng(bounds.north, bounds.east)
-  //     );
-  //     mapRef.current.fitBounds(googleBounds, {
-  //       top: 50,
-  //       left: 50,
-  //       right: 50,
-  //       bottom: 50,
-  //     });
-  //   }
-  // }, [bounds]);
+  useEffect(() => {
+    if (bounds && mapRef.current) {
+      const googleBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(bounds.south, bounds.west),
+        new google.maps.LatLng(bounds.north, bounds.east)
+      );
+      mapRef.current.fitBounds(googleBounds);
+    }
+  }, [bounds]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -187,9 +177,32 @@ function MyMap({
     }
   }, [selectedRecord]);
 
+  const markers = filteredRecords?.map((value) => {
+    const marker = new google.maps.Marker({
+      position: { lat: value.fields.lat, lng: value.fields.lng },
+    });
+    return marker;
+  });
+
+  useEffect(() => {
+    if (filteredRecords && filteredRecords.length < clusterThreshHold) return;
+
+    const mc = new MarkerClusterer({
+      markers,
+      map: mapRef.current,
+      algorithm: new SuperClusterAlgorithm({ radius: 200 }),
+    });
+
+    return () => {
+      mc.clearMarkers();
+    };
+  }, [markers]);
+
   return (
     <div ref={divRef} className="w-full h-[50dvh] sm:h-[85dvh]">
       {mapRef.current &&
+        filteredRecords &&
+        filteredRecords?.length < clusterThreshHold &&
         filteredRecords?.map((record) => (
           <MyMarker key={record.id} map={mapRef.current!} record={record} />
         ))}
