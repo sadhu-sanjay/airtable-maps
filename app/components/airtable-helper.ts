@@ -1,4 +1,6 @@
 import { AIRTABLE_ACCESS_TOKEN } from "../config"
+import { Record } from "~/app/components/types"
+
 
 const baseUrl = "https://api.airtable.com/v0"
 let baseId = "apptqItGLVMWKG63G"
@@ -29,46 +31,66 @@ export async function fetchAirtableRecords() {
     return res.json()
 }
 
-// import { faker } from '@faker-js/faker';
-// export async function createFakeRecord(totalRecords: number) {
+export async function sampleFetch() {
+  const pageSize = 100;
+  const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
+  const view = "All Records";
+  const maxRecords = 1000;
+  let allRecords: Array<Record> = [];
 
-//     const batchSize = 10; // Total records to create
-//     const batches = Math.ceil(totalRecords / batchSize);
+  let offset = null;
+  let shouldFetchMore = true;
 
-//     for (let batch = 0; batch < batches; batch++) {
-//         const records = [];
-//         for (let i = 0; i < batchSize; i++) {
+  const startTime = new Date().getTime(); // Start time
 
-//             const placeName = faker.location.city()
-//             const latitude = faker.location.latitude()
-//             const longitude = faker.location.longitude()
+  while (shouldFetchMore) {
+    let finalUrl = `${baseUrl}/${baseId}/${tableName}/listRecords`;
 
-//             const randomIndex = Math.floor(Math.random() * CATEGORIES.length);
-//             const randomCategory = CATEGORIES[randomIndex];
-//             const category = randomCategory
+    const res = await fetch(finalUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify({
+        fields,
+        view,
+        maxRecords,
+        filterByFormula: "",
+        pageSize,
+        offset,
+      }),
+    });
 
-//             records.push({
-//                 name: placeName,
-//                 lat: latitude,
-//                 lng: longitude,
-//                 category: category,
-//             });
-//         }
+    const data = await res.json();
+    allRecords = allRecords.concat(data.records);
 
-//         await insertRecords(records);
+    if (data.offset) {
+      offset = data.offset;
+      console.log("Offset: " + offset);
+    } else {
+      shouldFetchMore = false;
+      console.log("No more records");
+    }
+  }
 
-//         if (batch < batches - 1) {
-//             await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second between batches
-//         }
-//     }
-// }
+  const endTime = new Date().getTime(); // End time
+  const duration = endTime - startTime; // Duration in milliseconds
+  console.log("Total records: " + allRecords.length);
+  console.log("Duration: " + duration + "ms");
+
+  return allRecords;
+}
+
 
 export async function fetchsql() {
-    try{
-        const res = await fetch("http://localhost:8080/select-data")
+    try {
+        const query = "SELECT * FROM Map limit 20001 ";
+        const url = `http://localhost:8080/select-data?query=${encodeURIComponent(query)}`;
+        const res = await fetch(url);
         const data = await res.json()
         return data
-    }catch(e){
+    } catch (e) {
         console.error(e)
         return []
     }

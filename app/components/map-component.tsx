@@ -9,8 +9,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
 import { MAPS_API_KEY, clusterThreshHold } from "~/app/config";
-import { fetchsql } from "./airtable-helper";
-import { calculateBounds } from "./map-helper";
+import { fetchAirtableRecords, fetchsql, sampleFetch } from "./airtable-helper";
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -25,6 +24,7 @@ export function MapComponent() {
             {...mapOptions}
             filteredRecords={filteredRecords}
             selectedRecord={selectedRecord}
+            records={records}
           />
         );
     }
@@ -75,8 +75,11 @@ export function MapComponent() {
     });
 
     // fetchAirtableRecords()
-    //   .then((res) => setRecords(res.records))
+    //   .then((res: any) => setRecords(res.records))
     //   .finally(() => setIsLoading(false));
+
+    sampleFetch()
+
   }, []);
 
   return (
@@ -132,26 +135,30 @@ function MyMap({
   zoom,
   filteredRecords,
   selectedRecord,
+  records,
 }: {
   center: google.maps.LatLngLiteral;
   zoom: number;
   filteredRecords?: Record[];
   selectedRecord: Record | null;
+  records: Record[];
 }) {
-
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
-  const bounds = calculateBounds(selectedRecord, filteredRecords || []);
 
   useEffect(() => {
-    if (bounds && mapRef.current) {
-      const googleBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(bounds.south, bounds.west),
-        new google.maps.LatLng(bounds.north, bounds.east)
-      );
-      mapRef.current.fitBounds(googleBounds);
+    if (mapRef.current && filteredRecords) {
+      const bounds = new google.maps.LatLngBounds();
+      filteredRecords.forEach((record) => {
+        const latLng = new window.google.maps.LatLng(
+          record.fields.lat,
+          record.fields.lng
+        );
+        bounds.extend(latLng);
+      });
+      mapRef.current.fitBounds(bounds);
     }
-  }, [bounds]);
+  }, [filteredRecords]);
 
   useEffect(() => {
     if (divRef.current) {
@@ -180,17 +187,21 @@ function MyMap({
   const markers = filteredRecords?.map((value) => {
     const marker = new google.maps.Marker({
       position: { lat: value.fields.lat, lng: value.fields.lng },
+      icon: {
+        url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+        scaledSize: new google.maps.Size(20, 20),
+      },
     });
     return marker;
   });
 
   useEffect(() => {
+    console.log("Lenght", filteredRecords?.length);
     if (filteredRecords && filteredRecords.length < clusterThreshHold) return;
 
     const mc = new MarkerClusterer({
       markers,
       map: mapRef.current,
-      algorithm: new SuperClusterAlgorithm({ radius: 200 }),
     });
 
     return () => {
@@ -270,7 +281,7 @@ function List({
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
   return (
-    <div className="relative sm:w-[40%] w-full  ">
+    <div className="relative sm:w-[25%] w-full  ">
       {isLoading ? (
         <Spinner2 />
       ) : records?.length > 0 ? (

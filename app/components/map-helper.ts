@@ -7,7 +7,6 @@ export function calculateBounds(selectedRecord: Record | null, filteredRecords: 
   const MIN_LNG = -180;
 
   let firstValidRecord, lastValidRecord;
-  console.log("Here ", filteredRecords);
 
   let i = 0;
   while (!firstValidRecord && i < filteredRecords.length) {
