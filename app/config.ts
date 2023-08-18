@@ -7,5 +7,5 @@ export const AIRTABLE_BASE_ID = process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID as stri
 export const AIRTABLE_TABLE_NAME = process.env.NEXT_PUBLIC_AIRTABLE_TABLE_NAME as string
 
 // Map Config
-export const clusterThreshHold = 1001;
+export const clusterThreshHold = 5001;
 

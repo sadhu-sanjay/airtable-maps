@@ -1,32 +1,28 @@
-
 import {
     AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
 } from "~/app/config"
 import { Record } from "~/app/components/types"
 import { NextResponse } from "next/server"
-
 const baseUrl = "https://api.airtable.com/v0"
 let baseId = AIRTABLE_BASE_ID
 let tableName = AIRTABLE_TABLE_NAME
-const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 let globalRecords: Record[] = []
 fetchAirtableRecords()
 
-export async function POST() {
 
+export async function POST() {
     console.log("Records", globalRecords.length)
     return new NextResponse(JSON.stringify(globalRecords), {
         status: 200,
     })
-
 }
 
-export async function fetchAirtableRecords() {
+async function fetchAirtableRecords() {
 
-    const pageSize = 1;
+    const pageSize = 100;
     const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
     const view = "All Records";
-    const maxRecords = 100;
+    const maxRecords = 1000;
     let records: Array<Record> = [];
 
     let offset = null;

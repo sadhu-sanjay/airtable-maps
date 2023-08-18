@@ -53,33 +53,18 @@ export function MapComponent() {
 
   useEffect(() => {
     setIsLoading(true);
-    // fetchsql().then((value: any) => {
-    //   const mappedArray: Record[] = value.map((data: any) => ({
-    //     id: data.Id.toString(), // Convert Id to string
-    //     createdTime: data.Date, // Assuming Date is the creation time
-    //     fields: {
-    //       lat: parseFloat(data.Coordinates.split(",")[0]),
-    //       lng: parseFloat(data.Coordinates.split(",")[1]),
-    //       Title: data.Title || "",
-    //       Region: data.Region.split(","), // Assuming Region is comma-separated
-    //       City: data.City,
-    //       "Coordinates (lat, lng)": data.Coordinates,
-    //       Tags: data.Tags.split(","), // Assuming Tags is comma-separated
-    //       "State / AAL1": data.State,
-    //       Country: data.Country,
-    //     },
-    //   }));
 
-    //   setRecords(mappedArray);
-    //   setIsLoading(false);
-    // });
-
-    // fetchAirtableRecords()
-    //   .then((res: any) => setRecords(res.records))
-    //   .finally(() => setIsLoading(false));
+    fetch("http://localhost:3000/api/hello", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Come ther result", data[0]);
+        setRecords(data);
+        setIsLoading(false);
+      });
 
     // sampleFetch()
-
   }, []);
 
   return (
@@ -114,12 +99,21 @@ export function MapComponent() {
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
       >
-        {/* <List
+        // Add a refresh button
+        <div className="absolute top-0 right-0 p-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => fetchRecords()}
+          >
+            Refresh
+          </button>
+        </div>
+        <List
           isLoading={isLoading}
           filteredRecords={filteredRecords}
           setSelectedRecord={setSelectedRecord}
           records={records}
-        /> */}
+        />
         <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
@@ -207,7 +201,7 @@ function MyMap({
     return () => {
       mc.clearMarkers();
     };
-  }, [markers]);
+  }, [filteredRecords, markers]);
 
   return (
     <div ref={divRef} className="w-full h-[50dvh] sm:h-[85dvh]">

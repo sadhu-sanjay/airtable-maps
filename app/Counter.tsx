@@ -24,6 +24,7 @@ export function Counter() {
     });
     const data = await res.json();
     console.log("Come ther result", data);
+
     setData(data);
   }
 
