@@ -53,32 +53,32 @@ export function MapComponent() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchsql().then((value: any) => {
-      const mappedArray: Record[] = value.map((data: any) => ({
-        id: data.Id.toString(), // Convert Id to string
-        createdTime: data.Date, // Assuming Date is the creation time
-        fields: {
-          lat: parseFloat(data.Coordinates.split(",")[0]),
-          lng: parseFloat(data.Coordinates.split(",")[1]),
-          Title: data.Title || "",
-          Region: data.Region.split(","), // Assuming Region is comma-separated
-          City: data.City,
-          "Coordinates (lat, lng)": data.Coordinates,
-          Tags: data.Tags.split(","), // Assuming Tags is comma-separated
-          "State / AAL1": data.State,
-          Country: data.Country,
-        },
-      }));
+    // fetchsql().then((value: any) => {
+    //   const mappedArray: Record[] = value.map((data: any) => ({
+    //     id: data.Id.toString(), // Convert Id to string
+    //     createdTime: data.Date, // Assuming Date is the creation time
+    //     fields: {
+    //       lat: parseFloat(data.Coordinates.split(",")[0]),
+    //       lng: parseFloat(data.Coordinates.split(",")[1]),
+    //       Title: data.Title || "",
+    //       Region: data.Region.split(","), // Assuming Region is comma-separated
+    //       City: data.City,
+    //       "Coordinates (lat, lng)": data.Coordinates,
+    //       Tags: data.Tags.split(","), // Assuming Tags is comma-separated
+    //       "State / AAL1": data.State,
+    //       Country: data.Country,
+    //     },
+    //   }));
 
-      setRecords(mappedArray);
-      setIsLoading(false);
-    });
+    //   setRecords(mappedArray);
+    //   setIsLoading(false);
+    // });
 
     // fetchAirtableRecords()
     //   .then((res: any) => setRecords(res.records))
     //   .finally(() => setIsLoading(false));
 
-    sampleFetch()
+    // sampleFetch()
 
   }, []);
 

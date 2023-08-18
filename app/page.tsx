@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { MapComponent } from "./components/map-component";
+import { Counter } from "./Counter";
 
 export default function Home() {
   return (
@@ -8,7 +9,8 @@ export default function Home() {
     justify-between"
     >
       {/* <div className="w-full h-full flex-grow bg-blue-100"> */}
-      <MapComponent />
+      <Counter />
+      {/* <MapComponent /> */}
       {/* </div> */}
 
       {/* <div>Hi Sanjay Goswami</div> */}

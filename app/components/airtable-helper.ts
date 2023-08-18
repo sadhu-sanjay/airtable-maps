@@ -1,10 +1,11 @@
-import { AIRTABLE_ACCESS_TOKEN } from "../config"
+import { AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
+ } from "~/app/config"
 import { Record } from "~/app/components/types"
-
+// fetch from next
 
 const baseUrl = "https://api.airtable.com/v0"
-let baseId = "apptqItGLVMWKG63G"
-let tableName = "Map"
+let baseId = AIRTABLE_BASE_ID
+let tableName = AIRTABLE_TABLE_NAME
 const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 
 export async function fetchAirtableRecords() {
@@ -35,7 +36,7 @@ export async function sampleFetch() {
   const pageSize = 100;
   const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
   const view = "All Records";
-  const maxRecords = 1000;
+  const maxRecords = 500;
   let allRecords: Array<Record> = [];
 
   let offset = null;
@@ -76,7 +77,7 @@ export async function sampleFetch() {
 
   const endTime = new Date().getTime(); // End time
   const duration = endTime - startTime; // Duration in milliseconds
-  console.log("Total records: " + allRecords.length);
+  console.log("Total records: " + allRecords);
   console.log("Duration: " + duration + "ms");
 
   return allRecords;
