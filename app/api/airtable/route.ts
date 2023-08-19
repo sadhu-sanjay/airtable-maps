@@ -4,11 +4,17 @@ import {
 import { Record } from "~/app/components/types"
 import { NextResponse } from "next/server"
 const baseUrl = "https://api.airtable.com/v0"
-let baseId = AIRTABLE_BASE_ID
-let tableName = AIRTABLE_TABLE_NAME
 let globalRecords: Record[] = []
-fetchAirtableRecords()
+let recordCount = 0
 
+fetchAirtableRecords().then(() => console.log("Ok Iam done"))
+
+export async function GET() {
+    // fetchAirtableRecords()
+    return new NextResponse(JSON.stringify(globalRecords.length), {
+        status: 200,
+    })
+}
 
 export async function POST() {
     console.log("Records", globalRecords.length)
@@ -21,8 +27,8 @@ async function fetchAirtableRecords() {
 
     const pageSize = 100;
     const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
-    const view = "All Records";
-    const maxRecords = 1000;
+    const view = "Test View";
+    const maxRecords = 5000;
     let records: Array<Record> = [];
 
     let offset = null;
@@ -32,7 +38,7 @@ async function fetchAirtableRecords() {
 
     while (shouldFetchMore === true) {
 
-        let finalUrl = `${baseUrl}/${baseId}/${tableName}/listRecords`;
+        let finalUrl = `${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/listRecords`;
 
         const res = await fetch(finalUrl, {
             method: "POST",
