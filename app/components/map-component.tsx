@@ -49,6 +49,7 @@ export function MapComponent() {
   ) => {
     setCategory(event.target.value);
   };
+  
 
   const filteredRecords = records
     ? records.filter((record) =>
