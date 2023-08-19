@@ -49,18 +49,15 @@ export function MapComponent() {
   ) => {
     setCategory(event.target.value);
   };
-  
 
   const filteredRecords = records
-    ? records.filter((record) =>
-        // record.fields.category.includes(category) &&
-        record.fields.searchStr.toLowerCase().includes(searchTerm.toLowerCase())
+    ? records.filter((r) =>
+        r.fields.searchStr.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
 
   function fetchRecords() {
     setIsLoading(true);
-    console.log("fetchRecords trigger", RECORDS_FETCH_URL);
     fetch(RECORDS_FETCH_URL, {
       method: "POST",
     })
@@ -85,6 +82,15 @@ export function MapComponent() {
         <h1 className="self-center text-xl font-bold dark:text-slate-200">
           Airtable Records
         </h1>
+        {/* Refresh Button */}
+        <div className=" w-20 h-8 top-0 right-0 p-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold rounded"
+            onClick={() => fetchRecords()}
+          >
+            ⟳
+          </button>
+        </div>
         <div className="flex ">
           <input
             type="text"
@@ -111,14 +117,6 @@ export function MapComponent() {
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
       >
-        <div className=" w-20 h-8 top-0 right-0 p-2">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => fetchRecords()}
-          >
-            Refresh Button
-          </button>
-        </div>
         <MyList
           isLoading={isLoading}
           filteredRecords={filteredRecords}
@@ -132,5 +130,5 @@ export function MapComponent() {
 }
 const mapOptions = {
   center: { lat: 47.4351810744086, lng: 3.0833809671533285 },
-  zoom: 4,
+  zoom: 6,
 };

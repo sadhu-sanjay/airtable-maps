@@ -35,14 +35,15 @@ export function MyMap({
   }, [center, zoom]);
 
   /**
-   * This effect will run every time the filteredRecords changes
    * It will create a new bounds object and extend it with the lat/lng of each record
+   * This effect will run every time the filteredRecords changes
    */
   useEffect(() => {
-    if (mapRef.current && filteredRecords) {
+    if (mapRef.current && filteredRecords && filteredRecords.length > 0) {
       const bounds = new google.maps.LatLngBounds();
+
       filteredRecords.forEach((record) => {
-        
+        if (!record.fields.lat || !record.fields.lng) return;
         const latLng = new window.google.maps.LatLng(
           record.fields.lat,
           record.fields.lng

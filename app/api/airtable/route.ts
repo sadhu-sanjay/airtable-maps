@@ -7,7 +7,7 @@ const baseUrl = "https://api.airtable.com/v0"
 let globalRecords: Record[] = []
 let recordCount = 0
 
-fetchAirtableRecords().then(() => console.log("Ok Iam done"))
+fetchAirtableRecords().then(() => console.log("Ok Iam done Fetching "))
 
 export async function GET() {
     // fetchAirtableRecords()
@@ -17,7 +17,6 @@ export async function GET() {
 }
 
 export async function POST() {
-    console.log("Records", globalRecords.length)
     return new NextResponse(JSON.stringify(globalRecords), {
         status: 200,
     })
@@ -28,7 +27,7 @@ async function fetchAirtableRecords() {
     const pageSize = 100;
     const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
     const view = "Test View";
-    const maxRecords = 2001;
+    const maxRecords = 5001;
     let records: Array<Record> = [];
 
     let offset = null;
@@ -60,7 +59,7 @@ async function fetchAirtableRecords() {
         // add lat long from 'Coordinates (lat, lng)'
         data.records.forEach((record: Record) => {
 
-            // update search string var to include all searchable fields
+            // making searching easier
             record.fields.searchStr = record.fields.Title + " " + record.fields.Tags + " " + record.fields.Region + " " + record.fields["State / AAL1"] + " " + record.fields.City + " " + record.fields.Country;
 
             if (!record.fields["Coordinates (lat, lng)"]) return;

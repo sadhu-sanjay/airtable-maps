@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <main className="flex min-h-[100dvh] flex-col items-center justify-between">
       {/* <div className="w-full h-full flex-grow bg-blue-100"> */}
-      <Counter />
-      {/* <MapComponent /> */}
+      {/* <Counter /> */}
+    <MapComponent />
       {/* </div> */}
 
       {/* <div>Hi Sanjay Goswami</div> */}
