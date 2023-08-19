@@ -2,6 +2,7 @@ export type Record = {
   id: string;
   createdTime: string;
   fields: {
+    searchStr: string;
     lat: number;
     lng: number;
     Title: string;

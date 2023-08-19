@@ -4,11 +4,17 @@ import {
 import { Record } from "~/app/components/types"
 import { NextResponse } from "next/server"
 const baseUrl = "https://api.airtable.com/v0"
-let baseId = AIRTABLE_BASE_ID
-let tableName = AIRTABLE_TABLE_NAME
 let globalRecords: Record[] = []
-fetchAirtableRecords()
+let recordCount = 0
 
+fetchAirtableRecords().then(() => console.log("Ok Iam done"))
+
+export async function GET() {
+    // fetchAirtableRecords()
+    return new NextResponse(JSON.stringify(globalRecords.length), {
+        status: 200,
+    })
+}
 
 export async function POST() {
     console.log("Records", globalRecords.length)
@@ -21,8 +27,8 @@ async function fetchAirtableRecords() {
 
     const pageSize = 100;
     const fields = ["Title", "Coordinates (lat, lng)", "Tags", "Region", "State / AAL1", "City", "Country"];
-    const view = "All Records";
-    const maxRecords = 1000;
+    const view = "Test View";
+    const maxRecords = 2001;
     let records: Array<Record> = [];
 
     let offset = null;
@@ -32,7 +38,7 @@ async function fetchAirtableRecords() {
 
     while (shouldFetchMore === true) {
 
-        let finalUrl = `${baseUrl}/${baseId}/${tableName}/listRecords`;
+        let finalUrl = `${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/listRecords`;
 
         const res = await fetch(finalUrl, {
             method: "POST",
@@ -51,8 +57,20 @@ async function fetchAirtableRecords() {
         });
 
         const data = await res.json();
+        // add lat long from 'Coordinates (lat, lng)'
+        data.records.forEach((record: Record) => {
+
+            // update search string var to include all searchable fields
+            record.fields.searchStr = record.fields.Title + " " + record.fields.Tags + " " + record.fields.Region + " " + record.fields["State / AAL1"] + " " + record.fields.City + " " + record.fields.Country;
+
+            if (!record.fields["Coordinates (lat, lng)"]) return;
+            const [lat, lng] = record.fields["Coordinates (lat, lng)"].split(",");
+            record.fields.lat = parseFloat(lat);
+            record.fields.lng = parseFloat(lng);
+        });
         records = records.concat(data.records);
         globalRecords = records
+
 
         if (data.offset) {
             offset = data.offset;
@@ -67,6 +85,7 @@ async function fetchAirtableRecords() {
     const duration = endTime - startTime; // Duration in milliseconds
     console.log("Total records: " + records.length);
     console.log("Duration: " + duration + "ms");
+    console.log("Time of day: " + new Date().toLocaleTimeString());
 
 }
 

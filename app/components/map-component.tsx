@@ -8,8 +8,14 @@ import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Spinner, Spinner2 } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
-import { MAPS_API_KEY, clusterThreshHold } from "~/app/config";
+import {
+  MAPS_API_KEY,
+  RECORDS_FETCH_URL,
+  clusterThreshHold,
+} from "~/app/config";
 import { fetchAirtableRecords, fetchsql, sampleFetch } from "./airtable-helper";
+import { MyList } from "./List";
+import { MyMap } from "./my-map";
 
 export function MapComponent() {
   const render = (status: Status) => {
@@ -47,14 +53,14 @@ export function MapComponent() {
   const filteredRecords = records
     ? records.filter((record) =>
         // record.fields.category.includes(category) &&
-        record.fields.Title.toLowerCase().includes(searchTerm.toLowerCase())
+        record.fields.searchStr.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
 
-  useEffect(() => {
+  function fetchRecords() {
     setIsLoading(true);
-
-    fetch("http://localhost:3000/api/hello", {
+    console.log("fetchRecords trigger", RECORDS_FETCH_URL);
+    fetch(RECORDS_FETCH_URL, {
       method: "POST",
     })
       .then((res) => res.json())
@@ -63,6 +69,11 @@ export function MapComponent() {
         setRecords(data);
         setIsLoading(false);
       });
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchRecords();
 
     // sampleFetch()
   }, []);
@@ -99,16 +110,15 @@ export function MapComponent() {
         className="w-full h-full flex flex-col-reverse sm:flex-row relative
      bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
       >
-        // Add a refresh button
-        <div className="absolute top-0 right-0 p-2">
+        <div className=" w-20 h-8 top-0 right-0 p-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => fetchRecords()}
           >
-            Refresh
+            Refresh Button
           </button>
         </div>
-        <List
+        <MyList
           isLoading={isLoading}
           filteredRecords={filteredRecords}
           setSelectedRecord={setSelectedRecord}
@@ -120,192 +130,6 @@ export function MapComponent() {
   );
 }
 const mapOptions = {
-  center: { lat: 38.50505275699189, lng: -98.9286968796735 },
+  center: { lat: 47.4351810744086, lng: 3.0833809671533285 },
   zoom: 4,
 };
-
-function MyMap({
-  center,
-  zoom,
-  filteredRecords,
-  selectedRecord,
-  records,
-}: {
-  center: google.maps.LatLngLiteral;
-  zoom: number;
-  filteredRecords?: Record[];
-  selectedRecord: Record | null;
-  records: Record[];
-}) {
-  const mapRef = useRef<google.maps.Map>();
-  const divRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (mapRef.current && filteredRecords) {
-      const bounds = new google.maps.LatLngBounds();
-      filteredRecords.forEach((record) => {
-        const latLng = new window.google.maps.LatLng(
-          record.fields.lat,
-          record.fields.lng
-        );
-        bounds.extend(latLng);
-      });
-      mapRef.current.fitBounds(bounds);
-    }
-  }, [filteredRecords]);
-
-  useEffect(() => {
-    if (divRef.current) {
-      mapRef.current = new window.google.maps.Map(divRef.current, {
-        center,
-        zoom,
-      });
-    }
-  }, [center, zoom]);
-
-  useEffect(() => {
-    if (selectedRecord && mapRef.current) {
-      // const [lat, lng] = selectedRecord.fields["Coordinates (lat, lng)"]
-      //   .split(",")
-      //   .map(parseFloat);
-      mapRef.current.setZoom(8); // ADDED THIS
-      mapRef.current.panTo(
-        new google.maps.LatLng(
-          selectedRecord.fields.lat,
-          selectedRecord.fields.lng
-        )
-      );
-    }
-  }, [selectedRecord]);
-
-  const markers = filteredRecords?.map((value) => {
-    const marker = new google.maps.Marker({
-      position: { lat: value.fields.lat, lng: value.fields.lng },
-      icon: {
-        url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-        scaledSize: new google.maps.Size(20, 20),
-      },
-    });
-    return marker;
-  });
-
-  useEffect(() => {
-    console.log("Lenght", filteredRecords?.length);
-    if (filteredRecords && filteredRecords.length < clusterThreshHold) return;
-
-    const mc = new MarkerClusterer({
-      markers,
-      map: mapRef.current,
-    });
-
-    return () => {
-      mc.clearMarkers();
-    };
-  }, [filteredRecords, markers]);
-
-  return (
-    <div ref={divRef} className="w-full h-[50dvh] sm:h-[85dvh]">
-      {mapRef.current &&
-        filteredRecords &&
-        filteredRecords?.length < clusterThreshHold &&
-        filteredRecords?.map((record) => (
-          <MyMarker key={record.id} map={mapRef.current!} record={record} />
-        ))}
-    </div>
-  );
-}
-
-interface MyMarkerProps {
-  record: Record;
-  map: google.maps.Map;
-}
-
-function MyMarker({ record, map }: MyMarkerProps) {
-  var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
-  if (record.fields["Coordinates (lat, lng)"]) {
-    const [lat, lng] = record.fields["Coordinates (lat, lng)"]
-      .split(",")
-      .map(parseFloat);
-    record.fields.lat = lat;
-    record.fields.lng = lng;
-  }
-
-  let category = record.fields.City;
-
-  // var icons: { [key: string]: string } = {
-  //   Hiking: iconBase + "hiker.png",
-  //   Airport: iconBase + "volcano.png",
-  //   Restaurant: iconBase + "coffee.png",
-  //   Pub: iconBase + "bars.png",
-  //   Lake: iconBase + "terrain.png",
-  // };
-
-  // const icon = icons[category];
-  const icon = iconBase + "volcano.png";
-
-  useEffect(() => {
-    const marker = new google.maps.Marker({
-      position: new google.maps.LatLng(record.fields.lat, record.fields.lng),
-      map,
-      title: record.fields.Title,
-      icon: {
-        url: icon,
-        scaledSize: new google.maps.Size(32, 32),
-      },
-      animation: google.maps.Animation.DROP,
-    });
-
-    return () => {
-      marker.setMap(null); // this removes the marker
-    };
-  }, [record, map]);
-
-  return null;
-}
-
-function List({
-  isLoading,
-  records,
-  filteredRecords,
-  setSelectedRecord,
-}: {
-  isLoading: boolean;
-  records: Record[];
-  filteredRecords: Record[];
-  setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
-}) {
-  return (
-    <div className="relative sm:w-[25%] w-full  ">
-      {isLoading ? (
-        <Spinner2 />
-      ) : records?.length > 0 ? (
-        <ul className="overflow-y-scroll h-[85dvh] p-4">
-          {filteredRecords.map((record, index) => (
-            <li
-              key={record.id}
-              onClick={() => setSelectedRecord(record)}
-              className="p-4 hover:scale-105 transition-all ease-in-out 1s cursor-pointer
-            shadow-sm hover:shadow-md font-mono text-md bg-gray-100 rounded-md m-2 
-            dark:bg-gray-700"
-            >
-              <strong>
-                {index + 1}
-                {". "}{" "}
-              </strong>
-              {record.fields.Title}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="text-center p-5 top-1/4 ">
-          <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
-            No records found ~!
-          </p>
-          <p style={{ fontSize: "1rem", color: "gray" }}>
-            Try adjusting your search criteria.
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}

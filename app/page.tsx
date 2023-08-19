@@ -1,13 +1,12 @@
 import Image from "next/image";
 import { MapComponent } from "./components/map-component";
 import { Counter } from "./Counter";
+import { useEffect } from "react";
+import { RECORDS_FETCH_URL } from "./config";
 
 export default function Home() {
   return (
-    <main
-      className="flex min-h-[100dvh] flex-col items-center 
-    justify-between"
-    >
+    <main className="flex min-h-[100dvh] flex-col items-center justify-between">
       {/* <div className="w-full h-full flex-grow bg-blue-100"> */}
       {/* <Counter /> */}
       <MapComponent />
