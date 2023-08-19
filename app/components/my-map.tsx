@@ -104,7 +104,6 @@ function MyMarker(record: Record, map: google.maps.Map) {
 
   const marker = new google.maps.Marker({
     position: new google.maps.LatLng(record.fields.lat, record.fields.lng),
-    map,
     title: record.fields.Title,
     icon: {
       url: icon,
