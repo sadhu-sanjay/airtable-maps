@@ -39,7 +39,7 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    */
   useEffect(() => {
-    if (mapRef.current && filteredRecords && filteredRecords.length > 0) {
+    if (mapRef.current && filteredRecords ) {
       const bounds = new google.maps.LatLngBounds();
 
       filteredRecords.forEach((record) => {
@@ -77,7 +77,9 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    * it will rerender the cluster on the map
    */
+  
   useEffect(() => {
+    
     const mc = new MarkerClusterer({
       markers: markers,
       map: mapRef.current,
