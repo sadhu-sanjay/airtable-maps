@@ -29,7 +29,7 @@ export function MyMap({
     if (divRef.current) {
       mapRef.current = new window.google.maps.Map(divRef.current, {
         center,
-        zoom,
+        zoom ,
       });
     }
   }, [center, zoom]);
@@ -39,7 +39,7 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    */
   useEffect(() => {
-    if (mapRef.current && filteredRecords ) {
+    if (mapRef.current && filteredRecords && filteredRecords.length > 0 ) {
       const bounds = new google.maps.LatLngBounds();
 
       filteredRecords.forEach((record) => {

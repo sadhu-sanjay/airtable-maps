@@ -14,6 +14,5 @@ export const SITE_DESCRIPTION = "Airtable Map"
 export const SITE_URL = process.env.NEXT_PUBLIC_DOMAIN_NAME as string
 
 // URLS
-export const RECORDS_FETCH_URL = process.env.NEXT_PUBLIC_DOMAIN_NAME + "/api/airtable"
-
+export const RECORDS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/records"
 

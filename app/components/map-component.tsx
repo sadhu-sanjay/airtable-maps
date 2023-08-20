@@ -51,19 +51,18 @@ export function MapComponent() {
   };
 
   const filteredRecords = records
-    ? records.filter((r) =>
-        r.fields.searchStr.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    ? records.filter((record) => {
+        if (!record) return;
+        return record.searchStr.toLowerCase().includes(searchTerm.toLowerCase());
+      })
     : [];
 
   function fetchRecords() {
     setIsLoading(true);
-    fetch(RECORDS_FETCH_URL, {
-      method: "POST",
-    })
+    fetch(RECORDS_FETCH_URL)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Come ther result", data[0]);
+        console.log("Here comes the result", data[0]);
         setRecords(data);
         setIsLoading(false);
       });
@@ -123,7 +122,7 @@ export function MapComponent() {
           setSelectedRecord={setSelectedRecord}
           records={records}
         />
-        <Wrapper apiKey={MAPS_API_KEY} render={render} />
+        {/* <Wrapper apiKey={MAPS_API_KEY} render={render} /> */}
       </div>
     </div>
   );

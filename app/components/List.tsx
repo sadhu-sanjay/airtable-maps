@@ -31,7 +31,7 @@ export function MyList({
                 {index + 1}
                 {". "}{" "}
               </strong>
-              {record.fields.Title}
+              {record.Title}
             </li>
           ))}
         </ul>
@@ -45,12 +45,9 @@ export function MyList({
           </p>
         </div>
       )}
-      <div className="flex absolute bottom-0 bg-slate-50 dark:bg-slate-900 justify-between items-center p-4">
+      <div className="flex w-full  absolute bottom-0 bg-slate-50 dark:bg-slate-900 justify-between items-center p-4">
         <div className="text-gray-500">
           Showing {filteredRecords.length} of {records.length} records
-        </div>
-        <div className="flex items-center">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold rounded"></button>
         </div>
       </div>
     </div>

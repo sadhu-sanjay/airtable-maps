@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/google.maps": "^3.53.6",
+    "dotenv": "^16.3.1",
     "firebase-tools": "^12.4.7"
   }
 }
