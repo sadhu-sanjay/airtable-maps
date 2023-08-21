@@ -53,7 +53,9 @@ export function MapComponent() {
   const filteredRecords = records
     ? records.filter((record) => {
         if (!record) return;
-        return record.searchStr.toLowerCase().includes(searchTerm.toLowerCase());
+        return record.searchStr
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
       })
     : [];
 
@@ -122,7 +124,7 @@ export function MapComponent() {
           setSelectedRecord={setSelectedRecord}
           records={records}
         />
-        {/* <Wrapper apiKey={MAPS_API_KEY} render={render} /> */}
+        <Wrapper apiKey={MAPS_API_KEY} render={render} />
       </div>
     </div>
   );

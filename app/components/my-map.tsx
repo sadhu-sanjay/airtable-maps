@@ -29,7 +29,7 @@ export function MyMap({
     if (divRef.current) {
       mapRef.current = new window.google.maps.Map(divRef.current, {
         center,
-        zoom ,
+        zoom,
       });
     }
   }, [center, zoom]);
@@ -39,35 +39,33 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    */
   useEffect(() => {
-    if (mapRef.current && filteredRecords && filteredRecords.length > 0 ) {
+    if (mapRef.current && filteredRecords && filteredRecords.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
       filteredRecords.forEach((record) => {
-        if (!record.fields.lat || !record.fields.lng) return;
-        const latLng = new window.google.maps.LatLng(
-          record.fields.lat,
-          record.fields.lng
-        );
+        if (!record.lat || !record.lng) return;
+        const latLng = new window.google.maps.LatLng(record.lat, record.lng);
         bounds.extend(latLng);
       });
       mapRef.current.fitBounds(bounds);
+
+      if (filteredRecords.length === 1) {
+        mapRef.current.setZoom(8);
+      }
     }
   }, [filteredRecords]);
 
-  // useEffect(() => {
-  //   if (selectedRecord && mapRef.current) {
-  //     if (!selectedRecord.fields["Coordinates (lat, lng)"]) {
-  //       alert("No coordinates found for this record");
-  //       return;
-  //     }
+  useEffect(() => {
+    if (selectedRecord && mapRef.current) {
 
-  //     const [lat, lng] = selectedRecord.fields["Coordinates (lat, lng)"]
-  //       .split(",")
-  //       .map(parseFloat);
-  //     mapRef.current.setZoom(8); // ADDED THIS
-  //     mapRef.current.panTo(new google.maps.LatLng(lat, lng));
-  //   }
-  // }, [selectedRecord]);
+      const { lat, lng } = selectedRecord;
+      if (!lat || !lng) {
+        return alert("No coordinates found for this record");
+      }
+      mapRef.current.setZoom(8); // ADDED THIS
+      mapRef.current.panTo(new google.maps.LatLng(lat, lng));
+    }
+  }, [selectedRecord]);
 
   const markers: google.maps.Marker[] = filteredRecords
     ?.map((record: Record) => MyMarker(record, mapRef.current!))
@@ -77,9 +75,8 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    * it will rerender the cluster on the map
    */
-  
+
   useEffect(() => {
-    
     const mc = new MarkerClusterer({
       markers: markers,
       map: mapRef.current,
@@ -99,12 +96,12 @@ interface MyMarkerProps {
 }
 
 function MyMarker(record: Record, map: google.maps.Map) {
-  if (!record.fields.lat || !record.fields.lng) return null;
+  if (!record.lat || !record.lng) return null;
   const icon = "./marker-icon3.png";
 
   const marker = new google.maps.Marker({
-    position: new google.maps.LatLng(record.fields.lat, record.fields.lng),
-    title: record.fields.Title,
+    position: new google.maps.LatLng(record.lat, record.lng),
+    title: record.Title,
     icon: {
       url: icon,
       scaledSize: new google.maps.Size(32, 32),
