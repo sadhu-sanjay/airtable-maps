@@ -62,7 +62,7 @@ export function MyMap({
       if (!lat || !lng) {
         return alert("No coordinates found for this record");
       }
-      mapRef.current.setZoom(8); // ADDED THIS
+      mapRef.current.setZoom(10); // ADDED THIS
       mapRef.current.panTo(new google.maps.LatLng(lat, lng));
     }
   }, [selectedRecord]);
@@ -97,7 +97,7 @@ interface MyMarkerProps {
 
 function MyMarker(record: Record, map: google.maps.Map) {
   if (!record.lat || !record.lng) return null;
-  const icon = "./marker-icon3.png";
+  const icon = "./marker-icon2.png";
 
   const marker = new google.maps.Marker({
     position: new google.maps.LatLng(record.lat, record.lng),
