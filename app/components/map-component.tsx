@@ -8,14 +8,35 @@ import { MAPS_API_KEY, RECORDS_FETCH_URL } from "~/app/config";
 import { MyList } from "./List";
 import { MyMap } from "./my-map";
 
-
-
 export function MapComponent() {
   const [records, setRecords] = useState<Record[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
-  const recordsPerPage = 100; // Number of records per page
+  // Pagination
+  const recordsPageSize = 100; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastRecord = currentPage * recordsPageSize;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
+  const recordsToShow = records.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(records.length / recordsPageSize);
+
+  const render = (status: Status) => {
+    switch (status) {
+      case Status.LOADING:
+        return <Spinner />;
+      case Status.FAILURE:
+        return <div>Error Loading Map</div>;
+      case Status.SUCCESS:
+        return (
+          <MyMap
+            {...mapOptions}
+            filteredRecords={recordsToShow}
+            selectedRecord={selectedRecord}
+            records={records}
+          />
+        );
+    }
+  };
 
   function fetchRecords() {
     setIsLoading(true);
@@ -29,15 +50,8 @@ export function MapComponent() {
   }
 
   useEffect(() => {
-    setIsLoading(true);
     fetchRecords();
   }, []);
-
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const recordsToShow = records.slice(indexOfFirstRecord, indexOfLastRecord);
-
-  const totalPages = Math.ceil(records.length / recordsPerPage);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -45,16 +59,10 @@ export function MapComponent() {
     }
   };
 
-  const maxButtonsDisplayed = 5; // Maximum number of page buttons to display
-  const halfMaxButtons = Math.floor(maxButtonsDisplayed / 2);
-
-  const startPage = Math.max(currentPage - halfMaxButtons, 1);
-  const endPage = Math.min(startPage + maxButtonsDisplayed - 1, totalPages);
-
   return (
     <div className="w-full h-full flex-1 bg-pink-300">
       <aside className="bg-blue-200/1 sm:w-[30%] w-full h-[100dvh] p-4 ">
-        <aside className="bg-blue-300 rounded-lg flex w-full h-full flex-col gap-3 items justify-between p-4">
+        <div className="bg-blue-300 rounded-lg flex w-full h-full flex-col gap-3 items justify-between p-4">
           <SearchBar />
           <Filters />
           <MyList
@@ -63,7 +71,7 @@ export function MapComponent() {
             setSelectedRecord={setSelectedRecord}
           />
           <Paginator />
-        </aside>
+        </div>
       </aside>
     </div>
     // </div>
@@ -128,7 +136,7 @@ export function MapComponent() {
 
   function Paginator() {
     return (
-      <div>
+      <div className="flex gap-1 flex-col justify-center ">
         <div className="flex justify-between bg-red-800 items-center gap-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -145,6 +153,9 @@ export function MapComponent() {
           >
             Next
           </button>
+        </div>
+        <div>
+          Showing {currentPage } of {totalPages} pages
         </div>
       </div>
     );
@@ -198,28 +209,10 @@ export function MapComponent() {
 //   );
 // }
 
-// const mapOptions = {
-//   center: { lat: 47.4351810744086, lng: 3.0833809671533285 },
-//   zoom: 6,
-// };
-// const render = (status: Status) => {
-//   switch (status) {
-//     case Status.LOADING:
-//       return <Spinner />;
-//     case Status.FAILURE:
-//       return <div>Error Loading Map</div>;
-//     case Status.SUCCESS:
-//       return (
-//         <MyMap
-//           {...mapOptions}
-//           filteredRecords={filteredRecords}
-//           selectedRecord={selectedRecord}
-//           records={records}
-//         />
-//       );
-//   }
-// };
-// <Wrapper apiKey={MAPS_API_KEY} render={render} />
+const mapOptions = {
+  center: { lat: 41.29684086561144, lng: 24.47824249120258 },
+  zoom: 6,
+};
 
 // const filteredRecords = records
 //     ? records.filter((record) => {

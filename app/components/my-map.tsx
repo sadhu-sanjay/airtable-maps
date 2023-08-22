@@ -75,7 +75,6 @@ export function MyMap({
    * This effect will run every time the filteredRecords changes
    * it will rerender the cluster on the map
    */
-
   useEffect(() => {
     const mc = new MarkerClusterer({
       markers: markers,
@@ -87,7 +86,7 @@ export function MyMap({
     };
   }, [markers]);
 
-  return <div ref={divRef} className="w-full h-[50dvh] sm:h-[85dvh]"></div>;
+  return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
 }
 
 interface MyMarkerProps {
