@@ -12,19 +12,20 @@ export function MyList({
   setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
 }) {
   return (
-    <div className="relative w-full  ">
+    <>
       {isLoading ? (
         <Spinner2 />
       ) : records.length > 0 ? (
-        <ul className="overflow-y-scroll ">
+        <ul className="overflow-scroll ">
           {records.map((record) => (
             <li
               key={record.id}
               onClick={() => setSelectedRecord(record)}
-              className="p-2 hover:scale-105 transition-all ease-in-out 1s cursor-pointer
-              hover:shadow-sm border font-mono text-md bg-gray-100 rounded-md m-2 
+              className="p-1 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer
+              hover:shadow-sm border font-mono text-md bg-gray-100 rounded-md 
               dark:bg-gray-700"
             >
+              {record.sNo}{". "}
               {record.Title}
             </li>
           ))}
@@ -39,6 +40,6 @@ export function MyList({
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 }

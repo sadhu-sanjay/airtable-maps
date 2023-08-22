@@ -8,11 +8,7 @@ import { MAPS_API_KEY, RECORDS_FETCH_URL } from "~/app/config";
 import { MyList } from "./List";
 import { MyMap } from "./my-map";
 
-// ... (imports and other code)
 
-// ... (imports and other code)
-
-// ... (imports and other code)
 
 export function MapComponent() {
   const [records, setRecords] = useState<Record[]>([]);
@@ -56,42 +52,103 @@ export function MapComponent() {
   const endPage = Math.min(startPage + maxButtonsDisplayed - 1, totalPages);
 
   return (
-    <div className="w-full h-full px-2 sm:px-16 pt-2 ">
-      <div
-        className="w-full h-full flex flex-col-reverse sm:flex-row relative
-     bg-gray-100 dark:bg-gray-800 shadow-sm rounded-md border "
-      >
-        <aside className="bg-red-200 sm:w-[30%] w-full flex flex-col gap-2 items justify-between">
+    <div className="w-full h-full flex-1 bg-pink-300">
+      <aside className="bg-blue-200/1 sm:w-[30%] w-full h-[100dvh] p-4 ">
+        <aside className="bg-blue-300 rounded-lg flex w-full h-full flex-col gap-3 items justify-between p-4">
           <SearchBar />
+          <Filters />
           <MyList
             isLoading={isLoading}
             records={recordsToShow}
             setSelectedRecord={setSelectedRecord}
           />
-
-          <div>
-            <div className="flex justify-center items-center mt-4 space-x-4">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-              >
-                Previous
-              </button>
-
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          <Paginator />
         </aside>
-      </div>
+      </aside>
     </div>
+    // </div>
   );
+
+  function Filters() {
+    return (
+      <>
+        <div className="flex gap-2 justify-between items-center">
+          <TableFilter />
+          <TagsFilter />
+          <StateFilter />
+        </div>
+      </>
+    );
+  }
+
+  function TableFilter() {
+    return (
+      <>
+        <select className="w-full p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">All Categories</option>
+          <option value="Hiking">Hiking</option>
+          <option value="Airport">Airport</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Lake">Lake</option>
+          <option value="Pub">Pub</option>
+        </select>
+      </>
+    );
+  }
+
+  function TagsFilter() {
+    return (
+      <>
+        <select className="w-full p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">All Categories</option>
+          <option value="Hiking">Hiking</option>
+          <option value="Airport">Airport</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Lake">Lake</option>
+          <option value="Pub">Pub</option>
+        </select>
+      </>
+    );
+  }
+
+  function StateFilter() {
+    return (
+      <>
+        <select className="w-full p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">All Categories</option>
+          <option value="Hiking">Hiking</option>
+          <option value="Airport">Airport</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Lake">Lake</option>
+          <option value="Pub">Pub</option>
+        </select>
+      </>
+    );
+  }
+
+  function Paginator() {
+    return (
+      <div>
+        <div className="flex justify-between bg-red-800 items-center gap-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    );
+  }
 }
 
 // function Header({
