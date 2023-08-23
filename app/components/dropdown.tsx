@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 function Dropdown({
   items,
@@ -14,6 +14,21 @@ function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -26,7 +41,7 @@ function Dropdown({
   return (
     <>
       <div
-        className="relative inline-block text-left"
+        className="relative inline-block text-left" ref={dropdownRef}
       >
         <button
           disabled={isLoading}

@@ -27,7 +27,7 @@ export function MapComponent() {
     return record.searchStr.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const recordsPageSize = 100; // Number of records per page
+  const recordsPageSize = 10; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
@@ -58,7 +58,8 @@ export function MapComponent() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Records ==>", data[0]);
-        setRecords(data);
+        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        setRecords(randomRecords)
         setIsLoading(false);
       });
   }
@@ -74,6 +75,7 @@ export function MapComponent() {
   };
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
 
   return (
@@ -82,12 +84,13 @@ export function MapComponent() {
       <aside className="absolute bg-blue-200/1 sm:w-[30%] w-full h-[100dvh]  p-4 ">
         <div className="bg-blue-100 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
           <SearchBar searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+          <Filters />
           <MyList
             isLoading={isLoading}
-            records={filteredRecords}
+            records={recordsToShow}
             setSelectedRecord={setSelectedRecord}
           />
-          {/* <Paginator /> */}
+          <Paginator />
         </div>
       </aside>
     </div>
@@ -165,9 +168,16 @@ export function MapComponent() {
   }
 
   function Paginator() {
+    // Generate an array of page numbers
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    // Calculate the range of records currently viewed
+    const firstViewedRecord = indexOfFirstRecord + 1;
+    const lastViewedRecord = Math.min(indexOfLastRecord, filteredRecords.length);
+
     return (
-      <div className="absolute bottom-0 self-center flex gap-1 flex-col justify-center ">
-        <div className="flex justify-between bg-red-800 items-center gap-2">
+      <div className="self-center flex gap-1 flex-col justify-center ">
+        <div className="flex justify-between bg-blue-100 items-center gap-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -175,6 +185,17 @@ export function MapComponent() {
           >
             Previous
           </button>
+
+          {/* Render a button for each page number */}
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-2 py-1 rounded-md ${currentPage === number ? 'bg-blue-200' : 'bg-gray-200'}`}
+            >
+              {number}
+            </button>
+          ))}
 
           <button
             onClick={() => handlePageChange(currentPage + 1)}
@@ -184,9 +205,9 @@ export function MapComponent() {
             Next
           </button>
         </div>
-        <div>
-      Showing {currentPage} of {totalPages} pages , total {filteredRecords.length}
-         
+        <div className="text-center">
+          <p>Page {currentPage} of {totalPages}</p>
+          <p>Viewing records {firstViewedRecord} to {lastViewedRecord} out of {filteredRecords.length} total</p>
         </div>
       </div>
     );

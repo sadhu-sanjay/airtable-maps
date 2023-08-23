@@ -40,6 +40,7 @@ export function SearchBar({
           value={searchTerm}
           required
         />
+        
       </div>
     </form>
   );
