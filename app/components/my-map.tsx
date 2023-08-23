@@ -20,7 +20,7 @@ export function MyMap({
   const divRef = useRef<HTMLDivElement>(null);
 
   /*
-   * This effect will run once when the component mounts
+
    * It will create a new google map and store it in the mapRef
    * It will also set the center and zoom of the map
    * It will also add a listener to the map that will update the center and zoom state when the user changes the map
@@ -86,7 +86,9 @@ export function MyMap({
     };
   }, [markers]);
 
-  return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
+  // return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
+  // return <div className="bg-blue-900 w-full h-full absolute">Hello</div>;
+  return <div ref={divRef} className="bg-blue-900 w-full h-full absolute ">Hello</div>;
 }
 
 interface MyMarkerProps {

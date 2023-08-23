@@ -15,4 +15,6 @@ export const SITE_URL = process.env.NEXT_PUBLIC_DOMAIN_NAME as string
 
 // URLS
 export const RECORDS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/records"
+export const TAGS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/tags"
+export const REGIONS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/regions"
 
