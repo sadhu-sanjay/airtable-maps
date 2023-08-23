@@ -16,8 +16,8 @@ export function MyList({
       {isLoading ? (
         <Spinner2 />
       ) : records.length > 0 ? (
-        <ul className="overflow-scroll ">
-          {records.map((record) => (
+        <ul className="overflow-scroll max-h-[70dvh] ">
+          {records.map((record, index) => (
             <li
               key={record.id}
               onClick={() => setSelectedRecord(record)}
@@ -25,7 +25,7 @@ export function MyList({
               hover:shadow-sm border font-mono text-md bg-gray-100 rounded-md 
               dark:bg-gray-700"
             >
-              {record.sNo}{". "}
+              {index + 1}{". "}
               {record.Title}
             </li>
           ))}
