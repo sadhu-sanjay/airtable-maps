@@ -31,7 +31,10 @@ export function MapComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
-  const recordsToShow = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const recordsToShow = filteredRecords.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(filteredRecords.length / recordsPageSize);
 
   const render = (status: Status) => {
@@ -59,7 +62,7 @@ export function MapComponent() {
       .then((data) => {
         console.log("Records ==>", data[0]);
         const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-        setRecords(randomRecords)
+        setRecords(randomRecords);
         setIsLoading(false);
       });
   }
@@ -78,12 +81,36 @@ export function MapComponent() {
     setCurrentPage(1);
   };
 
+  /**
+   * Handle Region Filter
+   */
+  const [isLoadingRegion, setIsLoadingRegion] = useState(false);
+  const [regions, setRegions] = useState<string[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  function fetchRegions() {
+    setIsLoadingRegion(true);
+    fetch(REGIONS_FETCH_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched Regions==>", data);
+        setRegions(data);
+        setIsLoadingRegion(false);
+      });
+  }
+  useEffect(() => {
+    fetchRegions();
+  }, []);
+  
+
   return (
     <div className="w-full h-full flex-1 bg-pink-300">
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] w-full h-[100dvh]  p-4 ">
         <div className="bg-blue-100 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
-          <SearchBar searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+          <SearchBar
+            searchTerm={searchTerm}
+            handleSearchChange={handleSearchChange}
+          />
           <Filters />
           <MyList
             isLoading={isLoading}
@@ -102,8 +129,13 @@ export function MapComponent() {
       <>
         <div className="flex gap-2 justify-between items-center">
           {/* <TableFilter /> */}
-          <TagsFilter />
-          <RegionFilter />
+          {/* <TagsFilter /> */}
+          <Dropdown
+            items={regions}
+            label="Region"
+            isLoading={isLoadingRegion}
+            placeholder="Region"
+          />
         </div>
       </>
     );
@@ -138,42 +170,16 @@ export function MapComponent() {
     );
   }
 
-  function RegionFilter() {
-    useEffect(() => {
-      fetchRegions();
-    }, []);
-
-    const [regions, setRegions] = useState<string[]>([]);
-    const [isLoadingRegion, setIsLoadingRegion] = useState(false);
-
-    function fetchRegions() {
-      setIsLoadingRegion(true);
-      fetch(REGIONS_FETCH_URL)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Fetched Regions==>", data);
-          setRegions(data);
-          setIsLoadingRegion(false);
-        });
-    }
-
-    return (
-      <Dropdown
-        items={regions}
-        label="Regions"
-        isLoading={isLoadingRegion}
-        placeholder="Regions"
-      />
-    );
-  }
-
   function Paginator() {
     // Generate an array of page numbers
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     // Calculate the range of records currently viewed
     const firstViewedRecord = indexOfFirstRecord + 1;
-    const lastViewedRecord = Math.min(indexOfLastRecord, filteredRecords.length);
+    const lastViewedRecord = Math.min(
+      indexOfLastRecord,
+      filteredRecords.length
+    );
 
     return (
       <div className="self-center flex gap-1 flex-col justify-center ">
@@ -191,7 +197,9 @@ export function MapComponent() {
             <button
               key={number}
               onClick={() => handlePageChange(number)}
-              className={`px-2 py-1 rounded-md ${currentPage === number ? 'bg-blue-200' : 'bg-gray-200'}`}
+              className={`px-2 py-1 rounded-md ${
+                currentPage === number ? "bg-blue-200" : "bg-gray-200"
+              }`}
             >
               {number}
             </button>
@@ -206,8 +214,13 @@ export function MapComponent() {
           </button>
         </div>
         <div className="text-center">
-          <p>Page {currentPage} of {totalPages}</p>
-          <p>Viewing records {firstViewedRecord} to {lastViewedRecord} out of {filteredRecords.length} total</p>
+          <p>
+            Page {currentPage} of {totalPages}
+          </p>
+          <p>
+            Viewing records {firstViewedRecord} to {lastViewedRecord} out of{" "}
+            {filteredRecords.length} total
+          </p>
         </div>
       </div>
     );
