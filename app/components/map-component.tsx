@@ -124,6 +124,11 @@ export function MapComponent() {
     // </div>
   );
 
+  function handleRegionsSelected(selectedItems: string[]) {
+
+    console.log("Selected Item", selectedItems)
+  }
+
   function Filters() {
     return (
       <>
@@ -135,40 +140,41 @@ export function MapComponent() {
             label="Region"
             isLoading={isLoadingRegion}
             placeholder="Region"
+            onItemsSelected={handleRegionsSelected}
           />
         </div>
       </>
     );
   }
 
-  function TagsFilter() {
-    useEffect(() => {
-      fetchTags();
-    }, []);
+  // function TagsFilter() {
+  //   useEffect(() => {
+  //     fetchTags();
+  //   }, []);
 
-    const [tags, setTags] = useState<string[]>([]);
-    const [isLoadingTags, setIsLoadingTags] = useState(false);
+  //   const [tags, setTags] = useState<string[]>([]);
+  //   const [isLoadingTags, setIsLoadingTags] = useState(false);
 
-    function fetchTags() {
-      setIsLoadingTags(true);
-      fetch(TAGS_FETCH_URL)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Fetch Tags", data[0]);
-          setTags(data);
-          setIsLoadingTags(false);
-        });
-    }
+  //   function fetchTags() {
+  //     setIsLoadingTags(true);
+  //     fetch(TAGS_FETCH_URL)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         console.log("Fetch Tags", data[0]);
+  //         setTags(data);
+  //         setIsLoadingTags(false);
+  //       });
+  //   }
 
-    return (
-      <Dropdown
-        items={tags}
-        label="Tags"
-        isLoading={isLoadingTags}
-        placeholder="Tags"
-      />
-    );
-  }
+  //   return (
+  //     <Dropdown
+  //       items={tags}
+  //       label="Tags"
+  //       isLoading={isLoadingTags}
+  //       placeholder="Tags"
+  //     />
+  //   );
+  // }
 
   function Paginator() {
     // Generate an array of page numbers

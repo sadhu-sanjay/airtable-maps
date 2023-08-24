@@ -5,20 +5,39 @@ function Dropdown({
   label,
   isLoading,
   placeholder,
+  onItemsSelected,
 }: {
   items: string[];
   label: string;
   isLoading: boolean;
   placeholder: string;
+  onItemsSelected: (selectedItems: string[]) => void
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const handleSelected = (item: string) => {
+    setSelectedItems((prevItems) =>
+      prevItems.includes(item)
+        ? prevItems.filter((i) => i !== item)
+        : [...prevItems, item]
+    );
+  };
+
+  useEffect(() => {
+    onItemsSelected(selectedItems)
+    console.log("use Effect triggered")
+  }, [selectedItems])
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -29,20 +48,22 @@ function Dropdown({
     };
   }, []);
 
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const filteredItems = items.length > 0 ? items.filter((item) => {
-    if (!item) return;
-    return item.toLowerCase().includes(searchTerm.toLowerCase());
-  }): [];
+  const filteredItems =
+    items.length > 0
+      ? items.filter((item) => {
+          if (!item) return;
+          return item.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+      : [];
 
   return (
     <>
-      <div
-        className="relative inline-block text-left" ref={dropdownRef}
-      >
+      <div className="relative inline-block text-left" ref={dropdownRef}>
         <button
           disabled={isLoading}
           onClick={toggleDropdown}
@@ -131,13 +152,14 @@ function Dropdown({
                 <li key={item}>
                   <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <input
-                      id="checkbox-item-17"
+                      id={`checkbox-item-${item}`}
                       type="checkbox"
-                      value=""
+                      checked={selectedItems.includes(item)}
+                      onChange={() => handleSelected(item)}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
                     <label
-                      htmlFor="checkbox-item-17"
+                      htmlFor={`checkbox-item-${item}`}
                       className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                     >
                       {item}
@@ -150,7 +172,7 @@ function Dropdown({
               href="#"
               className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500 hover:underline"
             >
-              {items.length} total 
+              {items.length} total
             </a>
           </div>
         )}
