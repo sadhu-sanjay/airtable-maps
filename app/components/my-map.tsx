@@ -67,6 +67,7 @@ export function MyMap({
     }
   }, [selectedRecord]);
 
+
   const markers: google.maps.Marker[] = filteredRecords
     ?.map((record: Record) => MyMarker(record, mapRef.current!))
     .filter(Boolean) as google.maps.Marker[];

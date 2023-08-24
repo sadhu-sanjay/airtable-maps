@@ -37,23 +37,7 @@ export function MapComponent() {
   );
   const totalPages = Math.ceil(filteredRecords.length / recordsPageSize);
 
-  const render = (status: Status) => {
-    switch (status) {
-      case Status.LOADING:
-        return <Spinner />;
-      case Status.FAILURE:
-        return <div>Error Loading Map</div>;
-      case Status.SUCCESS:
-        return (
-          <MyMap
-            {...mapOptions}
-            filteredRecords={recordsToShow}
-            selectedRecord={selectedRecord}
-            records={records}
-          />
-        );
-    }
-  };
+  
 
   function fetchRecords() {
     setIsLoading(true);
@@ -102,27 +86,7 @@ export function MapComponent() {
   }, []);
   
 
-  return (
-    <div className="w-full h-full flex-1 bg-pink-300">
-      <Wrapper apiKey={MAPS_API_KEY} render={render} />
-      <aside className="absolute bg-blue-200/1 sm:w-[30%] w-full h-[100dvh]  p-4 ">
-        <div className="bg-blue-100 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
-          <SearchBar
-            searchTerm={searchTerm}
-            handleSearchChange={handleSearchChange}
-          />
-          <Filters />
-          <MyList
-            isLoading={isLoading}
-            records={recordsToShow}
-            setSelectedRecord={setSelectedRecord}
-          />
-          <Paginator />
-        </div>
-      </aside>
-    </div>
-    // </div>
-  );
+  
 
   function handleRegionsSelected(selectedItems: string[]) {
 
@@ -135,13 +99,7 @@ export function MapComponent() {
         <div className="flex gap-2 justify-between items-center">
           {/* <TableFilter /> */}
           {/* <TagsFilter /> */}
-          <Dropdown
-            items={regions}
-            label="Region"
-            isLoading={isLoadingRegion}
-            placeholder="Region"
-            onItemsSelected={handleRegionsSelected}
-          />
+          
         </div>
       </>
     );
@@ -231,9 +189,51 @@ export function MapComponent() {
       </div>
     );
   }
-}
 
-const mapOptions = {
-  center: { lat: 41.29684086561144, lng: 24.47824249120258 },
-  zoom: 6,
-};
+  const render = (status: Status) => {
+    switch (status) {
+      case Status.LOADING:
+        return <Spinner />;
+      case Status.FAILURE:
+        return <div>Error Loading Map</div>;
+      case Status.SUCCESS:
+        return (
+          <MyMap
+            center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
+            zoom={6}
+            filteredRecords={recordsToShow}
+            selectedRecord={selectedRecord}
+            records={records}
+          />
+        );
+    }
+  };
+
+  return (
+    <div className="w-full h-full flex-1 bg-pink-300">
+      <Wrapper apiKey={MAPS_API_KEY} render={render} />
+      <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
+        <div className="bg-blue-100 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
+          <SearchBar
+            searchTerm={searchTerm}
+            handleSearchChange={handleSearchChange}
+          />
+          <Dropdown
+            items={regions}
+            label="Region"
+            isLoading={isLoadingRegion}
+            placeholder="Region"
+            onItemsSelected={handleRegionsSelected}
+          />
+          <MyList
+            isLoading={isLoading}
+            records={recordsToShow}
+            setSelectedRecord={setSelectedRecord}
+          />
+          <Paginator />
+        </div>
+      </aside>
+    </div>
+    // </div>
+  );
+}
