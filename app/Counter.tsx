@@ -39,7 +39,7 @@ export function Counter() {
               data.map((record, index) => {
                 return (
                   <div key={record.id}>
-                    <strong>{index}.</strong> {record.fields.Title}
+                    <strong>{index}.</strong> {record.Title}
                   </div>
                 );
               })}
