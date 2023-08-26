@@ -5,13 +5,13 @@ function Dropdown({
   label,
   isLoading,
   placeholder,
-  onItemsSelected,
+  doneCallBack,
 }: {
   items: string[];
   label: string;
   isLoading: boolean;
   placeholder: string;
-  onItemsSelected: (selectedItems: string[]) => void
+  doneCallBack: (selectedItems: string[]) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,11 +25,11 @@ function Dropdown({
         : [...prevItems, item]
     );
   };
-
-  useEffect(() => {
-    onItemsSelected(selectedItems)
-    console.log("use Effect triggered")
-  }, [selectedItems])
+  
+  function doneButtonClicked() {
+    doneCallBack(selectedItems);
+    setIsOpen(!isOpen);
+  };
 
 
   useEffect(() => {
@@ -47,7 +47,6 @@ function Dropdown({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -168,12 +167,25 @@ function Dropdown({
                 </li>
               ))}
             </ul>
-            <a
-              href="#"
-              className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500 hover:underline"
-            >
-              {items.length} total
-            </a>
+            <div>
+              <div className="flex items-center justify-between">
+                <p
+                  className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700  dark:text-red-500 "
+                >
+                  {/* show how many selected */}
+                  {selectedItems.length === 0
+                    ? `Total: ${items.length}`
+                    : `${selectedItems.length} selected out of ${items.length}`}
+                
+                </p>
+                <button
+                  onClick={() => doneButtonClicked()}
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 m-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
