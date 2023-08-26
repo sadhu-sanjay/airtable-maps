@@ -33,10 +33,14 @@ export function MapComponent() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Records ==>", data[0]);
-          // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 100);
+        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 100);
         setRecords(data);
+      }).catch((err) => {
+        console.log("Error fetching records", err);
+        alert("Error fetching records Please try again. or Reload the page");
+      }).finally(() => {
         setIsLoading(false);
-      });
+      })
   }
 
   useEffect(() => {
@@ -53,32 +57,28 @@ export function MapComponent() {
     console.log("Apply filter called");
     setIsLoading(true);
 
-    setTimeout(() => {
-      let newFilteredRecords = records;
+    let newFilteredRecords = records;
 
-      // Filter records based on selected REgions
-      if (selectedRegions.length > 0) {
-        newFilteredRecords = newFilteredRecords.filter((record) => {
-          return selectedRegions.some((region) =>
-            record.Region.includes(region)
-          );
-        });
-      }
+    // Filter records based on selected REgions
+    if (selectedRegions.length > 0) {
+      newFilteredRecords = newFilteredRecords.filter((record) => {
+        return selectedRegions.some((region) => record.Region.includes(region));
+      });
+    }
 
-      // Filter records based on selected Tags
-      if (selectedTags.length > 0) {
-        console.log("selectedTags", selectedTags);
-        newFilteredRecords = newFilteredRecords.filter((record) => {
-          console.log("record.Tags", record.Tags);
-          return selectedTags.some((tag) => record.Tags?.includes(tag));
-        });
-      }
+    // Filter records based on selected Tags
+    if (selectedTags.length > 0) {
+      console.log("selectedTags", selectedTags);
+      newFilteredRecords = newFilteredRecords.filter((record) => {
+        console.log("record.Tags", record.Tags);
+        return selectedTags.some((tag) => record.Tags?.includes(tag));
+      });
+    }
 
-      // update Global Filtered Records
-      setFilteredRecords(newFilteredRecords);
+    // update Global Filtered Records
+    setFilteredRecords(newFilteredRecords);
 
-      setIsLoading(false);
-    }, 1000);
+    setIsLoading(false);
 
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
@@ -141,7 +141,7 @@ export function MapComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
-  const recordsToShow = searchedRecords.slice(
+  const recordsToShow = searchedRecords && searchedRecords.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
@@ -210,13 +210,20 @@ export function MapComponent() {
               Prev
             </button>
             <nav aria-label="Page navigation xample">
-              <ul style={{scrollbarWidth: 'none'}} className="flex items-center -space-x-px h-8 text-sm max-w-[180px] overflow-scroll ">
+              <ul
+                style={{ scrollbarWidth: "none" }}
+                className="flex items-center -space-x-px h-8 text-sm max-w-[180px] overflow-scroll "
+              >
                 {pageNumbers.map((number) => (
                   <li key={number} onClick={() => handlePageChange(number)}>
                     <a
                       className={`
                     flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white 
-                    ${ currentPage === number ? "font-semibold text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-white" : "" }
+                    ${
+                      currentPage === number
+                        ? "font-semibold text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-white"
+                        : ""
+                    }
                     `}
                     >
                       {number}
@@ -319,7 +326,7 @@ export function MapComponent() {
   };
 
   return (
-    <div className="w-full h-full flex-1 bg-pink-300">
+    <div className="w-full h-full flex-1 ">
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
         <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">

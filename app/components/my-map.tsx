@@ -87,7 +87,7 @@ export function MyMap({
 
   // return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
   // return <div className="bg-blue-900 w-full h-full absolute">Hello</div>;
-  return <div ref={divRef} className="bg-blue-900 w-full h-full absolute ">Hello</div>;
+  return <div ref={divRef} className="bg-blue-200 w-full h-full absolute ">Hello</div>;
 }
 
 interface MyMarkerProps {
