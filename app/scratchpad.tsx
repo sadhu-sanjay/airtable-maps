@@ -16,52 +16,72 @@ export function MapComponent() {
   }
 
   const applyFilters = useCallback(() => {
-    let newFilteredRecords = records;
+    console.log("Apply filter called");
+    setIsLoading(true);
 
-    // Filter records based on selected REgions
-    if (selectedRegions.length > 0) {
-      newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedRegions.some((region) => record.Region.includes(region));
-      });
-    }
+    setTimeout(() => {
+      let newFilteredRecords = records;
 
-    // Filter records based on selected Tags
-    if (selectedTags.length > 0) {
-      newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedTags.some((tag) => record.Tags.includes(tag));
-      });
-    }
+      // Filter records based on selected REgions
+      if (selectedRegions.length > 0) {
+        newFilteredRecords = newFilteredRecords.filter((record) => {
+          return selectedRegions.some((region) =>
+            record.Region.includes(region)
+          );
+        });
+      }
 
-    // update Global Filtered Records
-    setFilteredRecords(newFilteredRecords);
+      // Filter records based on selected Tags
+      if (selectedTags.length > 0) {
+        newFilteredRecords = newFilteredRecords.filter((record) => {
+          return selectedTags.some((tag) => record.Tags.includes(tag));
+        });
+      }
+
+      // update Global Filtered Records
+      setFilteredRecords(newFilteredRecords);
+
+      setIsLoading(false);
+    }, 1000);
+
+    console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
 
   useEffect(() => {
+    console.log("USE EFFECT CALLED");
     applyFilters();
+    console.log("USE EFFECT Ended");
   }, [applyFilters]);
 
   const searchedRecords = useMemo(() => {
+    console.log("SEARCHED RECORDS CALLED");
     if (searchTerm === "") {
       return filteredRecords;
     }
 
+    setIsLoading(true);
+    console.log("Loading done");
     const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
-
-    return filteredRecords.filter((record) =>
-      record.searchString.replace(/\s/g, "").toLowerCase().includes(formattedSearchTerm)
+    const searchRecords = filteredRecords.filter((record) =>
+      record.searchString
+        .replace(/\s/g, "")
+        .toLowerCase()
+        .includes(formattedSearchTerm)
     );
 
+    setIsLoading(false);
 
+    return searchRecords;
+
+    console.log("SEARCHED RECORDS Ended");
   }, [searchTerm, filteredRecords]);
 
   function tags_done_clicked(callBackResult: string[]) {
-
     setSelectedTags(callBackResult);
     console.log("selectedTags", selectedTags);
   }
 
   function region_done_clicked(callBackResult: string[]) {
-
     setSelectedRegions(callBackResult);
     console.log("selectedRegions", selectedRegions);
   }
@@ -69,6 +89,8 @@ export function MapComponent() {
   useEffect(() => {
     console.log("Map Component mounted.");
     // You can place cleanup logic here if needed
+    
+
     return () => {
       console.log("Map Component unmo");
     };
@@ -117,41 +139,41 @@ export function MapComponent() {
         placeholder="Region"
         doneCallBack={region_done_clicked}
       />
+
       {isLoading ? (
         <Spinner />
       ) : (
         <div className="flex flex-col gap-2 dark:bg-slate-700">
-          {searchedRecords.map((record) => (
-            <div
-              key={record.id}
-              className="bg-slate-100
-            m-2 text-white p-2 rounded-md
+          {searchedRecords &&
+            searchedRecords.map((record) => (
+              <div
+                key={record.id}
+                className="bg-slate-100
+            m-2 text-white p-2 
               flex flex-col gap-2"
-            >
-              <h1 className="text-slate-800">{record.Title}</h1>
-              <div className="flex flex-row gap-2">
-                {record.Tags.map((tag) => (
-                  <h1 key={tag} className="text-slate-800">
-                    {tag}
-                  </h1>
-                ))}
+              >
+                <h1 className="text-slate-800">{record.Title}</h1>
+                <div className="flex flex-row gap-2">
+                  {record.Tags.map((tag) => (
+                    <h1 key={tag} className="text-slate-800">
+                      {tag}
+                    </h1>
+                  ))}
+                </div>
+                <h1 className="text-slate-800">{record.city}</h1>
+                <div className="flex flex-row gap-2">
+                  {record.Region.map((region) => (
+                    <h1 key={region} className="text-slate-800">
+                      {region}
+                    </h1>
+                  ))}
+                </div>
               </div>
-              <h1 className="text-slate-800">{record.city}</h1>
-              <div className="flex flex-row gap-2">
-                {record.Region.map((region) => (
-                  <h1 key={region} className="text-slate-800">
-                    {region}
-                  </h1>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </>
   );
-
-  
 }
 
 const records = [

@@ -8,13 +8,11 @@ export function MyMap({
   zoom,
   filteredRecords,
   selectedRecord,
-  records,
 }: {
   center: google.maps.LatLngLiteral;
   zoom: number;
   filteredRecords?: Record[];
   selectedRecord: Record | null;
-  records: Record[];
 }) {
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);

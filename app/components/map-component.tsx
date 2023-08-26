@@ -1,7 +1,7 @@
 "use client";
 
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
 import {
@@ -19,26 +19,14 @@ export function MapComponent() {
   const [records, setRecords] = useState<Record[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
-  // Pagination
-
+  const [filteredRecords, setFilteredRecords] = useState(records);
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredRecords = records.filter((record) => {
-    if (!record) return;
-    return record.searchStr.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const recordsPageSize = 10; // Number of records per page
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastRecord = currentPage * recordsPageSize;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
-  const recordsToShow = filteredRecords.slice(
-    indexOfFirstRecord,
-    indexOfLastRecord
-  );
-  const totalPages = Math.ceil(filteredRecords.length / recordsPageSize);
-
-  
-
+  /**
+   * Core Fetches and Loading Start
+   * */
   function fetchRecords() {
     setIsLoading(true);
     fetch(RECORDS_FETCH_URL)
@@ -54,6 +42,110 @@ export function MapComponent() {
   useEffect(() => {
     fetchRecords();
   }, []);
+  /**
+   * Core Fetches and Loading End
+   */
+
+  /**
+   * Filter and Search Functionality Start
+   * */
+  const applyFilters = useCallback(() => {
+    console.log("Apply filter called");
+    setIsLoading(true);
+
+    setTimeout(() => {
+      let newFilteredRecords = records;
+
+      // Filter records based on selected REgions
+      if (selectedRegions.length > 0) {
+        newFilteredRecords = newFilteredRecords.filter((record) => {
+          return selectedRegions.some((region) =>
+            record.Region.includes(region)
+          );
+        });
+      }
+
+      // Filter records based on selected Tags
+      if (selectedTags.length > 0) {
+        console.log("selectedTags", selectedTags);
+        newFilteredRecords = newFilteredRecords.filter((record) => {
+          console.log("record.Tags", record.Tags);
+          return selectedTags.some((tag) => record.Tags?.includes(tag));
+        });
+      }
+
+      // update Global Filtered Records
+      setFilteredRecords(newFilteredRecords);
+
+      setIsLoading(false);
+    }, 1000);
+
+    console.log("Apply filter Ended");
+  }, [records, selectedRegions, selectedTags]);
+
+  useEffect(() => {
+    console.log("USE EFFECT CALLED");
+    applyFilters();
+    console.log("USE EFFECT Ended");
+  }, [applyFilters]);
+
+  const searchedRecords = useMemo(() => {
+    console.log("SEARCHED RECORDS CALLED");
+    if (searchTerm === "") {
+      return filteredRecords;
+    }
+
+    setIsLoading(true);
+    console.log("Loading done");
+    const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
+    const searchRecords = filteredRecords.filter((record) =>
+      record.searchStr
+        .replace(/\s/g, "")
+        .toLowerCase()
+        .includes(formattedSearchTerm)
+    );
+
+    setIsLoading(false);
+
+    return searchRecords;
+
+    console.log("SEARCHED RECORDS Ended");
+  }, [searchTerm, filteredRecords]);
+
+  function tags_done_clicked(callBackResult: string[]) {
+    setSelectedTags(callBackResult);
+    console.log("selectedTags", selectedTags);
+  }
+
+  function region_done_clicked(callBackResult: string[]) {
+    setSelectedRegions(callBackResult);
+    console.log("selectedRegions", selectedRegions);
+  }
+
+  useEffect(() => {
+    console.log("Map Component mounted.");
+    // You can place cleanup logic here if needed
+
+    return () => {
+      console.log("Map Component unmo");
+    };
+  });
+  /**
+   * Filter and Search Functionality End
+   */
+
+  /**
+   * Pagination Functionality Start
+   * */
+  const recordsPageSize = 10; // Number of records per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastRecord = currentPage * recordsPageSize;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
+  const recordsToShow = searchedRecords.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
+  const totalPages = Math.ceil(searchedRecords.length / recordsPageSize);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -65,75 +157,6 @@ export function MapComponent() {
     setCurrentPage(1);
   };
 
-  /**
-   * Handle Region Filter
-   */
-  const [isLoadingRegion, setIsLoadingRegion] = useState(false);
-  const [regions, setRegions] = useState<string[]>([]);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  function fetchRegions() {
-    setIsLoadingRegion(true);
-    fetch(REGIONS_FETCH_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Fetched Regions==>", data);
-        setRegions(data);
-        setIsLoadingRegion(false);
-      });
-  }
-  useEffect(() => {
-    fetchRegions();
-  }, []);
-  
-
-  
-
-  function handleRegionsSelected(selectedItems: string[]) {
-
-    console.log("Selected Item", selectedItems)
-  }
-
-  function Filters() {
-    return (
-      <>
-        <div className="flex gap-2 justify-between items-center">
-          {/* <TableFilter /> */}
-          {/* <TagsFilter /> */}
-          
-        </div>
-      </>
-    );
-  }
-
-  // function TagsFilter() {
-  //   useEffect(() => {
-  //     fetchTags();
-  //   }, []);
-
-  //   const [tags, setTags] = useState<string[]>([]);
-  //   const [isLoadingTags, setIsLoadingTags] = useState(false);
-
-  //   function fetchTags() {
-  //     setIsLoadingTags(true);
-  //     fetch(TAGS_FETCH_URL)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log("Fetch Tags", data[0]);
-  //         setTags(data);
-  //         setIsLoadingTags(false);
-  //       });
-  //   }
-
-  //   return (
-  //     <Dropdown
-  //       items={tags}
-  //       label="Tags"
-  //       isLoading={isLoadingTags}
-  //       placeholder="Tags"
-  //     />
-  //   );
-  // }
-
   function Paginator() {
     // Generate an array of page numbers
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -142,52 +165,139 @@ export function MapComponent() {
     const firstViewedRecord = indexOfFirstRecord + 1;
     const lastViewedRecord = Math.min(
       indexOfLastRecord,
-      filteredRecords.length
+      searchedRecords.length
     );
 
     return (
-      <div className="self-center flex gap-1 flex-col justify-center ">
-        <div className="flex justify-between bg-blue-100 items-center gap-2">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-          >
-            Previous
-          </button>
-
-          {/* Render a button for each page number */}
-          {pageNumbers.map((number) => (
+      <>
+        <div className="flex flex-col items-center">
+          <span className="text-sm text-gray-700 dark:text-gray-400">
+            Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {firstViewedRecord}
+            </span>{" "}
+            to{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {lastViewedRecord}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {searchedRecords.length}
+            </span>{" "}
+            Entries
+          </span>
+          <div className="inline-flex mt-2 xs:mt-0">
             <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-2 py-1 rounded-md ${
-                currentPage === number ? "bg-blue-200" : "bg-gray-200"
-              }`}
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              {number}
+              <svg
+                className="w-3.5 h-3.5 mr-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 5H1m0 0 4 4M1 5l4-4"
+                />
+              </svg>
+              Prev
             </button>
-          ))}
-
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-          >
-            Next
-          </button>
+            <nav aria-label="Page navigation xample">
+              <ul className="flex items-center -space-x-px h-8 text-sm">
+                {pageNumbers.map((number) => (
+                  <li key={number} onClick={() => handlePageChange(number)}>
+                    <a
+                      className={`
+                    flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white 
+                    ${ currentPage === number ? "font-semibold text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-white" : "" }
+                    `}
+                    >
+                      {number}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              Next
+              <svg
+                className="w-3.5 h-3.5 ml-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-        <div className="text-center">
-          <p>
-            Page {currentPage} of {totalPages}
-          </p>
-          <p>
-            Viewing records {firstViewedRecord} to {lastViewedRecord} out of{" "}
-            {filteredRecords.length} total
-          </p>
-        </div>
-      </div>
+      </>
     );
+    /**
+     * Pagination Functionality End
+     */
+
+    // return (
+    //   <div className="self-center flex gap-1 flex-col justify-center ">
+    //     <div className="flex justify-between bg-blue-100 items-center gap-2">
+    //       <button
+    //         onClick={() => handlePageChange(currentPage - 1)}
+    //         disabled={currentPage === 1}
+    //         className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
+    //       >
+    //         Previous
+    //       </button>
+
+    //       {/* Render a button for each page number */}
+    //       {pageNumbers.map((number) => (
+    //         <button
+    //           key={number}
+    //           onClick={() => handlePageChange(number)}
+    //           className={`px-2 py-1 rounded-md ${
+    //             currentPage === number ? "bg-blue-200" : "bg-gray-200"
+    //           }`}
+    //         >
+    //           {number}
+    //         </button>
+    //       ))}
+
+    //       <button
+    //         onClick={() => handlePageChange(currentPage + 1)}
+    //         disabled={currentPage === totalPages}
+    //         className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
+    //       >
+    //         Next
+    //       </button>
+    //     </div>
+    //     <div className="text-center">
+    //       <p>
+    //         Page {currentPage} of {totalPages}
+    //       </p>
+    //       <p>
+    //         Viewing records {firstViewedRecord} to {lastViewedRecord} out of{" "}
+    //         {filteredRecords.length} total
+    //       </p>
+    //     </div>
+    //   </div>
+    // );
   }
 
   const render = (status: Status) => {
@@ -203,7 +313,6 @@ export function MapComponent() {
             zoom={6}
             filteredRecords={recordsToShow}
             selectedRecord={selectedRecord}
-            records={records}
           />
         );
     }
@@ -213,18 +322,25 @@ export function MapComponent() {
     <div className="w-full h-full flex-1 bg-pink-300">
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
-        <div className="bg-blue-100 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
           <SearchBar
             searchTerm={searchTerm}
             handleSearchChange={handleSearchChange}
           />
-          <Dropdown
-            items={regions}
-            label="Region"
-            isLoading={isLoadingRegion}
-            placeholder="Region"
-            onItemsSelected={handleRegionsSelected}
-          />
+          <div className="flex justify-between">
+            <Dropdown
+              label="Region"
+              placeholder="Region"
+              doneCallBack={region_done_clicked}
+              fetchUrl={REGIONS_FETCH_URL}
+            />
+            <Dropdown
+              label="Tags"
+              placeholder="Tags"
+              doneCallBack={tags_done_clicked}
+              fetchUrl={TAGS_FETCH_URL}
+            />
+          </div>
           <MyList
             isLoading={isLoading}
             records={recordsToShow}

@@ -16,13 +16,13 @@ export function MyList({
       {isLoading ? (
         <Spinner2 />
       ) : records.length > 0 ? (
-        <ul className="overflow-scroll ">
+        <ul className="overflow-scroll  ">
           {records.map((record, index) => (
             <li
               key={record.id}
               onClick={() => setSelectedRecord(record)}
               className="p-1 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer
-              hover:shadow-sm border font-mono text-md bg-gray-100 rounded-md 
+              hover:shadow-sm border dark:border-slate-700 font-mono text-md bg-gray-100 rounded-xs
               dark:bg-gray-700"
             >
               {/* <p>{index + 1}{". "} </p> */}

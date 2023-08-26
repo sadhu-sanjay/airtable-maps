@@ -1,22 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
 
 function Dropdown({
-  items,
   label,
-  isLoading,
   placeholder,
   doneCallBack,
+  fetchUrl,
 }: {
-  items: string[];
   label: string;
-  isLoading: boolean;
   placeholder: string;
   doneCallBack: (selectedItems: string[]) => void;
+  fetchUrl: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [items, setItems] = useState<string[]>([]);
+
+
+  function fetchRegions() {
+    setIsLoading(true);
+    fetch(fetchUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched Regions==>", data);
+        setItems(data);
+        setIsLoading(false);
+      });
+  }
+  useEffect(() => {
+    fetchRegions();
+  }, []);
 
   const handleSelected = (item: string) => {
     setSelectedItems((prevItems) =>
@@ -25,12 +40,11 @@ function Dropdown({
         : [...prevItems, item]
     );
   };
-  
+
   function doneButtonClicked() {
     doneCallBack(selectedItems);
     setIsOpen(!isOpen);
-  };
-
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -169,14 +183,11 @@ function Dropdown({
             </ul>
             <div>
               <div className="flex items-center justify-between">
-                <p
-                  className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700  dark:text-red-500 "
-                >
+                <p className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700  dark:text-red-500 ">
                   {/* show how many selected */}
                   {selectedItems.length === 0
                     ? `Total: ${items.length}`
                     : `${selectedItems.length} selected out of ${items.length}`}
-                
                 </p>
                 <button
                   onClick={() => doneButtonClicked()}
