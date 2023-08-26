@@ -33,8 +33,8 @@ export function MapComponent() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Records ==>", data[0]);
-        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-        setRecords(randomRecords);
+          // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 100);
+        setRecords(data);
         setIsLoading(false);
       });
   }
@@ -137,7 +137,7 @@ export function MapComponent() {
   /**
    * Pagination Functionality Start
    * */
-  const recordsPageSize = 10; // Number of records per page
+  const recordsPageSize = 1000; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
@@ -210,7 +210,7 @@ export function MapComponent() {
               Prev
             </button>
             <nav aria-label="Page navigation xample">
-              <ul className="flex items-center -space-x-px h-8 text-sm">
+              <ul style={{scrollbarWidth: 'none'}} className="flex items-center -space-x-px h-8 text-sm max-w-[180px] overflow-scroll ">
                 {pageNumbers.map((number) => (
                   <li key={number} onClick={() => handlePageChange(number)}>
                     <a
