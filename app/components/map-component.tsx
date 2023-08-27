@@ -4,7 +4,6 @@ import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
-import { saveAs } from "file-saver";
 
 import {
   MAPS_API_KEY,
@@ -36,12 +35,8 @@ export function MapComponent() {
       .then((data) => {
         if (!data) return;
         console.log("Fetched Records==>", data);
-        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
         setRecords(data);
-
-        // const json = JSON.stringify(data);
-        // const blob = new Blob([json], { type: "application/json" });
-        // saveAs(blob, "records.json");
       })
       .catch((err) => {
         console.log("Error fetching records", err.message);
@@ -72,7 +67,7 @@ export function MapComponent() {
     // Filter records based on selected REgions
     if (selectedRegions.length > 0) {
       newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedRegions.some((region) => record.Region.includes(region));
+        return selectedRegions.some((region) => record.Region?.includes(region));
       });
     }
 
@@ -80,7 +75,6 @@ export function MapComponent() {
     if (selectedTags.length > 0) {
       console.log("selectedTags", selectedTags);
       newFilteredRecords = newFilteredRecords.filter((record) => {
-        console.log("record.Tags", record.Tags);
         return selectedTags.some((tag) => record.Tags?.includes(tag));
       });
     }
@@ -93,9 +87,11 @@ export function MapComponent() {
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
 
+  const debouncedApplyFilters = myDebounce(applyFilters, 300);
+
   useEffect(() => {
     console.log("USE EFFECT CALLED");
-    applyFilters();
+    debouncedApplyFilters();
     console.log("USE EFFECT Ended");
   }, [applyFilters]);
 
@@ -104,6 +100,7 @@ export function MapComponent() {
     if (searchTerm === "") {
       return filteredRecords;
     }
+    console.log("SEARCHED passed the check RECORDS CALLED");
 
     setIsLoading(true);
     console.log("Loading done");
@@ -161,9 +158,11 @@ export function MapComponent() {
       setCurrentPage(newPage);
     }
   };
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
     setCurrentPage(1);
+
+    debouncedApplyFilters(); 
   };
 
   function Paginator() {
@@ -297,7 +296,7 @@ export function MapComponent() {
         <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
           <SearchBar
             searchTerm={searchTerm}
-            handleSearchChange={handleSearchChange}
+            handleSearchChange={onSearchTermChange}
           />
           <div className="flex justify-between">
             <Dropdown
@@ -313,6 +312,7 @@ export function MapComponent() {
               fetchUrl={TAGS_FETCH_URL}
             />
           </div>
+          <div><h1>{isLoading}</h1></div>
           <MyList
             isLoading={isLoading}
             records={recordsToShow}
@@ -325,3 +325,15 @@ export function MapComponent() {
     // </div>
   );
 }
+
+const myDebounce = (func: any, wait: number) => {
+  let timeout: any;
+  return function executedFunction(...args: any) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
