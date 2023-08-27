@@ -24,19 +24,21 @@ export function MyMap({
    * It will also add a listener to the map that will update the center and zoom state when the user changes the map
    */
   useEffect(() => {
+    console.log("CENTER ZOOM", center, zoom);
     if (divRef.current) {
       mapRef.current = new window.google.maps.Map(divRef.current, {
         center,
         zoom,
       });
     }
-  }, [center, zoom]);
+  }, []);
 
   /**
    * It will create a new bounds object and extend it with the lat/lng of each record
    * This effect will run every time the filteredRecords changes
    */
   useEffect(() => {
+    console.log("FILTERED RECORDS", filteredRecords);
     if (mapRef.current && filteredRecords && filteredRecords.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
@@ -54,6 +56,7 @@ export function MyMap({
   }, [filteredRecords]);
 
   useEffect(() => {
+    console.log("SELECTED RECORD", selectedRecord);
     if (selectedRecord && mapRef.current) {
 
       const { lat, lng } = selectedRecord;

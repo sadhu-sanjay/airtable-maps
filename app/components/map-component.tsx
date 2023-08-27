@@ -33,8 +33,8 @@ export function MapComponent() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Records ==>", data[0]);
-        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-        setRecords(randomRecords);
+        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        setRecords(data);
       }).catch((err) => {
         console.log("Error fetching records", err);
         alert("Error fetching records Please try again. or Reload the page");
@@ -54,7 +54,9 @@ export function MapComponent() {
    * Filter and Search Functionality Start
    * */
   const applyFilters = useCallback(() => {
+
     console.log("Apply filter called");
+
     setIsLoading(true);
 
     let newFilteredRecords = records;
@@ -137,7 +139,7 @@ export function MapComponent() {
   /**
    * Pagination Functionality Start
    * */
-  const recordsPageSize = 10; // Number of records per page
+  const recordsPageSize = 3000; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;

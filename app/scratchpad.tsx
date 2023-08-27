@@ -1,262 +1,192 @@
-// "use client";
+"use client";
 
-// import { useCallback, useEffect, useMemo, useState } from "react";
-// import Dropdown from "./dropdown";
-// import { Spinner } from "./spinner";
+import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Spinner } from "~/app/components/spinner";
+import { Record } from "~/app/components/types";
+import {
+  MAPS_API_KEY,
+  RECORDS_FETCH_URL,
+  REGIONS_FETCH_URL,
+  TAGS_FETCH_URL,
+} from "~/app/config";
+import { MyMap } from "./my-map";
+import { SearchBar } from "./search-bar";
 
-// export function MapComponent() {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [filteredRecords, setFilteredRecords] = useState(records);
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-//   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+export function MapComponent() {
+  const [records, setRecords] = useState<Record[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
+  const [filteredRecords, setFilteredRecords] = useState(records);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-//   function handleSearchTerm(event: any) {
-//     setSearchTerm(event.target.value);
-//   }
+  /**
+   * Core Fetches and Loading Start
+   * */
+  function fetchRecords() {
+    setIsLoading(true);
+    fetch(RECORDS_FETCH_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Records ==>", data[0]);
+        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        setRecords(randomRecords);
+      }).catch((err) => {
+        console.log("Error fetching records", err);
+        alert("Error fetching records Please try again. or Reload the page");
+      }).finally(() => {
+        setIsLoading(false);
+      })
+  }
 
-//   const applyFilters = useCallback(() => {
-//     console.log("Apply filter called");
-//     setIsLoading(true);
+  useEffect(() => {
+    fetchRecords();
+  }, []);
+  /**
+   * Core Fetches and Loading End
+   */
 
-//     setTimeout(() => {
-//       let newFilteredRecords = records;
+  /**
+   * Filter and Search Functionality Start
+   * */
+  const applyFilters = useCallback(() => {
 
-//       // Filter records based on selected REgions
-//       if (selectedRegions.length > 0) {
-//         newFilteredRecords = newFilteredRecords.filter((record) => {
-//           return selectedRegions.some((region) =>
-//             record.Region.includes(region)
-//           );
-//         });
-//       }
+    console.log("Apply filter called");
 
-//       // Filter records based on selected Tags
-//       if (selectedTags.length > 0) {
-//         newFilteredRecords = newFilteredRecords.filter((record) => {
-//           return selectedTags.some((tag) => record.Tags.includes(tag));
-//         });
-//       }
+    setIsLoading(true);
 
-//       // update Global Filtered Records
-//       setFilteredRecords(newFilteredRecords);
+    let newFilteredRecords = records;
 
-//       setIsLoading(false);
-//     }, 1000);
+    // Filter records based on selected REgions
+    if (selectedRegions.length > 0) {
+      newFilteredRecords = newFilteredRecords.filter((record) => {
+        return selectedRegions.some((region) => record.Region.includes(region));
+      });
+    }
 
-//     console.log("Apply filter Ended");
-//   }, [records, selectedRegions, selectedTags]);
+    // Filter records based on selected Tags
+    if (selectedTags.length > 0) {
+      console.log("selectedTags", selectedTags);
+      newFilteredRecords = newFilteredRecords.filter((record) => {
+        console.log("record.Tags", record.Tags);
+        return selectedTags.some((tag) => record.Tags?.includes(tag));
+      });
+    }
 
-//   useEffect(() => {
-//     console.log("USE EFFECT CALLED");
-//     applyFilters();
-//     console.log("USE EFFECT Ended");
-//   }, [applyFilters]);
+    // update Global Filtered Records
+    setFilteredRecords(newFilteredRecords);
 
-//   const searchedRecords = useMemo(() => {
-//     console.log("SEARCHED RECORDS CALLED");
-//     if (searchTerm === "") {
-//       return filteredRecords;
-//     }
+    setIsLoading(false);
 
-//     setIsLoading(true);
-//     console.log("Loading done");
-//     const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
-//     const searchRecords = filteredRecords.filter((record) =>
-//       record.searchString
-//         .replace(/\s/g, "")
-//         .toLowerCase()
-//         .includes(formattedSearchTerm)
-//     );
+    console.log("Apply filter Ended");
+  }, [records, selectedRegions, selectedTags]);
 
-//     setIsLoading(false);
+  useEffect(() => {
+    console.log("USE EFFECT CALLED");
+    applyFilters();
+    console.log("USE EFFECT Ended");
+  }, [applyFilters]);
 
-//     return searchRecords;
+  const searchedRecords = useMemo(() => {
+    console.log("SEARCHED RECORDS CALLED");
+    if (searchTerm === "") {
+      return filteredRecords;
+    }
 
-//     console.log("SEARCHED RECORDS Ended");
-//   }, [searchTerm, filteredRecords]);
+    setIsLoading(true);
+    console.log("Loading done");
+    const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
+    const searchRecords = filteredRecords.filter((record) =>
+      record.searchStr
+        .replace(/\s/g, "")
+        .toLowerCase()
+        .includes(formattedSearchTerm)
+    );
 
-//   function tags_done_clicked(callBackResult: string[]) {
-//     setSelectedTags(callBackResult);
-//     console.log("selectedTags", selectedTags);
-//   }
+    setIsLoading(false);
 
-//   function region_done_clicked(callBackResult: string[]) {
-//     setSelectedRegions(callBackResult);
-//     console.log("selectedRegions", selectedRegions);
-//   }
+    return searchRecords;
 
-//   useEffect(() => {
-//     console.log("Map Component mounted.");
-//     // You can place cleanup logic here if needed
+    console.log("SEARCHED RECORDS Ended");
+  }, [searchTerm, filteredRecords]);
+
+  function tags_done_clicked(callBackResult: string[]) {
+    setSelectedTags(callBackResult);
+    console.log("selectedTags", selectedTags);
+  }
+
+  function region_done_clicked(callBackResult: string[]) {
+    setSelectedRegions(callBackResult);
+    console.log("selectedRegions", selectedRegions);
+  }
+
+  useEffect(() => {
+    console.log("Map Component mounted.");
+    // You can place cleanup logic here if needed
+
+    return () => {
+      console.log("Map Component unmo");
+    };
+  });
+  /**
+   * Filter and Search Functionality End
+   */
+  
     
+  }
 
-//     return () => {
-//       console.log("Map Component unmo");
-//     };
-//   });
+  const render = (status: Status) => {
+    switch (status) {
+      case Status.LOADING:
+        return <Spinner />;
+      case Status.FAILURE:
+        return <div>Error Loading Map</div>;
+      case Status.SUCCESS:
+        return (
+          <MyMap
+            center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
+            zoom={6}
+            filteredRecords={recordsToShow}
+            selectedRecord={selectedRecord}
+          />
+        );
+    }
+  };
 
-//   return (
-//     <>
-//       <input
-//         type="text"
-//         placeholder="Search"
-//         value={searchTerm}
-//         className="border-2 border-gray-500 rounded-md p-2 dark:bg-slate-700 dark:text-white"
-//         onChange={handleSearchTerm}
-//       />
-//       <Dropdown
-//         items={[
-//           "Tag 1",
-//           "Tag 2",
-//           "Tag 3",
-//           "Tag 4",
-//           "Tag 5",
-//           "Tag 6",
-//           "Tag 7",
-//           "Tag 8",
-//           "Tag 9",
-//           "Tag 10",
-//         ]}
-//         label="Tags"
-//         isLoading={false}
-//         placeholder="Tags"
-//         doneCallBack={tags_done_clicked}
-//       />
-//       <Dropdown
-//         items={[
-//           "Region 1",
-//           "Region 2",
-//           "Region 3",
-//           "Region 4",
-//           "Region 5",
-//           "Region 6",
-//           "Region 7",
-//           "Region 8",
-//         ]}
-//         label="Region"
-//         isLoading={false}
-//         placeholder="Region"
-//         doneCallBack={region_done_clicked}
-//       />
-
-//       {isLoading ? (
-//         <Spinner />
-//       ) : (
-//         <div className="flex flex-col gap-2 dark:bg-slate-700">
-//           {searchedRecords &&
-//             searchedRecords.map((record) => (
-//               <div
-//                 key={record.id}
-//                 className="bg-slate-100
-//             m-2 text-white p-2 
-//               flex flex-col gap-2"
-//               >
-//                 <h1 className="text-slate-800">{record.Title}</h1>
-//                 <div className="flex flex-row gap-2">
-//                   {record.Tags.map((tag) => (
-//                     <h1 key={tag} className="text-slate-800">
-//                       {tag}
-//                     </h1>
-//                   ))}
-//                 </div>
-//                 <h1 className="text-slate-800">{record.city}</h1>
-//                 <div className="flex flex-row gap-2">
-//                   {record.Region.map((region) => (
-//                     <h1 key={region} className="text-slate-800">
-//                       {region}
-//                     </h1>
-//                   ))}
-//                 </div>
-//               </div>
-//             ))}
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-// const records = [
-//   {
-//     id: 1,
-//     Title: "Record 1",
-//     Tags: ["Tag 9", "Tag 5"],
-//     city: "City 1",
-//     Region: ["Region 1", "Region 2"],
-//     searchString: "Record 1 Tag 9 Tag 5 City 1 Region 1 Region 2",
-//   },
-//   {
-//     id: 2,
-//     Title: "Record 2",
-//     Tags: ["Tag 2", "Tag 3"],
-//     city: "City 2",
-//     Region: ["Region 2", "Region 3"],
-//     searchString: "Record 2 Tag 2 Tag 3 City 2 Region 2 Region 3",
-//   },
-//   {
-//     id: 3,
-//     Title: "Record 3",
-//     Tags: ["Tag 3", "Tag 4"],
-//     city: "City 3",
-//     Region: ["Region 3", "Region 4"],
-//     searchString: "Record 3 Tag 3 Tag 4 City 3 Region 3 Region 4",
-//   },
-//   {
-//     id: 4,
-//     Title: "Record 4",
-//     Tags: ["Tag 4", "Tag 5", "Tag 8"],
-//     city: "City 4",
-//     Region: ["Region 4", "Region 5"],
-//     searchString: "Record 4 Tag 4 Tag 5 Tag 8 City 4 Region 4 Region 5",
-//   },
-//   // Give me 10 more records like this
-
-//   {
-//     id: 5,
-//     Title: "Record 5",
-//     Tags: ["Tag 5", "Tag 6"],
-//     city: "City 5",
-//     Region: ["Region 5", "Region 6"],
-//     searchString: "Record 5 Tag 5 Tag 6 City 5 Region 5 Region 6",
-//   },
-//   {
-//     id: 6,
-//     Title: "Record 6",
-//     Tags: ["Tag 6", "Tag 7"],
-//     city: "City 6",
-//     Region: ["Region 6", "Region 7"],
-//     searchString: "Record 6 Tag 6 Tag 7 City 6 Region 6 Region 7",
-//   },
-//   {
-//     id: 7,
-//     Title: "Record 7",
-//     Tags: ["Tag 7", "Tag 8"],
-//     city: "City 7",
-//     Region: ["Region 7", "Region 8"],
-//     searchString: "Record 7 Tag 7 Tag 8 City 7 Region 7 Region 8",
-//   },
-//   {
-//     id: 8,
-//     Title: "Record 8",
-//     Tags: ["Tag 8", "Tag 9", "Tag 2"],
-//     city: "City 8",
-//     Region: ["Region 8", "Region 9"],
-//     searchString: "Record 8 Tag 8 Tag 9 Tag 2 City 8 Region 8 Region 9",
-//   },
-//   {
-//     id: 9,
-//     Title: "Record 9",
-//     Tags: ["Tag 9", "Tag 1"],
-//     city: "City 9",
-//     Region: ["Region 9", "Region 1"],
-//     searchString: "Record 9 Tag 9 Tag 1 City 9 Region 9 Region 1",
-//   },
-//   {
-//     id: 10,
-//     Title: "Record 10",
-//     Tags: ["Tag 1", "Tag 2"],
-//     city: "City 10",
-//     Region: ["Region 1", "Region 2"],
-//     searchString: "Record 10 Tag 1 Tag 2 City 10 Region 1 Region 2",
-//   },
-// ];
+  return (
+    <div className="w-full h-full flex-1 ">
+      <Wrapper apiKey={MAPS_API_KEY} render={render} />
+      <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
+          <SearchBar
+            searchTerm={searchTerm}
+            handleSearchChange={handleSearchChange}
+          />
+          <div className="flex justify-between">
+            <Dropdown
+              label="Region"
+              placeholder="Region"
+              doneCallBack={region_done_clicked}
+              fetchUrl={REGIONS_FETCH_URL}
+            />
+            <Dropdown
+              label="Tags"
+              placeholder="Tags"
+              doneCallBack={tags_done_clicked}
+              fetchUrl={TAGS_FETCH_URL}
+            />
+          </div>
+          <MyList
+            isLoading={isLoading}
+            records={recordsToShow}
+            setSelectedRecord={setSelectedRecord}
+          />
+          <Paginator />
+        </div>
+      </aside>
+    </div>
+    // </div>
+  );
+}
