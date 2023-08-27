@@ -4,6 +4,8 @@ import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
+import { saveAs } from "file-saver";
+
 import {
   MAPS_API_KEY,
   RECORDS_FETCH_URL,
@@ -32,15 +34,22 @@ export function MapComponent() {
     fetch(RECORDS_FETCH_URL)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Records ==>", data[0]);
-        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        if (!data) return;
+        console.log("Fetched Records==>", data);
+        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
         setRecords(data);
-      }).catch((err) => {
-        console.log("Error fetching records", err);
-        alert("Error fetching records Please try again. or Reload the page");
-      }).finally(() => {
-        setIsLoading(false);
+
+        // const json = JSON.stringify(data);
+        // const blob = new Blob([json], { type: "application/json" });
+        // saveAs(blob, "records.json");
       })
+      .catch((err) => {
+        console.log("Error fetching records", err.message);
+        alert(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -54,7 +63,6 @@ export function MapComponent() {
    * Filter and Search Functionality Start
    * */
   const applyFilters = useCallback(() => {
-
     console.log("Apply filter called");
 
     setIsLoading(true);
@@ -109,9 +117,8 @@ export function MapComponent() {
 
     setIsLoading(false);
 
-    return searchRecords;
-
     console.log("SEARCHED RECORDS Ended");
+    return searchRecords;
   }, [searchTerm, filteredRecords]);
 
   function tags_done_clicked(callBackResult: string[]) {
@@ -139,14 +146,14 @@ export function MapComponent() {
   /**
    * Pagination Functionality Start
    * */
-  const recordsPageSize = 3000; // Number of records per page
+  const recordsPageSize = 5000; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
-  const recordsToShow = searchedRecords && searchedRecords.slice(
-    indexOfFirstRecord,
-    indexOfLastRecord
-  );
+  const recordsToShow =
+    searchedRecords.length > 0
+      ? searchedRecords?.slice(indexOfFirstRecord, indexOfLastRecord)
+      : [];
   const totalPages = Math.ceil(searchedRecords.length / recordsPageSize);
 
   const handlePageChange = (newPage: number) => {
@@ -260,54 +267,10 @@ export function MapComponent() {
         </div>
       </>
     );
-    /**
-     * Pagination Functionality End
-     */
-
-    // return (
-    //   <div className="self-center flex gap-1 flex-col justify-center ">
-    //     <div className="flex justify-between bg-blue-100 items-center gap-2">
-    //       <button
-    //         onClick={() => handlePageChange(currentPage - 1)}
-    //         disabled={currentPage === 1}
-    //         className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-    //       >
-    //         Previous
-    //       </button>
-
-    //       {/* Render a button for each page number */}
-    //       {pageNumbers.map((number) => (
-    //         <button
-    //           key={number}
-    //           onClick={() => handlePageChange(number)}
-    //           className={`px-2 py-1 rounded-md ${
-    //             currentPage === number ? "bg-blue-200" : "bg-gray-200"
-    //           }`}
-    //         >
-    //           {number}
-    //         </button>
-    //       ))}
-
-    //       <button
-    //         onClick={() => handlePageChange(currentPage + 1)}
-    //         disabled={currentPage === totalPages}
-    //         className="px-2 py-1 rounded-md bg-gray-200 disabled:bg-gray-300"
-    //       >
-    //         Next
-    //       </button>
-    //     </div>
-    //     <div className="text-center">
-    //       <p>
-    //         Page {currentPage} of {totalPages}
-    //       </p>
-    //       <p>
-    //         Viewing records {firstViewedRecord} to {lastViewedRecord} out of{" "}
-    //         {filteredRecords.length} total
-    //       </p>
-    //     </div>
-    //   </div>
-    // );
   }
+  /**
+   * Pagination Functionality End
+   */
 
   const render = (status: Status) => {
     switch (status) {
