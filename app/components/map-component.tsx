@@ -33,8 +33,8 @@ export function MapComponent() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Records ==>", data[0]);
-        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 100);
-        setRecords(data);
+        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        setRecords(randomRecords);
       }).catch((err) => {
         console.log("Error fetching records", err);
         alert("Error fetching records Please try again. or Reload the page");
@@ -137,7 +137,7 @@ export function MapComponent() {
   /**
    * Pagination Functionality Start
    * */
-  const recordsPageSize = 1000; // Number of records per page
+  const recordsPageSize = 10; // Number of records per page
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRecord = currentPage * recordsPageSize;
   const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
@@ -188,8 +188,8 @@ export function MapComponent() {
           </span>
           <div className="inline-flex mt-2 xs:mt-0">
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
               className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <svg
