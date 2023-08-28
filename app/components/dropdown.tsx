@@ -83,7 +83,9 @@ function Dropdown({
           disabled={isLoading}
           onClick={toggleDropdown}
           type="button"
-          className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none
+          rounded-4pixel focus:ring-gray-300 font-medium text-sm px-5 py-2.5 text-center inline-flex 
+           items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
           {selectedItems.length > 0 && <div className="pr-1">{selectedItems.length} </div>}
           {label}
@@ -125,7 +127,7 @@ function Dropdown({
 
         {isOpen && (
           <div
-            className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-700"
+            className="absolute z-10 bg-white rounded-4pixel shadow w-60 dark:bg-gray-700"
             id="dropdownSearch"
           >
             <div className="p-3">

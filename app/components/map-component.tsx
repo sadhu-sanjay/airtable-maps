@@ -190,7 +190,9 @@ export function MapComponent() {
 
     return (
       <>
-        <div className="flex flex-col items-center">
+        <div className=" flex flex-col items-center absolute bottom-0 py-4 left-0 right-0
+        bg-gray-100 dark:bg-gray-800 rounded-lg border-t dark:border-gray-700 shadow-xl
+        ">
           <span className="text-sm text-gray-700 dark:text-gray-400">
             Showing{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
@@ -305,7 +307,8 @@ export function MapComponent() {
     <div className="w-full h-full flex-1 ">
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3  justify-start p-4">
+        <div className="relative bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3
+        justify-start p-4 ">
           <SearchBar
             searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
