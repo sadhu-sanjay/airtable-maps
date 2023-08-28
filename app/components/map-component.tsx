@@ -85,6 +85,9 @@ export function MapComponent() {
     // update Global Filtered Records
     setFilteredRecords(newFilteredRecords);
 
+    // update current page to 1
+    setCurrentPage(1);
+
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
 
@@ -342,5 +345,3 @@ export function MapComponent() {
     // </div>
   );
 }
-
-
