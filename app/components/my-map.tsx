@@ -17,6 +17,12 @@ export function MyMap({
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
 
+  // logger use effect 
+  useEffect(() => {
+    console.log("MyMap.tsx: MyMap() useEffect() filteredRecords.length: ", filteredRecords?.length);
+  }, []);
+
+
   /*
 
    * It will create a new google map and store it in the mapRef
@@ -84,8 +90,6 @@ export function MyMap({
       mc.clearMarkers();
     };
   }, [markers]);
-
-
 
   // return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
   // return <div className="bg-blue-900 w-full h-full absolute">Hello</div>;

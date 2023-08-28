@@ -22,7 +22,6 @@ export function MapComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
   const [filteredRecords, setFilteredRecords] = useState(records);
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -40,7 +39,7 @@ export function MapComponent() {
 
         console.log("Fetched Records==>", data);
 
-        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
         setRecords(data);
       })
       .catch((err) => {
@@ -137,14 +136,14 @@ export function MapComponent() {
 
   const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchTerm(value);
+    
     debouncedSearch(value);
   };
 
   const debouncedSearch = myDebounce((value: string) => {
     setSearchQuery(value);
     setCurrentPage(1);
-  }, 500);
+  }, 300);
 
   useEffect(() => {
     console.log("Map Component mounted.");
@@ -310,11 +309,11 @@ export function MapComponent() {
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
         <div
-          className="relative bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3
+          className="relative bg-gray-100/90 dark:bg-gray-800/95 rounded-lg flex w-full h-full flex-col gap-3
         justify-start p-4 "
         >
           <SearchBar
-            searchTerm={searchTerm}
+            // searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
           />
           <div className="flex justify-between">
