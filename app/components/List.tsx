@@ -14,7 +14,7 @@ export function MyList({
   return (
     <>
       {isLoading ? (
-        <Spinner2 />
+        <div className="bg-red-700">List Loading...</div>
       ) : records.length > 0 ? (
         <ul className="overflow-y-scroll overflow-x-hidden  ">
           {records.map((record, index) => (

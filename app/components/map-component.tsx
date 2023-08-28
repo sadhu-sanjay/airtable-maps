@@ -31,21 +31,20 @@ export function MapComponent() {
    * */
   function fetchRecords() {
     setIsLoading(true);
-    fetch(RECORDS_FETCH_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data) return;
-        console.log("Fetched Records==>", data);
-        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-        setRecords(data);
-      })
-      .catch((err) => {
-        console.log("Error fetching records", err.message);
-        alert(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    // fetch(RECORDS_FETCH_URL)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (!data) return;
+    //     console.log("Fetched Records==>", data);
+    //     // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+    //     setRecords(data);
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error fetching records", err);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
   }
 
   useEffect(() => {
@@ -61,7 +60,6 @@ export function MapComponent() {
   const applyFilters = useCallback(() => {
     console.log("Apply filter called");
 
-    setIsLoading(true);
 
     let newFilteredRecords = records;
 
@@ -85,7 +83,6 @@ export function MapComponent() {
     // update Global Filtered Records
     setFilteredRecords(newFilteredRecords);
 
-    setIsLoading(false);
 
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
@@ -122,7 +119,6 @@ export function MapComponent() {
     const start = performance.now();
 
 
-    setIsLoading(true);
     const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
     const searchRecords = filteredRecords.filter((record) =>
       record.searchStr
@@ -131,7 +127,6 @@ export function MapComponent() {
         .includes(formattedSearchTerm)
     );
 
-    setIsLoading(false);
 
     // get current time
     const end = performance.now();
