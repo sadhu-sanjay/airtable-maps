@@ -55,7 +55,7 @@ export function MapComponent() {
    */
 
   /**
-   * Filter and Search Functionality Start
+   * Filter Functionality Start
    * */
   const applyFilters = useCallback(() => {
     console.log("Apply filter called");
@@ -67,7 +67,9 @@ export function MapComponent() {
     // Filter records based on selected REgions
     if (selectedRegions.length > 0) {
       newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedRegions.some((region) => record.Region?.includes(region));
+        return selectedRegions.some((region) =>
+          record.Region?.includes(region)
+        );
       });
     }
 
@@ -87,14 +89,28 @@ export function MapComponent() {
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
 
-  const debouncedApplyFilters = myDebounce(applyFilters, 300);
+  function tags_done_clicked(callBackResult: string[]) {
+    setSelectedTags(callBackResult);
+    console.log("selectedTags", selectedTags);
+  }
+
+  function region_done_clicked(callBackResult: string[]) {
+    setSelectedRegions(callBackResult);
+    console.log("selectedRegions", selectedRegions);
+  }
 
   useEffect(() => {
-    console.log("USE EFFECT CALLED");
-    debouncedApplyFilters();
-    console.log("USE EFFECT Ended");
+    console.log("USE EFFECT CALLED Apply Filter");
+    applyFilters();
+    console.log("USE EFFECT Ended APPLY Filter");
   }, [applyFilters]);
+  /**
+   * Filter Functionality End
+   * */
 
+  /**
+   * Search Functionality Start
+   * */
   const searchedRecords = useMemo(() => {
     console.log("SEARCHED RECORDS CALLED");
     if (searchTerm === "") {
@@ -103,7 +119,6 @@ export function MapComponent() {
     console.log("SEARCHED passed the check RECORDS CALLED");
 
     setIsLoading(true);
-    console.log("Loading done");
     const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
     const searchRecords = filteredRecords.filter((record) =>
       record.searchStr
@@ -118,15 +133,12 @@ export function MapComponent() {
     return searchRecords;
   }, [searchTerm, filteredRecords]);
 
-  function tags_done_clicked(callBackResult: string[]) {
-    setSelectedTags(callBackResult);
-    console.log("selectedTags", selectedTags);
-  }
 
-  function region_done_clicked(callBackResult: string[]) {
-    setSelectedRegions(callBackResult);
-    console.log("selectedRegions", selectedRegions);
-  }
+
+  const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     console.log("Map Component mounted.");
@@ -157,12 +169,6 @@ export function MapComponent() {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
-  };
-  const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
-
-    debouncedApplyFilters(); 
   };
 
   function Paginator() {
@@ -312,7 +318,9 @@ export function MapComponent() {
               fetchUrl={TAGS_FETCH_URL}
             />
           </div>
-          <div><h1>{isLoading}</h1></div>
+          <div>
+            <h1>{isLoading}</h1>
+          </div>
           <MyList
             isLoading={isLoading}
             records={recordsToShow}
