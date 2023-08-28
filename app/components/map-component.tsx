@@ -15,6 +15,7 @@ import { MyList } from "./List";
 import { MyMap } from "./my-map";
 import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
+import { myDebounce } from "./utility";
 
 export function MapComponent() {
   const [records, setRecords] = useState<Record[]>([]);
@@ -22,7 +23,7 @@ export function MapComponent() {
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
   const [filteredRecords, setFilteredRecords] = useState(records);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -31,20 +32,23 @@ export function MapComponent() {
    * */
   function fetchRecords() {
     setIsLoading(true);
-    // fetch(RECORDS_FETCH_URL)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (!data) return;
-    //     console.log("Fetched Records==>", data);
-    //     // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-    //     setRecords(data);
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error fetching records", err);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    fetch(RECORDS_FETCH_URL)
+      .then((res) => res.json())
+      .then((data) => {
+
+        if (!data || data.message) return;
+
+        console.log("Fetched Records==>", data);
+
+        const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+        setRecords(data);
+      })
+      .catch((err) => {
+        console.log("Error fetching records", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -59,7 +63,6 @@ export function MapComponent() {
    * */
   const applyFilters = useCallback(() => {
     console.log("Apply filter called");
-
 
     let newFilteredRecords = records;
 
@@ -82,7 +85,6 @@ export function MapComponent() {
 
     // update Global Filtered Records
     setFilteredRecords(newFilteredRecords);
-
 
     console.log("Apply filter Ended");
   }, [records, selectedRegions, selectedTags]);
@@ -113,11 +115,10 @@ export function MapComponent() {
     if (searchQuery === "") {
       return filteredRecords;
     }
-    
-    console.log("SEARCHED RECORDS CALLED");
-    // get current time 
-    const start = performance.now();
 
+    console.log("SEARCHED RECORDS CALLED");
+    // get current time
+    const start = performance.now();
 
     const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
     const searchRecords = filteredRecords.filter((record) =>
@@ -126,7 +127,6 @@ export function MapComponent() {
         .toLowerCase()
         .includes(formattedSearchTerm)
     );
-
 
     // get current time
     const end = performance.now();
@@ -142,7 +142,7 @@ export function MapComponent() {
   };
 
   const debouncedSearch = myDebounce((value: string) => {
-    setSearchQuery(value)
+    setSearchQuery(value);
     setCurrentPage(1);
   }, 500);
 
@@ -190,9 +190,11 @@ export function MapComponent() {
 
     return (
       <>
-        <div className=" flex flex-col items-center absolute bottom-0 py-4 left-0 right-0
+        <div
+          className=" flex flex-col items-center absolute bottom-0 py-4 left-0 right-0
         bg-gray-100 dark:bg-gray-800 rounded-lg border-t dark:border-gray-700 shadow-xl
-        ">
+        "
+        >
           <span className="text-sm text-gray-700 dark:text-gray-400">
             Showing{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
@@ -307,8 +309,10 @@ export function MapComponent() {
     <div className="w-full h-full flex-1 ">
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
       <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
-        <div className="relative bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3
-        justify-start p-4 ">
+        <div
+          className="relative bg-gray-100 dark:bg-gray-800 rounded-lg flex w-full h-full flex-col gap-3
+        justify-start p-4 "
+        >
           <SearchBar
             searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
@@ -327,9 +331,6 @@ export function MapComponent() {
               fetchUrl={TAGS_FETCH_URL}
             />
           </div>
-          <div>
-            <h1>{isLoading}</h1>
-          </div>
           <MyList
             isLoading={isLoading}
             records={recordsToShow}
@@ -343,14 +344,4 @@ export function MapComponent() {
   );
 }
 
-const myDebounce = (func: any, wait: number) => {
-  let timeout: any;
-  return function executedFunction(...args: any) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-};
+
