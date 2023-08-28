@@ -17,7 +17,9 @@ function Dropdown({
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<string[]>([]);
-
+  const clearAllSelected = () => {
+    setSelectedItems([]);
+  };
 
   function fetchRegions() {
     setIsLoading(true);
@@ -83,7 +85,7 @@ function Dropdown({
           type="button"
           className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
-          <div className="pr-1">{selectedItems.length} {" "}</div>
+          {selectedItems.length > 0 && <div className="pr-1">{selectedItems.length} </div>}
           {label}
           {isLoading ? (
             <svg
@@ -184,11 +186,17 @@ function Dropdown({
             </ul>
             <div>
               <div className="flex items-center justify-between">
-                <p className="flex items-center p-3 text-sm font-medium text-slate-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700  dark:text-red-500 ">
+                <p className="flex items-center p-3 text-sm font-medium text-slate-600  dark:text-slate-200 ">
                   {/* show how many selected */}
                   {selectedItems.length === 0
                     ? `Total: ${items.length}`
-                    : `${selectedItems.length} selected out of ${items.length}`}
+                    : `${selectedItems.length} of ${items.length}`}
+                </p>
+                <p
+                  onClick={clearAllSelected}
+                  className="flex items-center text-sm font-medium text-red-600 border-trounded-b-lg cursor-pointer dark:text-red-500 hover:underline"
+                >
+                  clear all
                 </p>
                 <button
                   onClick={() => doneButtonClicked()}
