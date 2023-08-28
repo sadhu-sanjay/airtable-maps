@@ -113,11 +113,14 @@ export function MapComponent() {
    * Search Functionality Start
    * */
   const searchedRecords = useMemo(() => {
-    console.log("SEARCHED RECORDS CALLED");
     if (searchQuery === "") {
       return filteredRecords;
     }
-    console.log("SEARCHED passed the check RECORDS CALLED");
+    
+    console.log("SEARCHED RECORDS CALLED");
+    // get current time 
+    const start = performance.now();
+
 
     setIsLoading(true);
     const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
@@ -130,7 +133,10 @@ export function MapComponent() {
 
     setIsLoading(false);
 
-    console.log("SEARCHED RECORDS Ended");
+    // get current time
+    const end = performance.now();
+    console.log("SEARCHED RECORDS Ended", end - start);
+
     return searchRecords;
   }, [searchQuery, filteredRecords]);
 
@@ -143,7 +149,7 @@ export function MapComponent() {
   const debouncedSearch = myDebounce((value: string) => {
     setSearchQuery(value)
     setCurrentPage(1);
-  }, 300);
+  }, 500);
 
   useEffect(() => {
     console.log("Map Component mounted.");
