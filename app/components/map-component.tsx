@@ -22,6 +22,7 @@ export function MapComponent() {
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
   const [filteredRecords, setFilteredRecords] = useState(records);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState("")
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -113,13 +114,13 @@ export function MapComponent() {
    * */
   const searchedRecords = useMemo(() => {
     console.log("SEARCHED RECORDS CALLED");
-    if (searchTerm === "") {
+    if (searchQuery === "") {
       return filteredRecords;
     }
     console.log("SEARCHED passed the check RECORDS CALLED");
 
     setIsLoading(true);
-    const formattedSearchTerm = searchTerm.replace(/\s/g, "").toLowerCase();
+    const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
     const searchRecords = filteredRecords.filter((record) =>
       record.searchStr
         .replace(/\s/g, "")
@@ -131,14 +132,18 @@ export function MapComponent() {
 
     console.log("SEARCHED RECORDS Ended");
     return searchRecords;
-  }, [searchTerm, filteredRecords]);
-
-
+  }, [searchQuery, filteredRecords]);
 
   const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
+    const value = event.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
   };
+
+  const debouncedSearch = myDebounce((value: string) => {
+    setSearchQuery(value)
+    setCurrentPage(1);
+  }, 300);
 
   useEffect(() => {
     console.log("Map Component mounted.");
