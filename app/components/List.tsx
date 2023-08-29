@@ -33,7 +33,7 @@ export function MyList({
           </svg>
           <span className="sr-only">Loading...</span>
         </div>
-      ) : records.length > 0 ? (
+      ) : records ? (
         <ul className="overflow-y-scroll overflow-x-hidden  ">
           {records.map((record, index) => (
             <li
