@@ -308,11 +308,13 @@ export function MapComponent() {
   };
 
   return (
-    <div className="w-full h-full flex-1 ">
+    <div className="h-screen flex flex-row-reverse">
+      {/* <div className="w-1/4 bg-pink-800 overflow-clip">Sanjay </div> */}
+      {/* <div className="w-3/4 bg-red-900  overflow-clip">Sanjay </div> */}
       <Wrapper apiKey={MAPS_API_KEY} render={render} />
-      <aside className="absolute bg-blue-200/1 sm:w-[30%] sm:min-w-[390px] w-full h-[100dvh]  p-4 ">
+      <aside className="w-1/4 ">
         <div
-          className="relative bg-gray-100/90 dark:bg-gray-800/95 rounded-lg flex w-full h-full flex-col gap-3
+          className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3
         justify-start p-4 "
         >
           <SearchBar
@@ -342,6 +344,5 @@ export function MapComponent() {
         </div>
       </aside>
     </div>
-    // </div>
   );
 }
