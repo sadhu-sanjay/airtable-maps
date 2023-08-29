@@ -194,7 +194,7 @@ export function MapComponent() {
       <>
         <div
           className=" flex flex-col items-center absolute bottom-0 py-4 left-0 right-0
-        bg-gray-100 dark:bg-gray-800 rounded-lg border-t dark:border-gray-700 shadow-xl
+        bg-gray-100 dark:bg-gray-800 border-t dark:border-gray-700 shadow-xl
         "
         >
           <span className="text-sm text-gray-700 dark:text-gray-400">
@@ -238,7 +238,7 @@ export function MapComponent() {
             <nav aria-label="Page navigation xample">
               <ul
                 style={{ scrollbarWidth: "none" }}
-                className="flex items-center -space-x-px h-8 text-sm max-w-[180px] overflow-scroll "
+                className="flex items-center -space-x-px h-8 text-sm max-w-[140px] overflow-scroll "
               >
                 {pageNumbers.map((number) => (
                   <li key={number} onClick={() => handlePageChange(number)}>
