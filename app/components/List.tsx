@@ -41,7 +41,7 @@ export function MyList({
               onClick={() => setSelectedRecord(record)}
               // hide horizontal scrollbar
               className="p-1 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer
-              hover:shadow-sm border dark:border-slate-700 font-mono text-md bg-gray-100 rounded-xs
+              hover:shadow-sm border dark:border-slate-700 bg-gray-100 rounded-xs
               dark:bg-gray-700  "
             >
               {/* <p>{index + 1}{". "} </p> */}
