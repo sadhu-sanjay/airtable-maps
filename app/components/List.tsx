@@ -34,28 +34,32 @@ export function MyList({
           <span className="sr-only">Loading...</span>
         </div>
       ) : records ? (
-        <ul className="overflow-y-scroll overflow-x-hidden  ">
+        <>
+        <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 
+        overflow-x-hidden overflow-y-scroll ">
           {records.map((record, index) => (
-            <li
-              key={record.id}
-              onClick={() => setSelectedRecord(record)}
-              // hide horizontal scrollbar
-              className="p-1 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer
-              hover:shadow-sm border dark:border-slate-700 bg-gray-100 rounded-xs
-              dark:bg-gray-700  "
-            >
-              {/* <p>{index + 1}{". "} </p> */}
-              <span className="text-xs">
-                <strong>{record.Title}</strong>
-              </span>
-              <div className="flex justify-between">
-                <p className="text-xs">{record.Tags}</p>
-                <p className="text-xs"> {record.Region} </p>
+            <li key={record.id} 
+            onClick={() => setSelectedRecord(record)}
+            className="p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer">
+              <div className="flex items-end space-x-4">
+                <div className="flex-1 min-w-0 ">
+                  <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
+                    <strong>{record.Title}</strong>
+                  </p>
+                  <p className="text-xs text-gray-600 truncate dark:text-gray-400">
+                    {record.Tags}
+                  </p>
+                </div>
+                <div className=" text-xs text-gray-500 truncate dark:text-gray-400">
+                  {record.Region}
+                </div>
               </div>
             </li>
           ))}
         </ul>
+        </>
       ) : (
+        
         <div className="text-center p-5 top-1/4 ">
           <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
             No records found ~!
