@@ -294,7 +294,7 @@ export function MapComponent() {
       case Status.LOADING:
         return <Spinner />;
       case Status.FAILURE:
-        return <div>Error Loading Map</div>;
+        return <div className="w-full sm:w-3/4">Error Loading Map</div>;
       case Status.SUCCESS:
         return (
           <MyMap

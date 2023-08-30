@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Record } from "~/app/components/types";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { clusterThreshHold } from "~/app/config";
 
 export function MyMap({
   center,
@@ -93,7 +92,7 @@ export function MyMap({
 
   // return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
   // return <div className="bg-blue-900 w-full h-full absolute">Hello</div>;
-  return <div ref={divRef} className="w-3/4 bg-red-900  overflow-clip"></div>;
+  return <div ref={divRef} className="w-3/4 bg-red-900 overflow-clip"></div>;
 }
 
 interface MyMarkerProps {
