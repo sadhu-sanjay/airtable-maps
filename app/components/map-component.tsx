@@ -15,7 +15,7 @@ import { MyList } from "./List";
 import { MyMap } from "./my-map";
 import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
-import { myDebounce } from "./utility";
+import { myDebounce } from "./utility/utilityFunctions";
 
 export function MapComponent() {
   const [records, setRecords] = useState<Record[]>([]);
