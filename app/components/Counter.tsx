@@ -4,11 +4,12 @@ import { myDebounce } from "./utility/utilityFunctions";
 import { CSSProperties, useEffect, useMemo } from "react";
 import { Spinner3, Spinner4 } from "./spinner";
 import useRecords from "./useRecords";
-import { WarningAlert } from "./common/alerts/warning-alert";
+import WarningAlert from "./common/alerts/warning-alert";
+import ErrorAlert from "./common/alerts/error-alert";
 import { FixedSizeList as List } from "react-window";
 
 export default function Counter() {
-  const { records } = useRecords();
+  const { recordsError, isLoadingRecords, records } = useRecords();
 
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
@@ -18,6 +19,22 @@ export default function Counter() {
       </li>
     );
   };
+
+  if (isLoadingRecords) {
+    return <Spinner3 />;
+  }
+  if (recordsError) {
+    return <ErrorAlert errorMessage={recordsError} />;
+  }
+  if (records.length === 0) {
+    return (
+      <div className="text-center p-5 top-1/4 ">
+        <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
+          No records found ~!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>

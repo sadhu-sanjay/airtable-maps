@@ -1,6 +1,6 @@
 /**
- * Pagination Functionality Start
- * */
+   * Pagination Functionality Start
+   * */
 // const recordsPageSize = 5000; // Number of records per page
 // const [currentPage, setCurrentPage] = useState(1);
 // const indexOfLastRecord = currentPage * recordsPageSize;
@@ -82,7 +82,7 @@
 //                 <li key={number} onClick={() => handlePageChange(number)}>
 //                   <a
 //                     className={`
-//                   flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white
+//                   flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white 
 //                   ${
 //                     currentPage === number
 //                       ? "font-semibold text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-white"
@@ -127,32 +127,32 @@
  * Pagination Functionality End
  */
 
-export function PageStatus({
-  filtered,
-  total,
-}: {
-  filtered: number;
-  total: number;
-}) {
-  return (
+// export function PageStatus({
+//   filtered,
+//   total,
+// }: {
+//   filtered: number;
+//   total: number;
+// }) {
+//   return (
     
-    <div
-      className=" flex flex-col items-center py-4 left-0 right-0
-        bg-gray-100 dark:bg-gray-800 border-t dark:border-gray-700 
-        "
-    >
-      <span className="text-sm text-gray-700 dark:text-gray-400">
-        Showing{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
-          {filtered}
-        </span>{" "}
-        of{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
-          {total}
-        </span>{" "}
-        Entries
-      </span>
-      {/* A seperator line */}
-    </div>
-  );
-}
+//     <div
+//       className=" flex flex-col items-center py-4 left-0 right-0
+//         bg-gray-100 dark:bg-gray-800 border-t dark:border-gray-700 
+//         "
+//     >
+//       <span className="text-sm text-gray-700 dark:text-gray-400">
+//         Showing{" "}
+//         <span className="font-semibold text-gray-900 dark:text-white">
+//           {filtered}
+//         </span>{" "}
+//         of{" "}
+//         <span className="font-semibold text-gray-900 dark:text-white">
+//           {total}
+//         </span>{" "}
+//         Entries
+//       </span>
+//       {/* A seperator line */}
+//     </div>
+//   );
+// }

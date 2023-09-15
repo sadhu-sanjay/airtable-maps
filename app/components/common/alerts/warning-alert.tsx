@@ -1,4 +1,4 @@
-const WarningAlert = ({ text }: { text: string }) => {
+const WarningAlert = ({ message }: {message: string }) => {
   return (
     <div
       id="alert-additional-content-4"
@@ -18,7 +18,7 @@ const WarningAlert = ({ text }: { text: string }) => {
         <span className="sr-only">Info</span>
         <h3 className="text-lg font-medium">Please wait.....</h3>
       </div>
-      <div className="mt-2 mb-4 text-sm">{text}</div>
+      <div className="mt-2 mb-4 text-sm">{message}</div>
       <div className="flex">
         <button
           onClick={() => window.location.reload()}
@@ -54,4 +54,4 @@ const WarningAlert = ({ text }: { text: string }) => {
   );
 };
 
-export { WarningAlert };
+export default WarningAlert
