@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Record } from "~/app/components/types";
-import { JSONObjectSeparator } from "~/app/components/utility/JSONObjectSeparator";
 import { RECORDS_FETCH_URL } from "~/app/config";
-import { WarningAlert } from "~/app/components/common/alerts/warning-alert";
-import { myDebounce } from "./utility/utilityFunctions";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
-  const [error, setError] = useState({});
-  // const [loadingRecords, setLoadingRecords] = useState(true);
+  const [recordsError, setRecordsError] = useState<null>(null);
+  const [isLoadingRecords, setIsLoadingRecords] = useState(false);
   console.log("USERECORDS RE-RENDER");
 
   const updateState = (records: Array<Record>) => {
@@ -16,51 +13,55 @@ export default function useRecords() {
       setRecords((prevRecords) => [...prevRecords, ...records]);
     }, 0);
   };
+
   const fetchRecords = useCallback(async (signal: AbortSignal) => {
-    console.time("fetcher");
-    const res = await fetch(RECORDS_FETCH_URL, { signal });
-    // const res = await fetch(
-    //   "https://shicane-test.ey.r.appspot.com/api/records",
-    //   { signal }
-    // );
-    if (!res.ok) setError("Error fetching records... Please try again later.");
-    const reader = res.body!.getReader();
-    let buffer = "";
-    let localRecords: Array<Record> = [];
+    setIsLoadingRecords(true);
 
     try {
+      const res = await fetch(RECORDS_FETCH_URL, { signal });
+      const reader = res.body!.getReader();
+      let buffer = "";
+      let localRecords: Array<Record> = [];
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
           updateState(localRecords);
           localRecords = [];
-          console.timeEnd("fetcher");
+          setIsLoadingRecords(false);
           break;
         }
 
-        let recordsJson = new TextDecoder().decode(value);
-        buffer += recordsJson;
+        try {
+          let recordsJson = new TextDecoder().decode(value);
+          buffer += recordsJson;
 
-        const recordsStringArray = buffer.split("\n");
-        buffer = recordsStringArray.pop() || "";
+          const recordsStringArray = buffer.split("\n");
+          buffer = recordsStringArray.pop() || ""; // last element might not be proper object so pull it out
 
-        const newRecords = recordsStringArray.map((record) =>
-          JSON.parse(record)
-        );
-        localRecords.push(...newRecords);
+          const newRecords = recordsStringArray.map((record) =>
+            JSON.parse(record)
+          );
+          localRecords.push(...newRecords);
 
-        if (localRecords.length > 100) {
-          updateState(localRecords);
-          localRecords = [];
+          if (localRecords.length > 100) {
+            updateState(localRecords);
+            localRecords = [];
+          }
+        } catch (error: any) {
+          console.log("Error parsing JSON", error);
+          setRecordsError(error);
+          break;
         }
       }
     } catch (error: any) {
       if (error.name === "AbortError") {
         console.log("Fetch aborted");
       } else {
-        console.error("Fetch Error: ", error);
-        setError(error);
+        console.error("FETCHE FETCH Fetch Error: ", typeof error);
+        setRecordsError(error.message);
       }
+      setIsLoadingRecords(false);
     }
   }, []);
 
@@ -75,6 +76,5 @@ export default function useRecords() {
     };
   }, [fetchRecords]);
 
-  // return { loadingRecords, error, records };
-  return { records };
+  return { recordsError, isLoadingRecords, records };
 }
