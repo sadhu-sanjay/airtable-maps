@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { Record } from "~/app/components/types";
 import { JSONObjectSeparator } from "~/app/components/utility/JSONObjectSeparator";
 import { RECORDS_FETCH_URL } from "~/app/config";
@@ -7,72 +7,73 @@ import { myDebounce } from "./utility/utilityFunctions";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
-  // const [error, setError] = useState({});
+  const [error, setError] = useState({});
   // const [loadingRecords, setLoadingRecords] = useState(true);
   console.log("USERECORDS RE-RENDER");
 
-  const updateState = (batch: Array<Record>) => {
+  const updateState = (records: Array<Record>) => {
     setTimeout(() => {
-      console.log("BATCH: ", batch);
-      setRecords((prevRecords) => [...prevRecords, ...batch]);
-    },0);
+      setRecords((prevRecords) => [...prevRecords, ...records]);
+    }, 0);
   };
-
-  async function fetchRecordsAndStore(signal: AbortSignal) {
+  const fetchRecords = useCallback(async (signal: AbortSignal) => {
+    console.time("fetcher");
     const res = await fetch(RECORDS_FETCH_URL, { signal });
-    // const res = await fetch("https://shicane-test.ey.r.appspot.com/api/records", { signal });
-
-    if (!res.ok) {
-      alert("Error fetching records");
-    }
+    // const res = await fetch(
+    //   "https://shicane-test.ey.r.appspot.com/api/records",
+    //   { signal }
+    // );
+    if (!res.ok) setError("Error fetching records... Please try again later.");
     const reader = res.body!.getReader();
-    let batch: Array<Record> = [];
-    let batchSize = 100;
+    let buffer = "";
+    let localRecords: Array<Record> = [];
 
-    const separator = new JSONObjectSeparator((jsonString) => {
-      jsonString = jsonString.substring(1);
-      const record = JSON.parse(jsonString);
-
-      batch.push(record);
-      if (batch.length > batchSize) {
-        updateState(batch);
-        batch = [];
-      }
-    });
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        console.log("STREAM FINISHED");
-        updateState(batch); // Push the final remaining records in the batch 
-        break;
-      }
-
-      try {
-        const jsonString = new TextDecoder("utf-8").decode(value);
-
-        separator.receive(jsonString);
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Fetch aborted");
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          updateState(localRecords);
+          localRecords = [];
+          console.timeEnd("fetcher");
           break;
-        } else {
-          console.error("Fetch Error: ", error);
+        }
+
+        let recordsJson = new TextDecoder().decode(value);
+        buffer += recordsJson;
+
+        const recordsStringArray = buffer.split("\n");
+        buffer = recordsStringArray.pop() || "";
+
+        const newRecords = recordsStringArray.map((record) =>
+          JSON.parse(record)
+        );
+        localRecords.push(...newRecords);
+
+        if (localRecords.length > 100) {
+          updateState(localRecords);
+          localRecords = [];
         }
       }
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.log("Fetch aborted");
+      } else {
+        console.error("Fetch Error: ", error);
+        setError(error);
+      }
     }
-  }
+  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    fetchRecordsAndStore(signal);
+    fetchRecords(signal);
 
     return () => {
       abortController.abort();
     };
-  }, []);
+  }, [fetchRecords]);
 
   // return { loadingRecords, error, records };
   return { records };
