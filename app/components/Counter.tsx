@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 import { myDebounce } from "./utility/utilityFunctions";
-import { useEffect, useMemo } from "react";
+import { CSSProperties, useEffect, useMemo } from "react";
 import { Spinner3, Spinner4 } from "./spinner";
 import useRecords from "./useRecords";
 import { WarningAlert } from "./common/alerts/warning-alert";
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList as List } from "react-window";
 
 export default function Counter() {
   const { records } = useRecords();
 
-  const Row = ({ index, style }) => {
+  const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
     return (
       <li className="text-sm " key={record.id} style={style}>
@@ -27,7 +27,7 @@ export default function Counter() {
             height={screen.height} // adjust this according to your needs
             itemCount={records.length}
             itemSize={30} // adjust this according to your needs
-            width='40%' // adjust this according to your needs
+            width="40%" // adjust this according to your needs
           >
             {Row}
           </List>
@@ -39,4 +39,3 @@ export default function Counter() {
     </>
   );
 }
-
