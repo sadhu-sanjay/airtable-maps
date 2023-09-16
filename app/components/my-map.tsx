@@ -11,15 +11,10 @@ export function MyMap({
   center: google.maps.LatLngLiteral;
   zoom: number;
   filteredRecords?: Record[];
-  selectedRecord: Record | null;
+  selectedRecord: Record | undefined;
 }) {
   const mapRef = useRef<google.maps.Map>();
   const divRef = useRef<HTMLDivElement>(null);
-
-  // logger use effect 
-  useEffect(() => {
-    console.log("MyMap.tsx: MyMap() useEffect() filteredRecords.length: ", filteredRecords?.length);
-  }, []);
 
 
   /*
@@ -90,9 +85,7 @@ export function MyMap({
     };
   }, [markers]);
 
-  // return <div ref={divRef} className="w-full h-[50dvh] sm:h-[100dvh]"></div>;
-  // return <div className="bg-blue-900 w-full h-full absolute">Hello</div>;
-  return <div ref={divRef} className="w-3/4 bg-red-900 overflow-clip"></div>;
+  return <div ref={divRef} className="h-full w-full bg-red-900 overflow-clip"></div>;
 }
 
 interface MyMarkerProps {

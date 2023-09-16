@@ -222,32 +222,28 @@ export default function Home() {
   const { recordsError, isLoadingRecords, records } = useRecords();
   const [selectedRecord, setSelectedRecord] = useState<Record>();
 
-  // const render = (status: Status) => {
-  //   switch (status) {
-  //     case Status.LOADING:
-  //       return <Spinner />;
-  //     case Status.FAILURE:
-  //       return <div className="w-full sm:w-3/4">Error Loading Map</div>;
-  //     case Status.SUCCESS:
-  //       return (
-  //         <MyMap
-  //           center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
-  //           zoom={6}
-  //           filteredRecords={recordsToShow}
-  //           selectedRecord={selectedRecord}
-  //         />
-  //       );
-  //   }
-  // };
+  const render = (status: Status) => {
+    switch (status) {
+      case Status.LOADING:
+        return <Spinner />;
+      case Status.FAILURE:
+        return <div className="w-full sm:w-3/4">Error Loading Map</div>;
+      case Status.SUCCESS:
+        return (
+          <MyMap
+            center={{ lat: 43.21222313155537, lng: -74.11117789530637 }}
+            zoom={6}
+            filteredRecords={records}
+            selectedRecord={selectedRecord}
+          />
+        );
+    }
+  };
 
   return (
-    <div className="h-screen flex flex-row">
-      {/* <Wrapper apiKey={MAPS_API_KEY} render={render} /> */}
-      <aside className="w-full md:w-1/3 lg:w-1/4 ">
-        <div
-          className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3
-            justify-start p-4 "
-        >
+    <div className="h-screen flex flex-col-reverse sm:flex-row ">
+      <aside className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]">
+        <div className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 pr-0 ">
           {/* <SearchBar
             // searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
@@ -273,6 +269,9 @@ export default function Home() {
           />
         </div>
       </aside>
+      <main className="bg-red-500 h-1/2 sm:h-full w-full">
+        <Wrapper apiKey={MAPS_API_KEY} render={render} />
+      </main>
     </div>
   );
 }

@@ -66,7 +66,7 @@ export function MyList({
             height={screen.height} // adjust this according to your needs
             itemCount={records.length}
             itemSize={45} // adjust this according to your needs
-            className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 
+            className=" divide-y divide-gray-200 dark:divide-gray-700 
          overflow-y-scroll "
           >
             {Row}
