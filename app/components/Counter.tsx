@@ -9,6 +9,7 @@ import ErrorAlert from "./common/alerts/error-alert";
 import { FixedSizeList as List } from "react-window";
 
 export default function Counter() {
+
   const { recordsError, isLoadingRecords, records } = useRecords();
 
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
@@ -20,7 +21,7 @@ export default function Counter() {
     );
   };
 
-  if (isLoadingRecords) {
+  if (isLoadingRecords && records.length < 1) {
     return <Spinner3 />;
   }
   if (recordsError) {

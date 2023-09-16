@@ -1,6 +1,7 @@
+import { CSSProperties, Dispatch, SetStateAction } from "react";
+import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Spinner2 } from "~/app/components/spinner";
+import EmptyList from "./common/empty-states/empty-list";
 
 export function MyList({
   isLoading,
@@ -9,11 +10,37 @@ export function MyList({
 }: {
   isLoading: boolean;
   records: Record[];
-  setSelectedRecord: Dispatch<SetStateAction<Record | null>>;
+  setSelectedRecord: Dispatch<SetStateAction<Record | undefined>>;
 }) {
+  const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
+    const record = records[index];
+    return (
+      <li
+        key={record.id}
+        onClick={() => setSelectedRecord(record)}
+        style={style}
+        className="p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
+      >
+        <div className="flex items-end space-x-4">
+          <div className="flex-1 min-w-0 ">
+            <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
+              <strong>{record.Title}</strong>
+            </p>
+            <p className="text-xs text-gray-600 truncate dark:text-gray-400">
+              {record.Tags}
+            </p>
+          </div>
+          <div className=" text-xs text-gray-500 truncate dark:text-gray-400">
+            {record.Region}
+          </div>
+        </div>
+      </li>
+    );
+  };
+
   return (
     <>
-      {isLoading ? (
+      {isLoading && records.length < 1 ? (
         <div role="status" className="self-center">
           <svg
             aria-hidden="true"
@@ -33,39 +60,25 @@ export function MyList({
           </svg>
           <span className="sr-only">Loading...</span>
         </div>
-      ) : records ? (
+      ) : records.length > 0 ? (
         <>
-        <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 
-        overflow-x-hidden overflow-y-scroll ">
-          {records.map((record, index) => (
-            <li key={record.id} 
-            onClick={() => setSelectedRecord(record)}
-            className="p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer">
-              <div className="flex items-end space-x-4">
-                <div className="flex-1 min-w-0 ">
-                  <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-                    <strong>{record.Title}</strong>
-                  </p>
-                  <p className="text-xs text-gray-600 truncate dark:text-gray-400">
-                    {record.Tags}
-                  </p>
-                </div>
-                <div className=" text-xs text-gray-500 truncate dark:text-gray-400">
-                  {record.Region}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+          <List
+            height={screen.height} // adjust this according to your needs
+            itemCount={records.length}
+            itemSize={45} // adjust this according to your needs
+            className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 
+         overflow-y-scroll "
+          >
+            {Row}
+          </List>
         </>
       ) : (
-        
-        <div className="text-center p-5 top-1/4 ">
-          <p style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
-            No records found ~!
-          </p>
-        </div>
+        <EmptyList
+          title="No Recods found"
+          subtitle="It's possible that we're currently in the process of updating the data. Please try again later."
+        />
       )}
     </>
   );
 }
+
