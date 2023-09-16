@@ -19,10 +19,10 @@ export function MyList({
         key={record.id}
         onClick={() => setSelectedRecord(record)}
         style={style}
-        className="p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
+        className="border-b p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >
         <div className="flex items-end space-x-4">
-          <div className="flex-1 min-w-0 ">
+          <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
               <strong>{record.Title}</strong>
             </p>
