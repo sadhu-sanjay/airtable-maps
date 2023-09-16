@@ -31,7 +31,7 @@ export function MyMap({
   useEffect(() => {
     // initialize the map
     mapRef.current = new window.google.maps.Map(divRef.current!, {
-      center: { lat: 43.21, lng: -74.11},
+      center: { lat: 43.21, lng: -74.11 },
       zoom: 2,
     });
 
@@ -40,21 +40,19 @@ export function MyMap({
       markers: markersRef.current,
       map: mapRef.current,
     });
+
   }, []);
 
   /**
    * Set up the map bounds to fit all the markers
    * */
 
-  /**
-   * INITIALIZE THE MAP
-   */
-
-  /**
 
   /**
    * Adjust the bounds on receiving new new records
    */
+
+
   // useEffect(() => {
   //   if (mapRef.current && records && records.length > 0) {
   //     const bounds = new google.maps.LatLngBounds();
@@ -72,16 +70,16 @@ export function MyMap({
   //   }
   // }, [records]);
 
-  // useEffect(() => {
-  //   if (selectedRecord && mapRef.current) {
-  //     const { lat, lng } = selectedRecord;
-  //     if (!lat || !lng) {
-  //       return alert("No coordinates found for this record");
-  //     }
-  //     mapRef.current.setZoom(10); // ADDED THIS
-  //     mapRef.current.panTo(new google.maps.LatLng(lat, lng));
-  //   }
-  // }, [selectedRecord]);
+  useEffect(() => {
+    if (selectedRecord && mapRef.current) {
+      const { lat, lng } = selectedRecord;
+      if (!lat || !lng) {
+        return alert("No coordinates found for this record");
+      }
+      mapRef.current.setZoom(17); // ADDED THIS
+      mapRef.current.panTo({ lat, lng });
+    }
+  }, [selectedRecord]);
 
   /**
    * MARKER CLUSTERING

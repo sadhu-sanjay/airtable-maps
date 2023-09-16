@@ -217,20 +217,20 @@ export default function Home() {
             // searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
           /> */}
-          {/* <div className="flex justify-between">
-            <Dropdown
+          <div className="flex justify-between">
+            {/* <Dropdown
               label="Region"
               placeholder="Region"
               doneCallBack={region_done_clicked}
               fetchUrl={REGIONS_FETCH_URL}
-            />
-            <Dropdown
+            /> */}
+            {/* <Dropdown
               label="Tags"
               placeholder="Tags"
               doneCallBack={tags_done_clicked}
               fetchUrl={TAGS_FETCH_URL}
-            />
-          </div> */}
+            /> */}
+          </div>
           <MyList
             isLoading={isLoadingRecords}
             records={records}
