@@ -27,8 +27,6 @@ import useRecords from "./useRecords";
 //   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
 //   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-
-
 //   /**
 //    * Filter Functionality Start
 //    * */
@@ -192,6 +190,12 @@ import useRecords from "./useRecords";
 export default function Home() {
   const { recordsError, isLoadingRecords, records } = useRecords();
   const [selectedRecord, setSelectedRecord] = useState<Record>();
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
+  function region_done_clicked(callBackResult: string[]) {
+    setSelectedRegions(callBackResult);
+    console.log("selectedRegions", selectedRegions);
+  }
 
   const render = (status: Status) => {
     switch (status) {
@@ -200,12 +204,7 @@ export default function Home() {
       case Status.FAILURE:
         return <div className="w-full sm:w-3/4">Error Loading Map</div>;
       case Status.SUCCESS:
-        return (
-          <MyMap
-            records={records}
-            selectedRecord={selectedRecord}
-          />
-        );
+        return <MyMap records={records} selectedRecord={selectedRecord} />;
     }
   };
 
@@ -218,12 +217,12 @@ export default function Home() {
             handleSearchChange={onSearchTermChange}
           /> */}
           <div className="flex justify-between">
-            {/* <Dropdown
+            <Dropdown
               label="Region"
               placeholder="Region"
               doneCallBack={region_done_clicked}
               fetchUrl={REGIONS_FETCH_URL}
-            /> */}
+            />
             {/* <Dropdown
               label="Tags"
               placeholder="Tags"
