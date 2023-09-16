@@ -66,9 +66,8 @@ export function MyList({
             height={screen.height} // adjust this according to your needs
             itemCount={records.length}
             itemSize={45} // adjust this according to your needs
-            className=" divide-y divide-gray-200 dark:divide-gray-700 
-         overflow-y-scroll "
-          >
+            // only show scrollbar if needed
+            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto" >
             {Row}
           </List>
         </>

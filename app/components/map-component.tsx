@@ -243,7 +243,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
       <aside className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]">
-        <div className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 pr-0 ">
+        <div className="relative shadow-lg bg-slate-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           {/* <SearchBar
             // searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
