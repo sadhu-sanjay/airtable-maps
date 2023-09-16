@@ -16,312 +16,243 @@ import { MyMap } from "./my-map";
 import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
+import useRecords from "./useRecords";
 
-export function MapComponent() {
-  const [records, setRecords] = useState<Record[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
-  const [filteredRecords, setFilteredRecords] = useState(records);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+// export function MapComponent() {
+//   const [records, setRecords] = useState<Record[]>([]);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
+//   const [filteredRecords, setFilteredRecords] = useState(records);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+//   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  /**
-   * Core Fetches and Loading Start
-   * */
-  function fetchRecords() {
-    setIsLoading(true);
-    fetch(RECORDS_FETCH_URL)
-      .then((res) => res.json())
-      .then((data) => {
+//   /**
+//    * Core Fetches and Loading Start
+//    * */
+//   function fetchRecords() {
+//     setIsLoading(true);
+//     fetch(RECORDS_FETCH_URL)
+//       .then((res) => res.json())
+//       .then((data) => {
 
-        if (!data || data.message) return;
+//         if (!data || data.message) return;
 
-        console.log("Fetched Records==>", data);
+//         console.log("Fetched Records==>", data);
 
-        // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-        setRecords(data);
-      })
-      .catch((err) => {
-        console.log("Error fetching records", err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+//         // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
+//         setRecords(data);
+//       })
+//       .catch((err) => {
+//         console.log("Error fetching records", err);
+//       })
+//       .finally(() => {
+//         setIsLoading(false);
+//       });
+//   }
 
-  useEffect(() => {
-    fetchRecords();
-  }, []);
-  /**
-   * Core Fetches and Loading End
-   */
+//   useEffect(() => {
+//     fetchRecords();
+//   }, []);
+//   /**
+//    * Core Fetches and Loading End
+//    */
 
-  /**
-   * Filter Functionality Start
-   * */
-  const applyFilters = useCallback(() => {
-    console.log("Apply filter called");
+//   /**
+//    * Filter Functionality Start
+//    * */
+//   const applyFilters = useCallback(() => {
+//     console.log("Apply filter called");
 
-    let newFilteredRecords = records;
+//     let newFilteredRecords = records;
 
-    // Filter records based on selected REgions
-    if (selectedRegions.length > 0) {
-      newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedRegions.some((region) =>
-          record.Region?.includes(region)
-        );
-      });
-    }
+//     // Filter records based on selected REgions
+//     if (selectedRegions.length > 0) {
+//       newFilteredRecords = newFilteredRecords.filter((record) => {
+//         return selectedRegions.some((region) =>
+//           record.Region?.includes(region)
+//         );
+//       });
+//     }
 
-    // Filter records based on selected Tags
-    if (selectedTags.length > 0) {
-      console.log("selectedTags", selectedTags);
-      newFilteredRecords = newFilteredRecords.filter((record) => {
-        return selectedTags.some((tag) => record.Tags?.includes(tag));
-      });
-    }
+//     // Filter records based on selected Tags
+//     if (selectedTags.length > 0) {
+//       console.log("selectedTags", selectedTags);
+//       newFilteredRecords = newFilteredRecords.filter((record) => {
+//         return selectedTags.some((tag) => record.Tags?.includes(tag));
+//       });
+//     }
 
-    // update Global Filtered Records
-    setFilteredRecords(newFilteredRecords);
+//     // update Global Filtered Records
+//     setFilteredRecords(newFilteredRecords);
 
-    // update current page to 1
-    setCurrentPage(1);
+//     // update current page to 1
+//     setCurrentPage(1);
 
-    console.log("Apply filter Ended");
-  }, [records, selectedRegions, selectedTags]);
+//     console.log("Apply filter Ended");
+//   }, [records, selectedRegions, selectedTags]);
 
-  function tags_done_clicked(callBackResult: string[]) {
-    setSelectedTags(callBackResult);
-    console.log("selectedTags", selectedTags);
-  }
+//   function tags_done_clicked(callBackResult: string[]) {
+//     setSelectedTags(callBackResult);
+//     console.log("selectedTags", selectedTags);
+//   }
 
-  function region_done_clicked(callBackResult: string[]) {
-    setSelectedRegions(callBackResult);
-    console.log("selectedRegions", selectedRegions);
-  }
+//   function region_done_clicked(callBackResult: string[]) {
+//     setSelectedRegions(callBackResult);
+//     console.log("selectedRegions", selectedRegions);
+//   }
 
-  useEffect(() => {
-    console.log("USE EFFECT CALLED Apply Filter");
-    applyFilters();
-    console.log("USE EFFECT Ended APPLY Filter");
-  }, [applyFilters]);
-  /**
-   * Filter Functionality End
-   * */
+//   useEffect(() => {
+//     console.log("USE EFFECT CALLED Apply Filter");
+//     applyFilters();
+//     console.log("USE EFFECT Ended APPLY Filter");
+//   }, [applyFilters]);
+//   /**
+//    * Filter Functionality End
+//    * */
 
-  /**
-   * Search Functionality Start
-   * */
-  const searchedRecords = useMemo(() => {
-    if (searchQuery === "") {
-      return filteredRecords;
-    }
+//   /**
+//    * Search Functionality Start
+//    * */
+//   const searchedRecords = useMemo(() => {
+//     if (searchQuery === "") {
+//       return filteredRecords;
+//     }
 
-    console.log("SEARCHED RECORDS CALLED");
-    // get current time
-    const start = performance.now();
+//     console.log("SEARCHED RECORDS CALLED");
+//     // get current time
+//     const start = performance.now();
 
-    const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
-    const searchRecords = filteredRecords.filter((record) =>
-      record.searchStr
-        .replace(/\s/g, "")
-        .toLowerCase()
-        .includes(formattedSearchTerm)
-    );
+//     const formattedSearchTerm = searchQuery.replace(/\s/g, "").toLowerCase();
+//     const searchRecords = filteredRecords.filter((record) =>
+//       record.searchStr
+//         .replace(/\s/g, "")
+//         .toLowerCase()
+//         .includes(formattedSearchTerm)
+//     );
 
-    // get current time
-    const end = performance.now();
-    console.log("SEARCHED RECORDS Ended", end - start);
+//     // get current time
+//     const end = performance.now();
+//     console.log("SEARCHED RECORDS Ended", end - start);
 
-    return searchRecords;
-  }, [searchQuery, filteredRecords]);
+//     return searchRecords;
+//   }, [searchQuery, filteredRecords]);
 
-  const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    
-    debouncedSearch(value);
-  };
+//   const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const value = event.target.value;
 
-  const debouncedSearch = myDebounce((value: string) => {
-    setSearchQuery(value);
-    setCurrentPage(1);
-  }, 300);
+//     debouncedSearch(value);
+//   };
 
-  useEffect(() => {
-    console.log("Map Component mounted.");
-    // You can place cleanup logic here if needed
+//   const debouncedSearch = myDebounce((value: string) => {
+//     setSearchQuery(value);
+//     setCurrentPage(1);
+//   }, 300);
 
-    return () => {
-      console.log("Map Component unmo");
-    };
-  });
-  /**
-   * Filter and Search Functionality End
-   */
+//   useEffect(() => {
+//     console.log("Map Component mounted.");
+//     // You can place cleanup logic here if needed
 
-  /**
-   * Pagination Functionality Start
-   * */
-  const recordsPageSize = 5000; // Number of records per page
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastRecord = currentPage * recordsPageSize;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPageSize;
-  const recordsToShow =
-    searchedRecords.length > 0
-      ? searchedRecords?.slice(indexOfFirstRecord, indexOfLastRecord)
-      : [];
-  const totalPages = Math.ceil(searchedRecords.length / recordsPageSize);
+//     return () => {
+//       console.log("Map Component unmo");
+//     };
+//   });
+//   /**
+//    * Filter and Search Functionality End
+//    */
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
+//   const render = (status: Status) => {
+//     switch (status) {
+//       case Status.LOADING:
+//         return <Spinner />;
+//       case Status.FAILURE:
+//         return <div className="w-full sm:w-3/4">Error Loading Map</div>;
+//       case Status.SUCCESS:
+//         return (
+//           <MyMap
+//             center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
+//             zoom={6}
+//             filteredRecords={recordsToShow}
+//             selectedRecord={selectedRecord}
+//           />
+//         );
+//     }
+//   };
 
-  function Paginator() {
-    // Generate an array of page numbers
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+//   return (
+//     <div className="h-screen flex flex-row-reverse">
+//       {/* <div className="w-1/4 bg-pink-800 overflow-clip">Sanjay </div> */}
+//       {/* <div className="w-3/4 bg-red-900  overflow-clip">Sanjay </div> */}
+//       <Wrapper apiKey={MAPS_API_KEY} render={render} />
+//       <aside className="w-1/4 ">
+//         <div
+//           className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3
+//         justify-start p-4 "
+//         >
+//           <SearchBar
+//             // searchTerm={searchTerm}
+//             handleSearchChange={onSearchTermChange}
+//           />
+//           <div className="flex justify-between">
+//             <Dropdown
+//               label="Region"
+//               placeholder="Region"
+//               doneCallBack={region_done_clicked}
+//               fetchUrl={REGIONS_FETCH_URL}
+//             />
+//             <Dropdown
+//               label="Tags"
+//               placeholder="Tags"
+//               doneCallBack={tags_done_clicked}
+//               fetchUrl={TAGS_FETCH_URL}
+//             />
+//           </div>
+//           <MyList
+//             isLoading={isLoading}
+//             records={recordsToShow}
+//             setSelectedRecord={setSelectedRecord}
+//           />
+//         </div>
+//       </aside>
+//     </div>
+//   );
+// }
 
-    // Calculate the range of records currently viewed
-    const firstViewedRecord = indexOfFirstRecord + 1;
-    const lastViewedRecord = Math.min(
-      indexOfLastRecord,
-      searchedRecords.length
-    );
+export default function Home() {
+  const { recordsError, isLoadingRecords, records } = useRecords();
+  const [selectedRecord, setSelectedRecord] = useState<Record>();
 
-    return (
-      <>
-        <div
-          className=" flex flex-col items-center absolute bottom-0 py-4 left-0 right-0
-        bg-gray-100 dark:bg-gray-800 border-t dark:border-gray-700 shadow-xl
-        "
-        >
-          <span className="text-sm text-gray-700 dark:text-gray-400">
-            Showing{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              {firstViewedRecord}
-            </span>{" "}
-            to{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              {lastViewedRecord}
-            </span>{" "}
-            of{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              {searchedRecords.length}
-            </span>{" "}
-            Entries
-          </span>
-          <div className="inline-flex mt-2 xs:mt-0">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <svg
-                className="w-3.5 h-3.5 mr-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 5H1m0 0 4 4M1 5l4-4"
-                />
-              </svg>
-              Prev
-            </button>
-            <nav aria-label="Page navigation xample">
-              <ul
-                style={{ scrollbarWidth: "none" }}
-                className="flex items-center -space-x-px h-8 text-sm max-w-[140px] overflow-scroll "
-              >
-                {pageNumbers.map((number) => (
-                  <li key={number} onClick={() => handlePageChange(number)}>
-                    <a
-                      className={`
-                    flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white 
-                    ${
-                      currentPage === number
-                        ? "font-semibold text-gray-900 bg-gray-100 dark:bg-gray-700 dark:text-white"
-                        : ""
-                    }
-                    `}
-                    >
-                      {number}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              Next
-              <svg
-                className="w-3.5 h-3.5 ml-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </>
-    );
-  }
-  /**
-   * Pagination Functionality End
-   */
-
-  const render = (status: Status) => {
-    switch (status) {
-      case Status.LOADING:
-        return <Spinner />;
-      case Status.FAILURE:
-        return <div className="w-full sm:w-3/4">Error Loading Map</div>;
-      case Status.SUCCESS:
-        return (
-          <MyMap
-            center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
-            zoom={6}
-            filteredRecords={recordsToShow}
-            selectedRecord={selectedRecord}
-          />
-        );
-    }
-  };
+  // const render = (status: Status) => {
+  //   switch (status) {
+  //     case Status.LOADING:
+  //       return <Spinner />;
+  //     case Status.FAILURE:
+  //       return <div className="w-full sm:w-3/4">Error Loading Map</div>;
+  //     case Status.SUCCESS:
+  //       return (
+  //         <MyMap
+  //           center={{ lat: 41.29684086561144, lng: 24.47824249120258 }}
+  //           zoom={6}
+  //           filteredRecords={recordsToShow}
+  //           selectedRecord={selectedRecord}
+  //         />
+  //       );
+  //   }
+  // };
 
   return (
-    <div className="h-screen flex flex-row-reverse">
-      {/* <div className="w-1/4 bg-pink-800 overflow-clip">Sanjay </div> */}
-      {/* <div className="w-3/4 bg-red-900  overflow-clip">Sanjay </div> */}
-      <Wrapper apiKey={MAPS_API_KEY} render={render} />
-      <aside className="w-1/4 ">
+    <div className="h-screen flex flex-row">
+      {/* <Wrapper apiKey={MAPS_API_KEY} render={render} /> */}
+      <aside className="w-full md:w-1/3 lg:w-1/4 ">
         <div
           className="relative bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3
-        justify-start p-4 "
+            justify-start p-4 "
         >
-          <SearchBar
+          {/* <SearchBar
             // searchTerm={searchTerm}
             handleSearchChange={onSearchTermChange}
-          />
-          <div className="flex justify-between">
+          /> */}
+          {/* <div className="flex justify-between">
             <Dropdown
               label="Region"
               placeholder="Region"
@@ -334,13 +265,12 @@ export function MapComponent() {
               doneCallBack={tags_done_clicked}
               fetchUrl={TAGS_FETCH_URL}
             />
-          </div>
+          </div> */}
           <MyList
-            isLoading={isLoading}
-            records={recordsToShow}
+            isLoading={isLoadingRecords}
+            records={records}
             setSelectedRecord={setSelectedRecord}
           />
-          <Paginator />
         </div>
       </aside>
     </div>
