@@ -27,36 +27,7 @@ import useRecords from "./useRecords";
 //   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
 //   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-//   /**
-//    * Core Fetches and Loading Start
-//    * */
-//   function fetchRecords() {
-//     setIsLoading(true);
-//     fetch(RECORDS_FETCH_URL)
-//       .then((res) => res.json())
-//       .then((data) => {
 
-//         if (!data || data.message) return;
-
-//         console.log("Fetched Records==>", data);
-
-//         // const randomRecords = data.sort(() => 0.5 - Math.random()).slice(0, 30);
-//         setRecords(data);
-//       })
-//       .catch((err) => {
-//         console.log("Error fetching records", err);
-//       })
-//       .finally(() => {
-//         setIsLoading(false);
-//       });
-//   }
-
-//   useEffect(() => {
-//     fetchRecords();
-//   }, []);
-//   /**
-//    * Core Fetches and Loading End
-//    */
 
 //   /**
 //    * Filter Functionality Start
@@ -231,9 +202,7 @@ export default function Home() {
       case Status.SUCCESS:
         return (
           <MyMap
-            center={{ lat: 43.21222313155537, lng: -74.11117789530637 }}
-            zoom={6}
-            filteredRecords={records}
+            records={records}
             selectedRecord={selectedRecord}
           />
         );

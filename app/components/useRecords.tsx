@@ -6,7 +6,6 @@ export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
-  console.log("USERECORDS RE-RENDER");
 
   const updateState = (records: Array<Record>) => {
     setTimeout(() => {
@@ -18,7 +17,8 @@ export default function useRecords() {
     setIsLoadingRecords(true);
 
     try {
-      const res = await fetch(RECORDS_FETCH_URL, { signal });
+      // const res = await fetch(RECORDS_FETCH_URL, { signal });
+      const res = await fetch("https://shicane-test.ey.r.appspot.com/api/records", { signal });
       const reader = res.body!.getReader();
       let buffer = "";
       let localRecords: Array<Record> = [];

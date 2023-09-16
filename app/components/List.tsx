@@ -2,6 +2,8 @@ import { CSSProperties, Dispatch, SetStateAction } from "react";
 import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
 import EmptyList from "./common/empty-states/empty-list";
+import { PageStatus } from "./Paginator";
+import { Spinner, Spinner4 } from "./spinner";
 
 export function MyList({
   isLoading,
@@ -77,6 +79,8 @@ export function MyList({
           subtitle="It's possible that we're currently in the process of updating the data. Please try again later."
         />
       )}
+      
+      <PageStatus isLoading={isLoading} filtered={records.length} total={records.length} />
     </>
   );
 }
