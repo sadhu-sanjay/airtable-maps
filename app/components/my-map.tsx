@@ -16,23 +16,29 @@ export function MyMap({
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const clusterRef = useRef<MarkerClusterer | null>(null);
 
+  /**
+   * SETUP MARKERS
+   */
   markersRef.current = records
     ?.map((record: Record) => MyMarker(record, mapRef.current!))
     .filter(Boolean) as google.maps.marker.AdvancedMarkerElement[];
-
-  // Clear the existing cluster and create a new one with updated markers
   if (clusterRef.current) {
     clusterRef.current.clearMarkers();
     clusterRef.current?.addMarkers(markersRef.current);
   }
-  
   /**
-   * Initialize the map , markerRef and clusterRef in one useEffect
+   * SETUP MARKERS END
+   * */
+  
+
+  /**
+   * INITILIZE MAP  && CLUSTER 
    * */
   useEffect(() => {
     mapRef.current = new window.google.maps.Map(divRef.current!, {
       center: { lat: 43.21, lng: -74.11 },
       zoom: 2,
+      mapId: "eb7b69cef73330bc",
       minZoom: 2,
     });
 
@@ -46,6 +52,10 @@ export function MyMap({
       clusterRef.current = null;
     };
   }, []);
+  /**
+   * INITILIZE MAP && CLUSTER END
+   * */
+
 
   /**
    * Adjust the bounds on receiving new new records

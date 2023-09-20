@@ -88,7 +88,7 @@ function Dropdown({
           {selectedItems.length > 0 && (
             <div className="pr-1">{selectedItems.length} </div>
           )}
-          {isLoading ?`Loading.`: label}
+          {isLoading ?`Loading...`: label}
           <svg
             className={`${isLoading ? "hidden" : "inline"} w-2.5 h-2.5 ml-2.5`}
             aria-hidden="true"

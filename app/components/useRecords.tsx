@@ -47,6 +47,7 @@ export default function useRecords() {
           if (localRecords.length > 100) {
             updateState(localRecords);
             localRecords = [];
+            break
           }
         } catch (error: any) {
           console.log("Error parsing JSON", error);
