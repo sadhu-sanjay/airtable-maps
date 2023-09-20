@@ -1,7 +1,7 @@
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { startTransition, useEffect, useRef } from "react";
+import { startTransition, use, useEffect, useRef } from "react";
 import { Record } from "~/app/components/types";
-import { myDebounce } from "./utility/utilityFunctions";
+import { isMarkerInBounds, myDebounce } from "./utility/utilityFunctions";
 const icon = "./marker-icon2.png";
 
 export function MyMap({
@@ -11,6 +11,8 @@ export function MyMap({
   records?: Record[];
   selectedRecord: Record | undefined;
 }) {
+
+  console.log("MAP RENDERED")
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
@@ -29,17 +31,16 @@ export function MyMap({
   /**
    * SETUP MARKERS END
    * */
-  
 
   /**
-   * INITILIZE MAP  && CLUSTER 
+   * INITILIZE MAP  && CLUSTER
    * */
   useEffect(() => {
     mapRef.current = new window.google.maps.Map(divRef.current!, {
       center: { lat: 43.21, lng: -74.11 },
       zoom: 2,
       mapId: "eb7b69cef73330bc",
-      minZoom: 2,
+      minZoom: 1,
     });
 
     clusterRef.current = new MarkerClusterer({
@@ -56,6 +57,40 @@ export function MyMap({
    * INITILIZE MAP && CLUSTER END
    * */
 
+  /**
+   * CLUSTER MARKERS UPDATER ON BOUNDS CHANGE
+   * */
+  if (
+    mapRef.current ||
+    clusterRef.current ||
+    (records && records?.length > 6000)
+  ) {
+    const boundsChangedHandler = myDebounce(() => {
+      const bounds = mapRef.current?.getBounds();
+      const markersToRemove: google.maps.marker.AdvancedMarkerElement[] = [];
+      const markersToAdd: google.maps.marker.AdvancedMarkerElement[] = [];
+
+      markersRef.current.forEach((marker) => {
+        if (!isMarkerInBounds(marker, bounds)) {
+          markersToRemove.push(marker);
+        } else if (!marker.map) {
+          markersToAdd.push(marker);
+        }
+      });
+
+      setTimeout(() => {
+        clusterRef.current?.removeMarkers(markersToRemove);
+        clusterRef.current?.addMarkers(markersToAdd);
+      }, 0);
+    }, 1000);
+
+    google.maps.event.clearListeners(mapRef.current || {}, "bounds_changed");
+    google.maps.event.addListener(
+      mapRef.current!,
+      "bounds_changed",
+      boundsChangedHandler
+    );
+  }
 
   /**
    * Adjust the bounds on receiving new new records

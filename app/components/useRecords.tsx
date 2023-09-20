@@ -25,6 +25,7 @@ export default function useRecords() {
 
       while (true) {
         const { done, value } = await reader.read();
+        console.log("READ")
         if (done) {
           updateState(localRecords);
           localRecords = [];
@@ -45,9 +46,9 @@ export default function useRecords() {
           localRecords.push(...newRecords);
 
           if (localRecords.length > 100) {
-            updateState(localRecords);
-            localRecords = [];
-            break
+            // updateState(localRecords);
+            // localRecords = [];
+            // break
           }
         } catch (error: any) {
           console.log("Error parsing JSON", error);
