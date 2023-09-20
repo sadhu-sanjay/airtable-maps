@@ -191,18 +191,37 @@ export default function Home() {
   const { recordsError, isLoadingRecords, records } = useRecords();
   const [selectedRecord, setSelectedRecord] = useState<Record>();
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  console.log("HOME RENDER");
 
   function region_done_clicked(callBackResult: string[]) {
     setSelectedRegions(callBackResult);
-    console.log("selectedRegions", selectedRegions);
   }
+  function filterRecordsByRegions(
+    records: Record[],
+    selectedRegions: string[]
+  ) {
+
+    if (selectedRegions.length === 0) {
+      return records; // Show all records if no regions are selected
+    } else {
+      const filtered = records.filter((record) =>
+        selectedRegions.some((region) => record.Region?.includes(region))
+      );
+      return filtered;
+    }
+  }
+  const filteredRecords = filterRecordsByRegions(records, selectedRegions);
 
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
         return <Spinner />;
       case Status.FAILURE:
-        return <div className="w-full sm:w-3/4">Error Loading Map</div>;
+        return (
+          <h3 className=" font-semibold text-zinc-800 text-lg absolute top-1/2 left-1/2 translate-x-1/2 ">
+            FAILED TO LOAD MAP...
+          </h3>
+        );
       case Status.SUCCESS:
         return <MyMap records={records} selectedRecord={selectedRecord} />;
     }
@@ -232,13 +251,13 @@ export default function Home() {
           </div>
           <MyList
             isLoading={isLoadingRecords}
-            records={records}
+            records={filteredRecords}
             setSelectedRecord={setSelectedRecord}
           />
         </div>
       </aside>
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
-        <Wrapper apiKey={MAPS_API_KEY} render={render} />
+        <Wrapper libraries={['marker']} apiKey={MAPS_API_KEY} render={render} />
       </main>
     </div>
   );
