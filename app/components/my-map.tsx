@@ -102,8 +102,7 @@ export function MyMap({
       map: mapRef.current,
       // algorithm: new SuperClusterAlgorithm({radius: 200}),
       algorithm: new SuperClusterViewportAlgorithm({
-        maxZoom: 17,
-        viewportPadding: 24,
+        viewportPadding: 0,
       }),
     });
 
