@@ -17,6 +17,8 @@ import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
 import useRecords from "./useRecords";
+import { FronnyFace } from "./resources/svg/fronyface";
+import EmptyList from "./common/empty-states/empty-list";
 
 // export function MapComponent() {
 //   const [records, setRecords] = useState<Record[]>([]);
@@ -191,26 +193,24 @@ export default function Home() {
   const { recordsError, isLoadingRecords, records } = useRecords();
   const [selectedRecord, setSelectedRecord] = useState<Record>();
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
   console.log("HOME RENDER");
 
   function region_done_clicked(callBackResult: string[]) {
     setSelectedRegions(callBackResult);
   }
-  function filterRecordsByRegions(
-    records: Record[],
-    selectedRegions: string[]
-  ) {
 
+
+  const filteredRecords = useMemo(() => {
     if (selectedRegions.length === 0) {
-      return records; // Show all records if no regions are selected
-    } else {
-      const filtered = records.filter((record) =>
-        selectedRegions.some((region) => record.Region?.includes(region))
-      );
-      return filtered;
+      return records;
     }
-  }
-  const filteredRecords = filterRecordsByRegions(records, selectedRegions);
+
+    return records.filter((record) => {
+      return selectedRegions.some((region) => record.Region?.includes(region));
+    });
+  }, [records, selectedRegions]);
+
 
   const render = (status: Status) => {
     switch (status) {
@@ -218,12 +218,15 @@ export default function Home() {
         return <Spinner />;
       case Status.FAILURE:
         return (
-          <h3 className=" font-semibold text-zinc-800 text-lg absolute top-1/2 left-1/2 translate-x-1/2 ">
-            FAILED TO LOAD MAP...
-          </h3>
+          <EmptyList
+            title="Failed to load Map."
+            subtitle="Please try refreshing the page."
+          />
         );
       case Status.SUCCESS:
-        return <MyMap records={records} selectedRecord={selectedRecord} />;
+        return (
+          <MyMap records={filteredRecords} selectedRecord={selectedRecord} />
+        );
     }
   };
 
@@ -257,7 +260,7 @@ export default function Home() {
         </div>
       </aside>
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
-        <Wrapper libraries={['marker']} apiKey={MAPS_API_KEY} render={render} />
+        <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
     </div>
   );

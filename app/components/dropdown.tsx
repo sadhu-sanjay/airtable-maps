@@ -21,7 +21,7 @@ function Dropdown({
     setSelectedItems([]);
   };
 
-  function fetchRegions() {
+  useEffect(() => {
     setIsLoading(true);
     fetch(fetchUrl)
       .then((res) => res.json())
@@ -30,10 +30,7 @@ function Dropdown({
         setItems(data);
         setIsLoading(false);
       });
-  }
-  useEffect(() => {
-    fetchRegions();
-  }, []);
+  }, [fetchUrl]);
 
   const handleSelected = (item: string) => {
     setSelectedItems((prevItems) =>
@@ -88,7 +85,7 @@ function Dropdown({
           {selectedItems.length > 0 && (
             <div className="pr-1">{selectedItems.length} </div>
           )}
-          {isLoading ?`Loading...`: label}
+          {isLoading ? `Loading...` : label}
           <svg
             className={`${isLoading ? "hidden" : "inline"} w-2.5 h-2.5 ml-2.5`}
             aria-hidden="true"
