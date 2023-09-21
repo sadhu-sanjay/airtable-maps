@@ -58,12 +58,18 @@ export function MyMap({
       }
     });
 
+    // UPDATE UI AFTER 0ms so that the UI is not blocked
     setTimeout(() => {
       clusterRef.current?.removeMarkers(markersToRemove);
       clusterRef.current?.addMarkers(markersToAdd);
+      updateBounds();
     }, 0);
 
     // Adjust the bounds on receiving new new records
+
+    console.timeEnd("SETUP MARKERS");
+  }
+  function updateBounds() {
     if (mapRef.current && records && records.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
@@ -78,8 +84,6 @@ export function MyMap({
         mapRef.current.setZoom(13);
       }
     }
-
-    console.timeEnd("SETUP MARKERS");
   }
   updateMarkers();
   /**
@@ -115,16 +119,16 @@ export function MyMap({
    * INITILIZE MAP && CLUSTER END
    * */
 
-  useEffect(() => {
-    if (selectedRecord && mapRef.current) {
-      const { lat, lng } = selectedRecord;
-      if (!lat || !lng) {
-        return alert("No coordinates found for this record");
-      }
-      mapRef.current.setZoom(17); // ADDED THIS
-      mapRef.current.panTo({ lat, lng });
-    }
-  }, [selectedRecord]);
+  // useEffect(() => {
+  //   if (selectedRecord && mapRef.current) {
+  //     const { lat, lng } = selectedRecord;
+  //     if (!lat || !lng) {
+  //       return alert("No coordinates found for this record");
+  //     }
+  //     mapRef.current.setZoom(18); // ADDED THIS
+  //     mapRef.current.panTo({ lat, lng });
+  //   }
+  // }, [selectedRecord]);
 
   return <div ref={divRef} className="h-full w-full overflow-clip" />;
 }
