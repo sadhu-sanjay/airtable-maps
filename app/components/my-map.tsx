@@ -63,60 +63,28 @@ export function MyMap({
       clusterRef.current?.addMarkers(markersToAdd);
     }, 0);
 
+    // Adjust the bounds on receiving new new records
+    if (mapRef.current && records && records.length > 0) {
+      const bounds = new google.maps.LatLngBounds();
+
+      records.forEach((record) => {
+        if (!record.lat || !record.lng) return;
+        const latLng = new window.google.maps.LatLng(record.lat, record.lng);
+        bounds.extend(latLng);
+      });
+      mapRef.current.fitBounds(bounds);
+
+      if (records.length === 1) {
+        mapRef.current.setZoom(13);
+      }
+    }
+
     console.timeEnd("SETUP MARKERS");
   }
   updateMarkers();
   /**
    * SETUP MARKERS END
    * */
-
-  /**
-   * CLUSTER MARKERS UPDATER ON BOUNDS CHANGE
-   * */
-  // google.maps.event.clearListeners(mapRef.current || {}, "bounds_changed");
-  // if (
-  //   mapRef.current &&
-  //   clusterRef.current &&
-  //   (records && records?.length > 6000)
-  // ) {
-  //   console.log("CLUSTER MARKERS UPDATER ON BOUNDS CHANGE");
-  //   const boundsChangedHandler = myDebounce(() => {
-  //     const bounds = mapRef.current?.getBounds();
-  //     const markersToRemove: google.maps.marker.AdvancedMarkerElement[] = [];
-  //     const markersToAdd: google.maps.marker.AdvancedMarkerElement[] = [];
-
-  //     console.time("MARKERS IN BOUNDS");
-  //     markersRef.current.forEach((marker) => {
-  //       if (!bounds?.contains(marker.position!)) {
-  //         markersToRemove.push(marker);
-  //       } else if (!marker.map) {
-  //         markersToAdd.push(marker);
-  //       }
-  //     });
-  //     console.timeEnd("MARKERS IN BOUNDS");
-
-  //     setTimeout(() => {
-  //       clusterRef.current?.removeMarkers(markersToRemove);
-  //       clusterRef.current?.addMarkers(markersToAdd);
-  //     }, 0);
-  //   }, 800);
-
-  //   google.maps.event.addListener(
-  //     mapRef.current!,
-  //     "bounds_changed",
-  //     boundsChangedHandler
-  //   );
-  // }
-  // /**
-  //  * CLUSTER MARKERS UPDATER ON BOUNDS CHANGE END
-  //  * */
-
-  // CLEAN UP USE EFFECT
-  useEffect(() => {
-    return () => {
-      google.maps.event.clearListeners(mapRef.current || {}, "bounds_changed");
-    };
-  }, []);
 
   /**
    * INITILIZE MAP  && CLUSTER
@@ -126,7 +94,7 @@ export function MyMap({
       center: { lat: 43.21, lng: -74.11 },
       zoom: 2,
       mapId: "eb7b69cef73330bc",
-      minZoom: 1,
+      minZoom: 2,
     });
 
     clusterRef.current = new MarkerClusterer({
