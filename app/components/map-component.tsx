@@ -12,7 +12,7 @@ import {
   TAGS_FETCH_URL,
 } from "~/app/config";
 import { MyList } from "./List";
-import { MyMap } from "./my-map";
+import { MyMap } from "./map";
 import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
