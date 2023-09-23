@@ -11,12 +11,7 @@ export const myDebounce = (func: any, wait: number) => {
     timeout = setTimeout(later, wait);
   };
 };
-
-export function isMarkerInBounds(marker, bounds) {
-  const pos = marker.position;
-  const lat = pos.h
-  let lng = pos.j
-  // console.log("Lat long", lat, lng)
+export function areCoordinatesInBounds(lat, lng, bounds) {
   let west = bounds.getSouthWest().lng();
   let east = bounds.getNorthEast().lng();
 
