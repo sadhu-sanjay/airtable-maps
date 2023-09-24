@@ -3,24 +3,19 @@ import {
   SuperClusterAlgorithm,
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
-import {
-  startTransition,
-  use,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Record } from "~/app/components/types";
-import { isMarkerInBounds, myDebounce } from "./utility/utilityFunctions";
+import { myDebounce } from "./utility/utilityFunctions";
 const icon = "./marker-icon2.png";
 
-export function MyMap({
+function MyMap({
   records,
   selectedRecord,
+  handleZoom,
 }: {
   records?: Record[];
   selectedRecord: Record | undefined;
+  handleZoom: (record: Record[]) => void;
 }) {
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -36,9 +31,6 @@ export function MyMap({
    */
 
   function updateMarkers() {
-    // only Create Marker that are not already created. and only add those markers to the cluster
-    // which are not already added to the cluster
-    console.time("SETUP MARKERS");
     records?.forEach((record) => {
       if (!record.lat || !record.lng) return;
       if (record_to_marker_map.current.has(record)) return;
@@ -64,10 +56,6 @@ export function MyMap({
       clusterRef.current?.addMarkers(markersToAdd);
       updateBounds();
     }, 0);
-
-    // Adjust the bounds on receiving new new records
-
-    console.timeEnd("SETUP MARKERS");
   }
   function updateBounds() {
     if (mapRef.current && records && records.length > 0) {
@@ -104,7 +92,6 @@ export function MyMap({
     clusterRef.current = new MarkerClusterer({
       markers: markersRef.current,
       map: mapRef.current,
-      // algorithm: new SuperClusterAlgorithm({radius: 200}),
       algorithm: new SuperClusterViewportAlgorithm({
         viewportPadding: 0,
       }),
@@ -119,19 +106,39 @@ export function MyMap({
    * INITILIZE MAP && CLUSTER END
    * */
 
-  // useEffect(() => {
-  //   if (selectedRecord && mapRef.current) {
-  //     const { lat, lng } = selectedRecord;
-  //     if (!lat || !lng) {
-  //       return alert("No coordinates found for this record");
-  //     }
-  //     mapRef.current.setZoom(18); // ADDED THIS
-  //     mapRef.current.panTo({ lat, lng });
-  //   }
-  // }, [selectedRecord]);
+  /**
+   * Initilize the listener for the cluster
+   **/
+  useEffect(() => {
+    let initialIdle = true;
+    if (mapRef.current) {
+      const listener = mapRef.current.addListener("idle", () => {
+        console.log("INITIAL IDLE");
+        if (initialIdle) {
+          initialIdle = false;
+          return;
+        }
+        // Get Records which are in the current viewport
+        const bounds = mapRef.current?.getBounds();
+        const recordsInViewport = records?.filter((record) => {
+          if (!record.lat || !record.lng) return false;
+          const latLng = new google.maps.LatLng(record.lat, record.lng);
+          return bounds?.contains(latLng);
+        });
+        console.log("RECORDS IN VIEWPORT", recordsInViewport?.length);
+        handleZoom(recordsInViewport || []);
+
+      });
+      return () => {
+        google.maps.event.removeListener(listener);
+      };
+    }
+  }, [handleZoom, records]);
 
   return <div ref={divRef} className="h-full w-full overflow-clip" />;
 }
+
+export default memo(MyMap);
 
 interface MyMarkerProps {
   record: Record;
@@ -175,3 +182,14 @@ function MyMarker(record: Record) {
 //     }
 //   }
 // }, [records]);
+
+// useEffect(() => {
+//   if (selectedRecord && mapRef.current) {
+//     const { lat, lng } = selectedRecord;
+//     if (!lat || !lng) {
+//       return alert("No coordinates found for this record");
+//     }
+//     mapRef.current.setZoom(18); // ADDED THIS
+//     mapRef.current.panTo({ lat, lng });
+//   }
+// }, [selectedRecord]);

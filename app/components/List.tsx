@@ -1,16 +1,17 @@
-import { CSSProperties, Dispatch, SetStateAction } from "react";
+import { CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
 import EmptyList from "./common/empty-states/empty-list";
 import { PageStatus } from "./Paginator";
 import { Spinner, Spinner4 } from "./spinner";
+import useRecords from "./useRecords";
 
 export function MyList({
-  isLoading,
+  isLoadingRecords,
   records,
   setSelectedRecord,
 }: {
-  isLoading: boolean;
+  isLoadingRecords: boolean;
   records: Record[];
   setSelectedRecord: Dispatch<SetStateAction<Record | undefined>>;
 }) {
@@ -42,7 +43,7 @@ export function MyList({
 
   return (
     <>
-      {isLoading && records.length < 1 ? (
+      {isLoadingRecords && records.length < 1 ? (
         <div role="status" className="self-center">
           <svg
             aria-hidden="true"
@@ -68,8 +69,8 @@ export function MyList({
             height={screen.height} // adjust this according to your needs
             itemCount={records.length}
             itemSize={45} // adjust this according to your needs
-            // only show scrollbar if needed
-            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto" >
+            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto"
+          >
             {Row}
           </List>
         </>
@@ -79,9 +80,12 @@ export function MyList({
           subtitle="It's possible that we're currently in the process of updating the data. Please try again later."
         />
       )}
-      
-      <PageStatus isLoading={isLoading} filtered={records.length} total={records.length} />
+
+      <PageStatus
+        isLoading={isLoadingRecords}
+        filtered={records.length}
+        total={records.length}
+      />
     </>
   );
 }
-

@@ -12,13 +12,13 @@ import {
   TAGS_FETCH_URL,
 } from "~/app/config";
 import { MyList } from "./List";
-import { MyMap } from "./map";
+import MyMap from "./map";
 import Dropdown from "./dropdown";
 import { SearchBar } from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
-import useRecords from "./useRecords";
 import { FronnyFace } from "./resources/svg/fronyface";
 import EmptyList from "./common/empty-states/empty-list";
+import useRecords from "./useRecords";
 
 // export function MapComponent() {
 //   const [records, setRecords] = useState<Record[]>([]);
@@ -190,9 +190,20 @@ import EmptyList from "./common/empty-states/empty-list";
 // }
 
 export default function Home() {
-  const { recordsError, isLoadingRecords, records } = useRecords();
   const [selectedRecord, setSelectedRecord] = useState<Record>();
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [listRecords, setListRecords] = useState<Record[]>([]);
+  const [mapRecords, setMapRecods] = useState<Record[]>([]);
+  const { recordsError, isLoadingRecords, records } = useRecords();
+  const updateRecords = useCallback((newRecords: Record[]) => {
+    setMapRecods(newRecords);
+    setListRecords(newRecords);
+  }, []);
+
+  useEffect(() => {
+    console.log("isLoadingRecords", isLoadingRecords);
+    updateRecords(records);
+  }, [updateRecords, records]);
 
   console.log("HOME RENDER");
 
@@ -200,17 +211,11 @@ export default function Home() {
     setSelectedRegions(callBackResult);
   }
 
-
-  const filteredRecords = useMemo(() => {
-    if (selectedRegions.length === 0) {
-      return records;
-    }
-
-    return records.filter((record) => {
-      return selectedRegions.some((region) => record.Region?.includes(region));
-    });
-  }, [records, selectedRegions]);
-
+  const handleZoom = useCallback((viewPortRecords: Record[]) => {
+    console.log("handle Zoom", viewPortRecords.length);
+    setListRecords(viewPortRecords);
+  }, []);
+  
 
   const render = (status: Status) => {
     switch (status) {
@@ -225,7 +230,11 @@ export default function Home() {
         );
       case Status.SUCCESS:
         return (
-          <MyMap records={filteredRecords} selectedRecord={selectedRecord} />
+          <MyMap
+            handleZoom={handleZoom}
+            records={mapRecords}
+            selectedRecord={selectedRecord}
+          />
         );
     }
   };
@@ -253,8 +262,8 @@ export default function Home() {
             /> */}
           </div>
           <MyList
-            isLoading={isLoadingRecords}
-            records={filteredRecords}
+            records={listRecords}
+            isLoadingRecords={isLoadingRecords}
             setSelectedRecord={setSelectedRecord}
           />
         </div>

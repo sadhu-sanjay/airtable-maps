@@ -14,22 +14,21 @@ export default function useRecords() {
   };
 
   const fetchRecords = useCallback(async (signal: AbortSignal) => {
-    setIsLoadingRecords(true);
-
     try {
-      // const res = await fetch(RECORDS_FETCH_URL, { signal });
-      const res = await fetch("https://shicane-test.ey.r.appspot.com/api/records", { signal });
+      setIsLoadingRecords(true);
+      const res = await fetch(RECORDS_FETCH_URL, { signal });
+      // const res = await fetch("https://shicane-test.ey.r.appspot.com/api/records", { signal });
       const reader = res.body!.getReader();
       let buffer = "";
       let localRecords: Array<Record> = [];
 
       while (true) {
         const { done, value } = await reader.read();
-        console.log("READ")
+        console.log("READ");
         if (done) {
+          setIsLoadingRecords(false);
           updateState(localRecords);
           localRecords = [];
-          setIsLoadingRecords(false);
           break;
         }
 
@@ -45,10 +44,11 @@ export default function useRecords() {
           );
           localRecords.push(...newRecords);
 
-          if (localRecords.length > 100) {
-            // updateState(localRecords);
-            // localRecords = [];
-            // break
+          if (localRecords.length > 500) {
+            updateState(localRecords);
+            localRecords = [];
+            setIsLoadingRecords(false);
+            break;
           }
         } catch (error: any) {
           console.log("Error parsing JSON", error);
@@ -57,13 +57,13 @@ export default function useRecords() {
         }
       }
     } catch (error: any) {
+      setIsLoadingRecords(false);
       if (error.name === "AbortError") {
         console.log("Fetch aborted");
       } else {
         console.error("FETCHE FETCH Fetch Error: ", typeof error);
         setRecordsError(error.message);
       }
-      setIsLoadingRecords(false);
     }
   }, []);
 
