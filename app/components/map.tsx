@@ -1,12 +1,9 @@
 import {
   MarkerClusterer,
-  SuperClusterAlgorithm,
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef } from "react";
 import { Record } from "~/app/components/types";
-import { myDebounce } from "./utility/utilityFunctions";
-const icon = "./marker-icon2.png";
 
 function MyMap({
   records,
@@ -20,7 +17,6 @@ function MyMap({
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const clusterRef = useRef<MarkerClusterer | null>(null);
   const record_to_marker_map = useRef<
     Map<Record, google.maps.marker.AdvancedMarkerElement>
@@ -90,7 +86,7 @@ function MyMap({
     });
 
     clusterRef.current = new MarkerClusterer({
-      markers: markersRef.current,
+      markers: Array.from(record_to_marker_map.current.values()),
       map: mapRef.current,
       algorithm: new SuperClusterViewportAlgorithm({
         viewportPadding: 0,
@@ -127,7 +123,6 @@ function MyMap({
         });
         console.log("RECORDS IN VIEWPORT", recordsInViewport?.length);
         handleZoom(recordsInViewport || []);
-
       });
       return () => {
         google.maps.event.removeListener(listener);
