@@ -11,7 +11,8 @@ export const myDebounce = (func: any, wait: number) => {
     timeout = setTimeout(later, wait);
   };
 };
-export function areCoordinatesInBounds(lat, lng, bounds) {
+
+export function areCoordinatesInBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds) {
   let west = bounds.getSouthWest().lng();
   let east = bounds.getNorthEast().lng();
 

@@ -7,10 +7,12 @@ import { Spinner, Spinner4 } from "./spinner";
 import useRecords from "./useRecords";
 
 export function MyList({
+  asideRef,
   isLoadingRecords,
   records,
   setSelectedRecord,
 }: {
+  asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
   setSelectedRecord: Dispatch<SetStateAction<Record | undefined>>;
@@ -66,7 +68,8 @@ export function MyList({
       ) : records.length > 0 ? (
         <>
           <List
-            height={screen.height} // adjust this according to your needs
+            height={screen.height}
+            width={asideRef.current?.style.width!}
             itemCount={records.length}
             itemSize={45} // adjust this according to your needs
             className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto"
