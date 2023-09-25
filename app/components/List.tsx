@@ -26,17 +26,17 @@ export function MyList({
         style={style}
         className="border-b p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >
-        <div className="flex items-end space-x-4">
+        <div className="flex  flex-col items-start space-x-4">
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
               <strong>{record.Title}</strong>
             </p>
             <p className="text-xs text-gray-600 truncate dark:text-gray-400">
-              {record.Tags}
+              {record.Tags ? record.Tags.join(", ") : ""}
             </p>
-          </div>
-          <div className=" text-xs text-gray-500 truncate dark:text-gray-400">
-            {record.Region}
+            <p className=" text-xs text-gray-500 truncate dark:text-gray-400">
+              {record.Region ? record.Region.join(", ") : ""}
+            </p>{" "}
           </div>
         </div>
       </li>
@@ -71,8 +71,8 @@ export function MyList({
             height={screen.height}
             width={asideRef.current?.style.width!}
             itemCount={records.length}
-            itemSize={45} // adjust this according to your needs
-            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto"
+            itemSize={60} // adjust this according to your needs
+            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
           >
             {Row}
           </List>
