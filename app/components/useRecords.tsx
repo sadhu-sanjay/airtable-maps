@@ -44,10 +44,10 @@ export default function useRecords() {
           );
           localRecords.push(...newRecords);
 
-          if (localRecords.length > 500) {
-            updateState(localRecords);
+          if (localRecords.length > 50) {
+            updateState(localRecords.slice(0, 50));
             localRecords = [];
-            setIsLoadingRecords(false);
+            // setIsLoadingRecords(false);
             break;
           }
         } catch (error: any) {
