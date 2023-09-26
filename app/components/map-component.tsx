@@ -19,6 +19,7 @@ import { myDebounce } from "./utility/utilityFunctions";
 import { FronnyFace } from "./resources/svg/fronyface";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
+import PlaceDetail from "./marker-detail/page";
 
 // export function MapComponent() {
 //   const [records, setRecords] = useState<Record[]>([]);
@@ -365,6 +366,9 @@ export default function Home() {
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
+      <aside className="absolute right-0 bg-blue-600 h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]">
+        <PlaceDetail />
+      </aside>
     </div>
   );
 }
