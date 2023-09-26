@@ -1,7 +1,7 @@
 "use client";
 
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
 
@@ -45,7 +45,6 @@ import useRecords from "./useRecords";
 //         );
 //       });
 //     }
-
 //     // Filter records based on selected Tags
 //     if (selectedTags.length > 0) {
 //       console.log("selectedTags", selectedTags);
@@ -190,32 +189,123 @@ import useRecords from "./useRecords";
 // }
 
 export default function Home() {
+  const asideRef = useRef<HTMLDivElement>(null);
   const [selectedRecord, setSelectedRecord] = useState<Record>();
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const { recordsError, isLoadingRecords, records } = useRecords();
+  // search term broken into array if they have any spaces
+  const searchTerms = useRef<string[]>([]);
+  const selectedRegions = useRef<string[]>([]);
+  const selectedTags = useRef<string[]>([]);
+
+  console.log("HOME RENDER");
+
+  /**
+   * Update views when new records are fetched
+   */
+  // const onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+
+  //   debouncedSearch(value);
+  // };
+
+  // const debouncedSearch = myDebounce((value: string) => {
+  //   setSearchQuery(value);
+  //   setCurrentPage(1);
+  // }, 300);
+
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
     setListRecords(newRecords);
   }, []);
 
   useEffect(() => {
-    console.log("isLoadingRecords", isLoadingRecords);
     updateRecords(records);
   }, [updateRecords, records]);
+  /**
+   *  End Update views when new records are fetched
+   */
 
-  console.log("HOME RENDER");
+  /**
+   * FILTER START
+   */
 
-  function region_done_clicked(callBackResult: string[]) {
-    setSelectedRegions(callBackResult);
-  }
+  //
+
+  const filterHandler = useCallback(() => {
+    // match allThree selected regions, searchTerms and tags, if any one of them is empty then match with other two,
+    // of if 2 are empty then match with the one that is not empty
+    let newFilteredRecords = records.filter((record) => {
+      let regionMatch = false;
+      let tagMatch = false;
+      let searchMatch = false;
+
+      // check if any of the selected regions match with record region
+      if (selectedRegions.current.length > 0) {
+        regionMatch = selectedRegions.current.some((region) =>
+          record.Region?.includes(region)
+        );
+      } else {
+        regionMatch = true;
+      }
+
+      // check if any of the selected tags match with record tags
+      if (selectedTags.current.length > 0) {
+        tagMatch = selectedTags.current.some((tag) =>
+          record.Tags?.includes(tag)
+        );
+      } else {
+        tagMatch = true;
+      }
+
+      // check if any of the search terms match with record search string
+      if (searchTerms.current.length > 0) {
+        searchMatch = searchTerms.current.every((term) =>
+          record.searchStr?.includes(term.toLowerCase())
+        );
+      } else {
+        searchMatch = true;
+      }
+
+      return regionMatch && tagMatch && searchMatch;
+    });
+
+    updateRecords(newFilteredRecords);
+  }, [records, updateRecords]);
+
+  const searchHandler = useCallback(
+    (searchEvent: React.ChangeEvent<HTMLInputElement>) => {
+      const value = searchEvent.target.value;
+      searchTerms.current = value.split(" ");
+
+      filterHandler();
+    },
+    [filterHandler]
+  );
+  const regionHandler = useCallback(
+    (newRegionHandler: string[]) => {
+      selectedRegions.current = newRegionHandler;
+      filterHandler();
+    },
+    [filterHandler]
+  );
+  const tagsHandler = useCallback(
+    (newTagsHandler: string[]) => {
+      selectedTags.current = newTagsHandler;
+      filterHandler();
+    },
+    [filterHandler]
+  );
+
+  /**
+   * FILTER END
+   */
 
   const handleZoom = useCallback((viewPortRecords: Record[]) => {
     console.log("handle Zoom", viewPortRecords.length);
     setListRecords(viewPortRecords);
   }, []);
-  
 
   const render = (status: Status) => {
     switch (status) {
@@ -241,27 +331,31 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
-      <aside className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]">
+      <aside
+        ref={asideRef}
+        className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]"
+      >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          {/* <SearchBar
+          <SearchBar
             // searchTerm={searchTerm}
-            handleSearchChange={onSearchTermChange}
-          /> */}
+            handleSearchChange={myDebounce(searchHandler, 500)}
+          />
           <div className="flex justify-between">
             <Dropdown
               label="Region"
               placeholder="Region"
-              doneCallBack={region_done_clicked}
+              doneCallBack={regionHandler}
               fetchUrl={REGIONS_FETCH_URL}
             />
-            {/* <Dropdown
+            <Dropdown
               label="Tags"
               placeholder="Tags"
-              doneCallBack={tags_done_clicked}
+              doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
-            /> */}
+            />
           </div>
           <MyList
+            asideRef={asideRef}
             records={listRecords}
             isLoadingRecords={isLoadingRecords}
             setSelectedRecord={setSelectedRecord}

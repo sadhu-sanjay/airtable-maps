@@ -38,7 +38,7 @@ export function MyList({
               <p className="text-xs text-gray-600 truncate dark:text-gray-400">
                 {record.Tags ? record.Tags.join(", ") : ""}
               </p>
-              <p className=" text-xs text-gray-500 truncate dark:text-gray-400">
+              <p className=" text-xs text-gray-700 font-medium truncate dark:text-gray-400">
                 {record.Region ? record.Region.join(", ") : ""}
               </p>{" "}
             </div>
@@ -85,7 +85,7 @@ export function MyList({
       ) : (
         <EmptyList
           title="No Recods found"
-          subtitle="It's possible that we're currently in the process of updating the data. Please try again later."
+          subtitle="Please change up the search term or try some other filter."
         />
       )}
 

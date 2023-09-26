@@ -45,10 +45,10 @@ export default function useRecords() {
           localRecords.push(...newRecords);
 
           if (localRecords.length > 500) {
-            updateState(localRecords.slice(0, 500));
+            updateState(localRecords);
             localRecords = [];
             // setIsLoadingRecords(false);
-            break;
+            // break;
           }
         } catch (error: any) {
           console.log("Error parsing JSON", error);
