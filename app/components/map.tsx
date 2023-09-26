@@ -53,6 +53,7 @@ function MyMap({
       updateBounds();
     }, 0);
   }
+
   function updateBounds() {
     if (mapRef.current && records && records.length > 0) {
       const bounds = new google.maps.LatLngBounds();
@@ -62,7 +63,7 @@ function MyMap({
         const latLng = new window.google.maps.LatLng(record.lat, record.lng);
         bounds.extend(latLng);
       });
-      mapRef.current.fitBounds(bounds);
+      mapRef.current.fitBounds(bounds, 100);
 
       if (records.length === 1) {
         mapRef.current.setZoom(13);

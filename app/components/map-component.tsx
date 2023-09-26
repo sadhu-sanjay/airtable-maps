@@ -338,7 +338,7 @@ export default function Home() {
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar
             // searchTerm={searchTerm}
-            handleSearchChange={myDebounce(searchHandler, 500)}
+            handleSearchChange={myDebounce(searchHandler, 1000)}
           />
           <div className="flex justify-between">
             <Dropdown

@@ -83,7 +83,7 @@ function Dropdown({
           className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-4pixel border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
         >
           {selectedItems.length > 0 && (
-            <div className="pr-1">{selectedItems.length} </div>
+              <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">{selectedItems.length}</div>
           )}
           {isLoading ? `Loading...` : label}
           <svg
