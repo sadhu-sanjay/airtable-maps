@@ -6,6 +6,7 @@ const DEFAULT_ZOOM_WITH_LOCATION = 16;
 import React, {
   RefObject,
   forwardRef,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -19,28 +20,54 @@ const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({ recordId }: { recordId: string }) => {
   const showPlaceHolder = true;
-  const [fields, setFields] = useState<[string: unknown]>();
+  const [record, setRecord] = useState<Record>();
+
+  function getDate(date: string) {
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  const cleanRecord = useCallback((record: Record) => {
+    delete record.fields.Geocache;
+    if (record.fields.date || record.fields.Updated) {
+      record.fields.date = getDate(record.fields.date);
+      record.fields.Updated = getDate(record.fields.Updated);
+    }
+    return record;
+  }, []);
+
+  const getRecord = useCallback(
+    async (recordId: string, signal: AbortSignal) => {
+      try {
+        const req = await fetch(RECORD_GET + "/" + recordId, { signal });
+        const result = await req.json();
+        const record = cleanRecord(result);
+        return record;
+      } catch (e: any) {
+        if (e.name === "AbortError") {
+          return console.log("Place Detail fetch aborted");
+        }
+        console.log(e);
+      }
+    },
+    [cleanRecord]
+  );
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    fetch(RECORD_GET + "/" + recordId, { signal })
-      .then(async (resp) => {
-        const result: { fields: unknown } = await resp.json();
-        setFields(result.fields as [string: unknown]);
-
-      })
-      .catch((err) => {
-        if (signal.aborted)
-          return console.log(`${RECORD_GET} request was aborted.`);
-        console.log("Place detail RECORD GET", err);
-      });
+    getRecord(recordId, signal).then((record) => {
+      setRecord(record);
+    });
 
     return function cleanup() {
       abortController.abort();
     };
-  }, [recordId]);
+  }, [cleanRecord, getRecord, recordId]);
 
   return (
     <>
@@ -62,23 +89,31 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
           style={{ scrollbarWidth: "none" }}
         >
           <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-         Random Title 
+            {record?.fields?.Title}
           </h1>
-          <ul className="space-y-2 ">
-            {Object.entries(fields || {}).map(([key, value]) => (
-              <li key={key}>
-                <p className="text-sm leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                  {key}
-                </p>
-                <p className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                  {/*if value is an array ignore  */}
-                  {Array.isArray(value)
-                    ? value.map((v) => v + " ")
-                    : value?.toString()}
-                    
-                </p>
-              </li>
-            ))}
+          <ul className="space-y-2">
+            {record?.fields &&
+              Object.entries(record.fields).map(([key, value]) => {
+                if (
+                  typeof value === "string" ||
+                  (Array.isArray(value) &&
+                    value.every((v) => typeof v === "string"))
+                ) {
+                  // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+                  return (
+                    <li key={key}>
+                      <span className="text-sm leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                        {key}
+                        {" : "}&nbsp;&nbsp;
+                      </span>
+                      <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
+                        {Array.isArray(value) ? value.join(", ") : value}
+                      </span>
+                    </li>
+                  );
+                }
+                return null;
+              })}
           </ul>
         </div>
       </div>

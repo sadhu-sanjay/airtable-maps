@@ -42,11 +42,3 @@
 // }
 
 // export default PlaceDetail;
-
-
-{/* <p className="text-sm leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-{item[title]}
-</p>
-<p className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-{item[description]}
-</p> */}
