@@ -77,6 +77,7 @@ export function MyList({
             width={asideRef.current?.style.width!}
             itemCount={records.length}
             itemSize={60} // adjust this according to your needs
+            style={{scrollbarWidth: "none"}}
             className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
           >
             {Row}
