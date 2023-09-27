@@ -1,4 +1,5 @@
 export type Record = {
+
   id: string;
   sNo: number;
   searchStr: string;

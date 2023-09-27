@@ -10,12 +10,12 @@ export function MyList({
   asideRef,
   isLoadingRecords,
   records,
-  onRecordSelect
+  onRecordSelect,
 }: {
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
-  onRecordSelect: (recordId: string) => void
+  onRecordSelect: (recordId: string) => void;
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
@@ -28,7 +28,7 @@ export function MyList({
       >
         <div className="flex space-x-2">
           <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-            <strong>{index + 1}</strong>
+            <strong>{record.sNo }</strong>
           </p>
           <div className="flex flex-col items-start space-x-4">
             <div className="flex-1 min-w-0">
@@ -77,11 +77,16 @@ export function MyList({
             width={asideRef.current?.style.width!}
             itemCount={records.length}
             itemSize={60} // adjust this according to your needs
-            style={{scrollbarWidth: "none"}}
+            style={{ scrollbarWidth: "none" }}
             className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
           >
             {Row}
           </List>
+          <PageStatus
+            isLoading={isLoadingRecords}
+            filtered={records.length}
+            total={records.length}
+          />
         </>
       ) : (
         <EmptyList
@@ -89,12 +94,6 @@ export function MyList({
           subtitle="Please change up the search term or try some other filter."
         />
       )}
-
-      <PageStatus
-        isLoading={isLoadingRecords}
-        filtered={records.length}
-        total={records.length}
-      />
     </>
   );
 }

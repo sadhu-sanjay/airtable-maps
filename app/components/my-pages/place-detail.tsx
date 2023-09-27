@@ -3,15 +3,44 @@ import * as GMPX from "@googlemaps/extended-component-library/react";
 const DEFAULT_CENTER = "45,-98";
 const DEFAULT_ZOOM = 4;
 const DEFAULT_ZOOM_WITH_LOCATION = 16;
-import React, { RefObject, forwardRef } from "react";
+import React, {
+  RefObject,
+  forwardRef,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Image from "next/image";
 import { Record } from "~/app/components/types";
 import CloseButton from "../resources/svg/close-button";
 import ImagePlaceHolder from "../resources/placeHolder/image";
+import { RECORD_GET } from "~/app/config";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({ recordId }: { recordId: string }) => {
   const showPlaceHolder = true;
+  const [fields, setFields] = useState<[string: unknown]>();
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    fetch(RECORD_GET + "/" + recordId, { signal })
+      .then(async (resp) => {
+        const result: { fields: unknown } = await resp.json();
+        setFields(result.fields as [string: unknown]);
+
+      })
+      .catch((err) => {
+        if (signal.aborted)
+          return console.log(`${RECORD_GET} request was aborted.`);
+        console.log("Place detail RECORD GET", err);
+      });
+
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, [recordId]);
 
   return (
     <>
@@ -33,17 +62,19 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
           style={{ scrollbarWidth: "none" }}
         >
           <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-            ’Ene’io Botanical Garden & Visitor Center
+         Random Title 
           </h1>
           <ul className="space-y-2 ">
-            {Array.from({ length: 15 }).map((_, i) => (
-              <li key={i}>
+            {Object.entries(fields || {}).map(([key, value]) => (
+              <li key={key}>
                 <p className="text-sm leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                  Vavaʻu, Tonga
+                  {key}
                 </p>
                 <p className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                  Our features are designed to enhance your workflow
-                  productivity and streamline your workflow.
+                  {/*if value is an array ignore  */}
+                  {Array.isArray(value)
+                    ? value.map((v) => v + " ")
+                    : value?.toString()}
                 </p>
               </li>
             ))}

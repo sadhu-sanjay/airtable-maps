@@ -155,9 +155,7 @@ export default function Home() {
         className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <SearchBar
-            handleSearchChange={myDebounce(searchHandler, 300)}
-          />
+          <SearchBar handleSearchChange={myDebounce(searchHandler, 300)} />
           <div className="flex justify-between">
             <Dropdown
               label="Region"
@@ -183,12 +181,12 @@ export default function Home() {
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
-      <aside
+      {/* <aside
         ref={detailAside}
         className="absolute right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
         <PlaceDetail recordId="rec2X9Llj4HTqJMte" />
-      </aside>
+      </aside> */}
     </div>
   );
 }
