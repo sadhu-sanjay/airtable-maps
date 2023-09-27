@@ -31,10 +31,12 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   }
 
   const cleanRecord = useCallback((record: Record) => {
+    console.log("CLEAN RECORD", record.fields.updated);
+
     delete record.fields.Geocache;
-    if (record.fields.date || record.fields.Updated) {
+    if (record.fields.date || record.fields.updated) {
       record.fields.date = getDate(record.fields.date);
-      record.fields.Updated = getDate(record.fields.Updated);
+      record.fields.updated = getDate(record.fields.updated);
     }
     return record;
   }, []);
@@ -61,6 +63,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
     const signal = abortController.signal;
 
     getRecord(recordId, signal).then((record) => {
+      if (!record) return;
       setRecord(record);
     });
 

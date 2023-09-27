@@ -26,7 +26,7 @@ export type Record = {
     Neighborhood: string;
     Altitude: string;
     date: string;
-    Updated: string;
+    updated: string;
     Geocache?: string;
     "County / AAL2": string;
     RecommendedBy: string;
