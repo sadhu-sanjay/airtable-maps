@@ -28,18 +28,18 @@ export function MyList({
       >
         <div className="flex space-x-2">
           <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-            <strong>{record.sNo }</strong>
+            <strong>{record.fields.sNo }</strong>
           </p>
           <div className="flex flex-col items-start space-x-4">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-                <strong>{record.Title}</strong>
+                <strong>{record.fields.Title}</strong>
               </p>
               <p className="text-xs text-gray-600 truncate dark:text-gray-400">
-                {record.Tags ? record.Tags.join(", ") : ""}
+                {record.fields.Tags ? record.fields.Tags.join(", ") : ""}
               </p>
               <p className=" text-xs text-gray-700 font-medium truncate dark:text-gray-400">
-                {record.Region ? record.Region.join(", ") : ""}
+                {record.fields.Region ? record.fields.Region.join(", ") : ""}
               </p>{" "}
             </div>
           </div>

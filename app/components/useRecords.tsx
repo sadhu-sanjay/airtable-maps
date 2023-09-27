@@ -39,9 +39,10 @@ export default function useRecords() {
           const recordsStringArray = buffer.split("\n");
           buffer = recordsStringArray.pop() || ""; // last element might not be proper object so pull it out
 
-          const newRecords = recordsStringArray.map((record) =>
-            JSON.parse(record)
-          );
+          const newRecords = recordsStringArray.map((record) => {
+            console.log("RECORD", record)
+            return JSON.parse(record)
+        });
           localRecords.push(...newRecords);
 
           if (localRecords.length > 500) {

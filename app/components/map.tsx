@@ -28,7 +28,7 @@ function MyMap({
 
   function updateMarkers() {
     records?.forEach((record) => {
-      if (!record.lat || !record.lng) return;
+      if (!record.fields.lat || !record.fields.lng) return;
       if (record_to_marker_map.current.has(record)) return;
       const marker = MyMarker(record);
       if (!marker) return;
@@ -59,8 +59,8 @@ function MyMap({
       const bounds = new google.maps.LatLngBounds();
 
       records.forEach((record) => {
-        if (!record.lat || !record.lng) return;
-        const latLng = new window.google.maps.LatLng(record.lat, record.lng);
+        if (!record.fields.lat || !record.fields.lng) return;
+        const latLng = new window.google.maps.LatLng(record.fields.lat, record.fields.lng);
         bounds.extend(latLng);
       });
       mapRef.current.fitBounds(bounds, 100);
@@ -130,8 +130,8 @@ function MyMap({
         // Get Records which are in the current viewport
         const bounds = mapRef.current?.getBounds();
         const recordsInViewport = records?.filter((record) => {
-          if (!record.lat || !record.lng) return false;
-          const latLng = new google.maps.LatLng(record.lat, record.lng);
+          if (!record.fields.lat || !record.fields.lng) return false;
+          const latLng = new google.maps.LatLng(record.fields.lat, record.fields.lng);
           return bounds?.contains(latLng);
         });
         console.log("RECORDS IN VIEWPORT", recordsInViewport?.length);
@@ -154,7 +154,7 @@ interface MyMarkerProps {
 }
 
 function MyMarker(record: Record) {
-  if (!record.lat || !record.lng) return null;
+  if (!record.fields.lat || !record.fields.lng) return null;
 
   const pin = new window.google.maps.marker.PinElement({
     borderColor: "white",
@@ -163,8 +163,8 @@ function MyMarker(record: Record) {
   });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
-    position: { lat: record.lat, lng: record.lng },
-    title: record.Title,
+    position: { lat: record.fields.lat, lng: record.fields.lng },
+    title: record.fields.Title,
     content: pin.element,
   });
 

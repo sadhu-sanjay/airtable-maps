@@ -75,6 +75,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
                   {Array.isArray(value)
                     ? value.map((v) => v + " ")
                     : value?.toString()}
+                    
                 </p>
               </li>
             ))}

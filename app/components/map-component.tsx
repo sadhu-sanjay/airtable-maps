@@ -60,7 +60,7 @@ export default function Home() {
       // check if any of the selected regions match with record region
       if (selectedRegions.current.length > 0) {
         regionMatch = selectedRegions.current.some((region) =>
-          record.Region?.includes(region)
+          record.fields.Region?.includes(region)
         );
       } else {
         regionMatch = true;
@@ -69,7 +69,7 @@ export default function Home() {
       // check if any of the selected tags match with record tags
       if (selectedTags.current.length > 0) {
         tagMatch = selectedTags.current.some((tag) =>
-          record.Tags?.includes(tag)
+          record.fields.Tags?.includes(tag)
         );
       } else {
         tagMatch = true;
@@ -78,7 +78,7 @@ export default function Home() {
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
         searchMatch = searchTerms.current.every((term) =>
-          record.searchStr?.includes(term.toLowerCase())
+          record.fields.searchStr?.includes(term.toLowerCase())
         );
       } else {
         searchMatch = true;
@@ -181,12 +181,13 @@ export default function Home() {
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
-      {/* <aside
+      <aside
         ref={detailAside}
         className="absolute right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
         <PlaceDetail recordId="rec2X9Llj4HTqJMte" />
-      </aside> */}
+      </aside>
     </div>
   );
 }
+
