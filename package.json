@@ -10,6 +10,7 @@
     "deploy": "node_modules/.bin/firebase deploy --only hosting:airtable-maps"
   },
   "dependencies": {
+    "@googlemaps/extended-component-library": "^0.4.2",
     "@googlemaps/markerclusterer": "^2.4.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@types/node": "20.4.9",
@@ -17,7 +18,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "eslint-config-next": "13.4.13",
-    "next": "^13.5.2",
+    "next": "^13.5.3",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",

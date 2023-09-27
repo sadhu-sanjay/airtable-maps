@@ -2,12 +2,15 @@
 const dotenv = require('dotenv')
 
 dotenv.config({
-    path: `.env.${process.env.NODE_ENV}`,
-  });
+  path: `.env.${process.env.NODE_ENV}`,
+});
 
 
 const nextConfig = {
-    output: 'export'
+  output: 'export',
+  images: {
+    domains: ['images.unsplash.com', 'source.unsplash.com'],
+  },
 }
 
 module.exports = nextConfig

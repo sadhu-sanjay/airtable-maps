@@ -10,19 +10,19 @@ export function MyList({
   asideRef,
   isLoadingRecords,
   records,
-  setSelectedRecord,
+  onRecordSelect
 }: {
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
-  setSelectedRecord: Dispatch<SetStateAction<Record | undefined>>;
+  onRecordSelect: (recordId: string) => void
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
     return (
       <li
         key={record.id}
-        onClick={() => setSelectedRecord(record)}
+        onClick={() => onRecordSelect(record.id)}
         style={style}
         className="border-b p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >

@@ -94,6 +94,18 @@ function MyMap({
       }),
     });
 
+    // get place id when a place is clicked
+    const listener = mapRef.current.addListener(
+      "click",
+      (event: google.maps.MapMouseEvent) => {
+        console.log("MAP CLICKED", event);
+        // if (event.placeId) {
+        //   console.log("PLACE ID", event.placeId);
+        // }
+      }
+    );
+
+
     return () => {
       mapRef.current = null;
       clusterRef.current = null;

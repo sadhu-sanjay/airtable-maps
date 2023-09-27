@@ -1,53 +1,44 @@
-// const filterHandler = useCallback(() => {
-  //   searchArray.current = [];
-  //   searchArray.current.push(
-  //     ...selectedTags.current,
-  //     ...selectedRegions.current
-  //   );
-  //   console.log("searchArray", searchArray.current);
+// function PlaceDetail(id: string = placeId) {
 
-  //   // let newFilteredRecords = records.filter((record) => {
-  //   //   return searchArray.current.some((each) => {
-  //   //     console.log("each", each);
-  //   //     return record.searchStr?.includes(each);
-  //   //   });
-  //   // });
-  //   const res = records.filter((record) => {
-  //     {
-  //       console.log("record", record.searchStr);
-  //       return searchArray.current.some((each) => record.searchStr?.includes(each));
-  //     }
-  //   });
-  //   console.log("newFilteredRecords", res.length);
+//   const overlayLayoutRef = React.useRef(null);
 
-  //   // if (newFilteredRecords.length === 0) return updateRecords(records);
+//   return (
+//     <>
+//       <GMPX.OverlayLayout ref={overlayLayoutRef} slot="fixed">
+//         <div className="MainContainer" slot="main">
 
-  //   // updateRecords(newFilteredRecords);
+//           <GMPX.PlaceOverview
+//             size="large"
+//             place={placeId}
+//             googleLogoAlreadyDisplayed
+//           >
+//             <GMPX.IconButton
+//               slot="action"
+//               variant="filled"
+//               onClick={() => overlayLayoutRef.current?.showOverlay()}
+//             >
+//               See Reviews
+//             </GMPX.IconButton>
+//             <GMPX.PlaceDirectionsButton slot="action" variant="filled">
+//               Directions
+//             </GMPX.PlaceDirectionsButton>
+//           </GMPX.PlaceOverview>
+//         </div>
+//         <div slot="overlay">
+//           <GMPX.IconButton
+//             autofocus
+//             className="CloseButton"
+//             onClick={() => overlayLayoutRef.current?.hideOverlay()}
+//           >
+//             Close
+//           </GMPX.IconButton>
+//           <GMPX.PlaceDataProvider place={placeId}>
+//             <GMPX.PlaceReviews />
+//           </GMPX.PlaceDataProvider>
+//         </div>
+//       </GMPX.OverlayLayout>
+//     </>
+//   );
+// }
 
-  //   // console.log("newFilteredRecords", newFilteredRecords.length);
-  // }, [records, updateRecords]);
-
-  // const searchHandler = useCallback(
-  //   (newSearchTerm: string) => {
-  //     searchTerm.current = newSearchTerm;
-  //     console.log("searchHandler", searchTerm.current);
-  //     filterHandler();
-  //   },
-  //   [filterHandler]
-  // );
-  // const regionHandler = useCallback(
-  //   (newRegionHandler: string[]) => {
-  //     selectedRegions.current = newRegionHandler;
-  //     console.log("regionHandler=>", selectedRegions.current);
-  //     filterHandler();
-  //   },
-  //   [filterHandler]
-  // );
-  // const tagsHandler = useCallback(
-  //   (newTagsHandler: string[]) => {
-  //     selectedTags.current = newTagsHandler;
-  //     console.log("tagHandler =>", selectedTags.current);
-  //     filterHandler();
-  //   },
-  //   [filterHandler]
-  // );
+// export default PlaceDetail;
