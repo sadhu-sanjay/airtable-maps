@@ -149,7 +149,7 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
-      <aside
+      {/* <aside
         ref={asideRef}
         className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]"
       >
@@ -179,7 +179,7 @@ export default function Home() {
       </aside>
       <main className="bg-red-500 h-1/2 sm:h-full w-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
-      </main>
+      </main> */}
       <aside
         ref={detailAside}
         className="absolute right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"

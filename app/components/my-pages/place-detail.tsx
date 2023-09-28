@@ -101,7 +101,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
                   // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
                   return (
                     <li key={key}>
-                      <span className="text-sm leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                      <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
                         {key}
                         {" : "}&nbsp;&nbsp;
                       </span>
