@@ -32,7 +32,6 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   }
 
   const cleanRecord = useCallback((record: Record) => {
-    console.log("CLEAN RECORD", record.fields.updated);
 
     delete record.fields.Geocache;
     if (record.fields.date || record.fields.updated) {

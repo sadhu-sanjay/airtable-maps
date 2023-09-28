@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 
 function Dropdown({
   label,
@@ -23,16 +23,27 @@ function Dropdown({
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(fetchUrl)
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    fetch(fetchUrl, { signal })
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Regions==>", data);
         setItems(data);
         setIsLoading(false);
-      }).catch((e) => {
-        console.log("Error Fetching Regions==>", e);
-        setIsLoading(false);
       })
+      .catch((e) => {
+        setIsLoading(false);
+        if (e.name === "AbortError") {
+          return console.log("Fetch Items Aborted");
+        }
+        console.log("Error Fetching Regions==>", e);
+      });
+
+    return () => {
+      abortController.abort();
+    };
   }, [fetchUrl]);
 
   const handleSelected = (item: string) => {
@@ -86,7 +97,9 @@ function Dropdown({
           className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-4pixel border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
         >
           {selectedItems.length > 0 && (
-              <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">{selectedItems.length}</div>
+            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+              {selectedItems.length}
+            </div>
           )}
           {isLoading ? `Loading...` : label}
           <svg
@@ -215,4 +228,4 @@ function Dropdown({
   );
 }
 
-export default React.memo(Dropdown)
+export default React.memo(Dropdown);

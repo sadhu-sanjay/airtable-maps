@@ -48,6 +48,10 @@ function MyMap({
 
     // UPDATE UI AFTER 0ms so that the UI is not blocked
     setTimeout(() => {
+      console.error("CLUSTER CURENT REF", clusterRef.current);
+      console.error("CLUSTER REF", clusterRef);
+      console.error("MARKERS TO REMOVE", markersToRemove.length);
+      console.error("MARKERS TO ADD", markersToAdd.length);
       clusterRef.current?.removeMarkers(markersToRemove);
       clusterRef.current?.addMarkers(markersToAdd);
       updateBounds();
@@ -60,7 +64,10 @@ function MyMap({
 
       records.forEach((record) => {
         if (!record.fields.lat || !record.fields.lng) return;
-        const latLng = new window.google.maps.LatLng(record.fields.lat, record.fields.lng);
+        const latLng = new window.google.maps.LatLng(
+          record.fields.lat,
+          record.fields.lng
+        );
         bounds.extend(latLng);
       });
       mapRef.current.fitBounds(bounds, 100);
@@ -105,7 +112,6 @@ function MyMap({
       }
     );
 
-
     return () => {
       mapRef.current = null;
       clusterRef.current = null;
@@ -131,7 +137,10 @@ function MyMap({
         const bounds = mapRef.current?.getBounds();
         const recordsInViewport = records?.filter((record) => {
           if (!record.fields.lat || !record.fields.lng) return false;
-          const latLng = new google.maps.LatLng(record.fields.lat, record.fields.lng);
+          const latLng = new google.maps.LatLng(
+            record.fields.lat,
+            record.fields.lng
+          );
           return bounds?.contains(latLng);
         });
         console.log("RECORDS IN VIEWPORT", recordsInViewport?.length);
