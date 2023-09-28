@@ -30,7 +30,7 @@ const PlaceDetail = ({
   closeDetail: () => void;
 }) => {
   const showPlaceHolder = false;
-  const [record, setRecord] = useState<Record>({} as Record);
+  const [record, setRecord] = useState<Record>();
   const [isLoading, setIsLoading] = useState(false);
 
   function getDate(date: string) {
@@ -84,13 +84,14 @@ const PlaceDetail = ({
     };
   }, [cleanRecord, getRecord, recordId]);
 
+
   return (
     <>
       <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
         {/* Close button closes this component */}
         <CloseButton onClick={closeDetail} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
-          <ImageSlider images={record.fields?.Image} />
+          <ImageSlider images={record?.fields?.Image as [any]} />
         </div>
         {isLoading ? (
           <CardPlaceHolder />
@@ -100,10 +101,10 @@ const PlaceDetail = ({
             style={{ scrollbarWidth: "none" }}
           >
             <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-              {record.fields?.Title ?? "No Title"}
+              {record?.fields?.Title ?? "No Title"}
             </h1>
             <ul className="space-y-2">
-              {record.fields &&
+              {record?.fields &&
                 Object.entries(record.fields).map(([key, value]) => {
                   if (
                     typeof value === "string" ||

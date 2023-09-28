@@ -139,8 +139,8 @@ export default function Home() {
 
   const onRecordSelected = (record: Record) => {
     console.log("Record Selected", record.id);
-    detailAside.current?.style.setProperty("display", "block");
     setSelectedRecord(record);
+    detailAside.current?.style.setProperty("display", "block");
   };
   const closeDetail = () => {
     detailAside.current?.style.setProperty("display", "none");
@@ -181,7 +181,7 @@ export default function Home() {
       </main>
       <aside
         ref={detailAside}
-        className="absolute hidden h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
+        className=" absolute hidden h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
         <PlaceDetail
           closeDetail={closeDetail}
