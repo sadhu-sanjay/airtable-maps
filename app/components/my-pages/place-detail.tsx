@@ -78,8 +78,6 @@ const PlaceDetail = ({
     };
   }, [cleanRecord, getRecord, recordId]);
 
-
-
   return (
     <>
       <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
@@ -106,14 +104,14 @@ const PlaceDetail = ({
                   // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
                   return (
                     <li key={key}>
+                      
                       <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
                         {key}
                         {" : "}&nbsp;&nbsp;
+                        {key === "Coordinates (lat, lng)" && MapIcon(value as string)}
                       </span>
                       <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                         {Array.isArray(value) ? value.join(", ") : value}
-                        {key === "Coordinates (lat, lng)" &&
-                          MapIcon(value as string)}
                       </span>
                     </li>
                   );
