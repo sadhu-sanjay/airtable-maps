@@ -133,20 +133,17 @@ export default function Home() {
           />
         );
       case Status.SUCCESS:
-        return (
-          <MyMap
-            handleZoom={handleZoom}
-            records={mapRecords}
-          />
-        );
+        return <MyMap handleZoom={handleZoom} records={mapRecords} />;
     }
   };
-  
 
   const onRecordSelected = (record: Record) => {
     console.log("Record Selected", record.id);
     detailAside.current?.style.setProperty("display", "block");
-    setSelectedRecord(record)
+    setSelectedRecord(record);
+  };
+  const closeDetail = () => {
+    detailAside.current?.style.setProperty("display", "none");
   };
 
   return (
@@ -186,7 +183,10 @@ export default function Home() {
         ref={detailAside}
         className="absolute hidden right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
-        <PlaceDetail recordId={selectedRecord?.id ?? ''} />
+        <PlaceDetail
+          closeDetail={closeDetail}
+          recordId={selectedRecord?.id ?? ""}
+        />
       </aside>
     </div>
   );

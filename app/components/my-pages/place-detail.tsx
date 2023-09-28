@@ -20,7 +20,13 @@ import ImageSlider from "./image-slider";
 import MapIcon from "../resources/svg/map-icon";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
-const PlaceDetail = ({ recordId }: { recordId: string }) => {
+const PlaceDetail = ({
+  recordId,
+  closeDetail,
+}: {
+  recordId: string;
+  closeDetail: () => void;
+}) => {
   const showPlaceHolder = false;
   const [record, setRecord] = useState<Record>({} as Record);
 
@@ -33,8 +39,6 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   }
 
   const cleanRecord = useCallback((record: Record) => {
-    console.log("Here Record", record);
-
     delete record.fields.Geocache;
     if (record.fields.date || record.fields.updated) {
       record.fields.date = getDate(record.fields.date);
@@ -74,10 +78,13 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
     };
   }, [cleanRecord, getRecord, recordId]);
 
+
+
   return (
     <>
       <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
-        <CloseButton onClick={() => window.location.reload()} />
+        {/* Close button closes this component */}
+        <CloseButton onClick={closeDetail} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
           <ImageSlider images={record.fields?.Image} />
         </div>
@@ -105,7 +112,8 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
                       </span>
                       <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                         {Array.isArray(value) ? value.join(", ") : value}
-                        {key === "Coordinates (lat, lng)" && (MapIcon(value as string))}
+                        {key === "Coordinates (lat, lng)" &&
+                          MapIcon(value as string)}
                       </span>
                     </li>
                   );
