@@ -29,7 +29,10 @@ function Dropdown({
         console.log("Fetched Regions==>", data);
         setItems(data);
         setIsLoading(false);
-      });
+      }).catch((e) => {
+        console.log("Error Fetching Regions==>", e);
+        setIsLoading(false);
+      })
   }, [fetchUrl]);
 
   const handleSelected = (item: string) => {

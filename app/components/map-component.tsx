@@ -19,7 +19,6 @@ import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetail from "./my-pages/place-detail";
-import ImageSlider from "./my-pages/image-slider";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -150,8 +149,7 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
-      <ImageSlider />
-      {/* <aside
+      <aside
         ref={asideRef}
         className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-1/4 sm:min-w-[320px]"
       >
@@ -187,7 +185,7 @@ export default function Home() {
         className="absolute right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
         <PlaceDetail recordId="rec2X9Llj4HTqJMte" />
-      </aside> */}
+      </aside>
     </div>
   );
 }

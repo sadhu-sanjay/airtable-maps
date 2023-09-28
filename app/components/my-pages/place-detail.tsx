@@ -16,6 +16,7 @@ import { Record } from "~/app/components/types";
 import CloseButton from "../resources/svg/close-button";
 import ImagePlaceHolder from "../resources/placeHolder/image";
 import { RECORD_GET } from "~/app/config";
+import ImageSlider from "./image-slider";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({ recordId }: { recordId: string }) => {
@@ -80,11 +81,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
           {showPlaceHolder ? (
             <ImagePlaceHolder />
           ) : (
-            <img
-              src="https://source.unsplash.com/random"
-              alt=""
-              className="w-full h-full object-cover"
-            />
+            <ImageSlider /> 
           )}
         </div>
         <div

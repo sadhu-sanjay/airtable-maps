@@ -27,7 +27,7 @@ const ImageSlider: React.FC = () => {
       className="relative w-full"
       data-carousel="slide"
     >
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <div className="relative h-full overflow-hidden rounded-lg">
         {images.map((image, index) => (
           <div
             key={index}
