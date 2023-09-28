@@ -1,6 +1,6 @@
 export default function ImagePlaceHolder() {
   return (
-    <div className=" flex items-center justify-center h-full bg-gray-300 dark:bg-gray-700">
+    <div className=" flex border items-center justify-center h-full bg-gray-300 dark:bg-gray-700">
       <svg
         className="w-10 h-10 text-gray-200 dark:text-gray-600 "
         aria-hidden="true"

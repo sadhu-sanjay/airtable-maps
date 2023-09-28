@@ -89,7 +89,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
           style={{ scrollbarWidth: "none" }}
         >
           <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-            {record?.fields?.Title}
+            {record?.fields?.Title ?? "No Title"}
           </h1>
           <ul className="space-y-2">
             {record?.fields &&
