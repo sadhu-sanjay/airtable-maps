@@ -7,11 +7,9 @@ import { Record } from "~/app/components/types";
 
 function MyMap({
   records,
-  selectedRecord,
   handleZoom,
 }: {
   records?: Record[];
-  selectedRecord: Record | undefined;
   handleZoom: (record: Record[]) => void;
 }) {
   console.log("MAP RENDERED");

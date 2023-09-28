@@ -14,14 +14,14 @@ export function MyList({
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
-  onRecordSelect: (recordId: string) => void;
+  onRecordSelect: (record: Record) => void;
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
     return (
       <li
         key={record.id}
-        onClick={() => onRecordSelect(record.id)}
+        onClick={() => onRecordSelect(record)}
         style={style}
         className="border-b p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >

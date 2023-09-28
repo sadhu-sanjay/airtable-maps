@@ -137,15 +137,17 @@ export default function Home() {
           <MyMap
             handleZoom={handleZoom}
             records={mapRecords}
-            selectedRecord={selectedRecord}
           />
         );
     }
   };
+  
 
-  const onRecordSelected = useCallback((recordId: string) => {
-    // detailAside.current?.style.setProperty("display", "block");
-  }, []);
+  const onRecordSelected = (record: Record) => {
+    console.log("Record Selected", record.id);
+    detailAside.current?.style.setProperty("display", "block");
+    setSelectedRecord(record)
+  };
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
@@ -182,9 +184,9 @@ export default function Home() {
       </main>
       <aside
         ref={detailAside}
-        className="absolute right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
+        className="absolute hidden right-0 h-screen w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
       >
-        <PlaceDetail recordId="rece35ZSVaqu9kakS" />
+        <PlaceDetail recordId={selectedRecord?.id ?? ''} />
       </aside>
     </div>
   );
