@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const ImageSlider: React.FC = () => {
   const images = [
@@ -20,16 +20,23 @@ const ImageSlider: React.FC = () => {
       (currentImageIndex - 1 + images.length) % images.length
     );
   };
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const toggleFullScreen = useCallback(() => {
+    setIsFullScreen(!isFullScreen);
+  }, [isFullScreen]);
 
   return (
     <div
       id="default-carousel"
-      className="relative w-full"
+      className={`${
+        isFullScreen ? "w-screen h-screen fixed" : "w-full h-full relative"
+      } left-0 bg-pink-500 `}
       data-carousel="slide"
     >
-      <div className="relative h-full overflow-hidden rounded-lg">
+      <div className="relative h-full overflow-hidden rounded-lg cursor-pointer">
         {images.map((image, index) => (
           <div
+            onDoubleClick={toggleFullScreen}
             key={index}
             className={`duration-700 ease-in-out ${
               index === currentImageIndex ? "block" : "hidden"

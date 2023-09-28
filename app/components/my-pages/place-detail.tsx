@@ -20,7 +20,7 @@ import ImageSlider from "./image-slider";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({ recordId }: { recordId: string }) => {
-  const showPlaceHolder = true;
+  const showPlaceHolder = false;
   const [record, setRecord] = useState<Record>();
 
   function getDate(date: string) {
@@ -75,8 +75,8 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   return (
     <>
       <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
-        <CloseButton onClick={() => window.location.reload()} />
-        <div className="img-container w-full bg-red-700 h-1/3 min-h-[33.33%] shadow-lg">
+        <CloseButton  onClick={() => window.location.reload()} />
+        <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
           {showPlaceHolder ? (
             <ImagePlaceHolder />
           ) : (
