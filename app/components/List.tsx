@@ -1,10 +1,9 @@
-import { CSSProperties, Dispatch, SetStateAction, useEffect } from "react";
+import { CSSProperties } from "react";
 import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
 import EmptyList from "./common/empty-states/empty-list";
 import { PageStatus } from "./Paginator";
 import { Spinner, Spinner4 } from "./spinner";
-import useRecords from "./useRecords";
 
 export function MyList({
   asideRef,
