@@ -17,11 +17,12 @@ import CloseButton from "../resources/svg/close-button";
 import ImagePlaceHolder from "../resources/placeHolder/image";
 import { RECORD_GET } from "~/app/config";
 import ImageSlider from "./image-slider";
+import MapIcon from "../resources/svg/map-icon";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({ recordId }: { recordId: string }) => {
   const showPlaceHolder = false;
-  const [record, setRecord] = useState<Record>();
+  const [record, setRecord] = useState<Record>({} as Record);
 
   function getDate(date: string) {
     return new Date(date).toLocaleDateString("en-US", {
@@ -32,6 +33,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   }
 
   const cleanRecord = useCallback((record: Record) => {
+    console.log("Here Record", record);
 
     delete record.fields.Geocache;
     if (record.fields.date || record.fields.updated) {
@@ -75,23 +77,19 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
   return (
     <>
       <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
-        <CloseButton  onClick={() => window.location.reload()} />
+        <CloseButton onClick={() => window.location.reload()} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
-          {showPlaceHolder ? (
-            <ImagePlaceHolder />
-          ) : (
-            <ImageSlider /> 
-          )}
+          <ImageSlider images={record.fields?.Image} />
         </div>
         <div
           className=" flex flex-col space-y-6 justify-start p-8 overflow-auto"
           style={{ scrollbarWidth: "none" }}
         >
           <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-            {record?.fields?.Title ?? "No Title"}
+            {record.fields?.Title ?? "No Title"}
           </h1>
           <ul className="space-y-2">
-            {record?.fields &&
+            {record.fields &&
               Object.entries(record.fields).map(([key, value]) => {
                 if (
                   typeof value === "string" ||
@@ -107,6 +105,7 @@ const PlaceDetail = ({ recordId }: { recordId: string }) => {
                       </span>
                       <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                         {Array.isArray(value) ? value.join(", ") : value}
+                        {key === "Coordinates (lat, lng)" && (MapIcon(value as string))}
                       </span>
                     </li>
                   );

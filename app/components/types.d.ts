@@ -18,7 +18,7 @@ export type Record = {
     Description: string;
     Status: string;
     URL: string;
-    Image: string;
+    Image: any[];
     Address: string;
     StreetNumber: string;
     Street: string;
@@ -33,4 +33,9 @@ export type Record = {
     Phone: string;
   }
 };
+
+type ShicaneImage = {
+  large: string;
+  original: string;
+}
 
