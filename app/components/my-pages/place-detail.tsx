@@ -18,6 +18,8 @@ import ImagePlaceHolder from "../resources/placeHolder/image";
 import { RECORD_GET } from "~/app/config";
 import ImageSlider from "./image-slider";
 import MapIcon from "../resources/svg/map-icon";
+import { Spinner3, Spinner4 } from "../spinner";
+import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 const PlaceDetail = ({
@@ -29,6 +31,7 @@ const PlaceDetail = ({
 }) => {
   const showPlaceHolder = false;
   const [record, setRecord] = useState<Record>({} as Record);
+  const [isLoading, setIsLoading] = useState(false);
 
   function getDate(date: string) {
     return new Date(date).toLocaleDateString("en-US", {
@@ -68,12 +71,15 @@ const PlaceDetail = ({
     const abortController = new AbortController();
     const signal = abortController.signal;
 
+    setIsLoading(true);
     getRecord(recordId, signal).then((record) => {
       if (!record) return;
       setRecord(record);
+      setIsLoading(false);
     });
 
     return function cleanup() {
+      setIsLoading(false);
       abortController.abort();
     };
   }, [cleanRecord, getRecord, recordId]);
@@ -86,40 +92,44 @@ const PlaceDetail = ({
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
           <ImageSlider images={record.fields?.Image} />
         </div>
-        <div
-          className=" flex flex-col space-y-6 justify-start p-8 overflow-auto"
-          style={{ scrollbarWidth: "none" }}
-        >
-          <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-            {record.fields?.Title ?? "No Title"}
-          </h1>
-          <ul className="space-y-2">
-            {record.fields &&
-              Object.entries(record.fields).map(([key, value]) => {
-                if (
-                  typeof value === "string" ||
-                  (Array.isArray(value) &&
-                    value.every((v) => typeof v === "string"))
-                ) {
-                  // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
-                  return (
-                    <li key={key}>
-                      
-                      <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                        {key}
-                        {" : "}&nbsp;&nbsp;
-                        {key === "Coordinates (lat, lng)" && MapIcon(value as string)}
-                      </span>
-                      <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                        {Array.isArray(value) ? value.join(", ") : value}
-                      </span>
-                    </li>
-                  );
-                }
-                return null;
-              })}
-          </ul>
-        </div>
+        {isLoading ? (
+          <CardPlaceHolder />
+        ) : (
+          <div
+            className=" flex flex-col space-y-6 justify-start p-8 overflow-auto"
+            style={{ scrollbarWidth: "none" }}
+          >
+            <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
+              {record.fields?.Title ?? "No Title"}
+            </h1>
+            <ul className="space-y-2">
+              {record.fields &&
+                Object.entries(record.fields).map(([key, value]) => {
+                  if (
+                    typeof value === "string" ||
+                    (Array.isArray(value) &&
+                      value.every((v) => typeof v === "string"))
+                  ) {
+                    // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+                    return (
+                      <li key={key}>
+                        <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                          {key}
+                          {" : "}&nbsp;&nbsp;
+                          {key === "Coordinates (lat, lng)" &&
+                            MapIcon(value as string)}
+                        </span>
+                        <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
+                          {Array.isArray(value) ? value.join(", ") : value}
+                        </span>
+                      </li>
+                    );
+                  }
+                  return null;
+                })}
+            </ul>
+          </div>
+        )}
       </div>
     </>
   );

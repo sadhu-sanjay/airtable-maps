@@ -31,7 +31,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
         {images &&
           images?.map((item: any, index: number) => (
             <div
-              onClick={toggleFullScreen}
+              onDoubleClick={toggleFullScreen}
               key={index}
               className={`duration-700 ease-in-out ${
                 index === currentImageIndex ? "block" : "hidden"
