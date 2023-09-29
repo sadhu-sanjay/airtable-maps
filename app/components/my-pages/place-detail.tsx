@@ -90,7 +90,7 @@ const PlaceDetail = ({
         <div className="bg-blue-900 img-container w-8/12 h-full absolute right-0 shadow-lg">
           <ImageSlider
             key={record?.id}
-            images={record?.fields?.Image}
+            images={record?.fields?.Image as [any]}
           />
         </div>
         <div
