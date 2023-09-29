@@ -9,10 +9,9 @@ let baseId = AIRTABLE_BASE_ID
 let tableName = AIRTABLE_TABLE_NAME
 const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 
-export async function fetchRecord(recordId: string, signal: AbortSignal) {
-  console.log("fetchRecord: " + recordId);
-  const finalUrl = `${baseUrl}/${baseId}/${tableName}/${recordId}`;
+export async function fetchRecord( signal: AbortSignal, recordId?: string) {
 
+  const finalUrl = `${baseUrl}/${baseId}/${tableName}/${recordId}`;
   const res = await fetch(finalUrl, {
     signal,
     method: "GET",
@@ -20,7 +19,6 @@ export async function fetchRecord(recordId: string, signal: AbortSignal) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
     },
-    
   });
 
   return res.json();

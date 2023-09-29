@@ -55,10 +55,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   }, []);
 
   const getRecord = useCallback(
-    async (recordId: string, signal: AbortSignal) => {
+    async (signal: AbortSignal, recordId?: string) => {
       try {
-        
-        const respJson = await fetchRecord(recordId, signal)
+        const respJson = await fetchRecord(signal, recordId);
         const record = cleanRecord(respJson);
         return record;
       } catch (e: any) {
@@ -75,8 +74,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     const abortController = new AbortController();
     const signal = abortController.signal;
 
+    if (!recordId) return;
     setIsLoading(true);
-    getRecord(recordId, signal).then((record) => {
+    getRecord(signal, recordId).then((record) => {
       if (!record) return;
       setRecord(record);
       setIsLoading(false);
