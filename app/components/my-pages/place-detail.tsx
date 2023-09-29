@@ -84,14 +84,16 @@ const PlaceDetail = ({
     };
   }, [cleanRecord, getRecord, recordId]);
 
-
   return (
     <>
       <div className=" flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
         {/* Close button closes this component */}
         <CloseButton onClick={closeDetail} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
-          <ImageSlider key={record?.id} images={record?.fields?.Image as [any]} />
+          <ImageSlider
+            key={record?.id}
+            images={record?.fields?.Image as [any]}
+          />
         </div>
         {isLoading ? (
           <CardPlaceHolder />
@@ -101,7 +103,7 @@ const PlaceDetail = ({
             style={{ scrollbarWidth: "none" }}
           >
             <h1 className="text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-              {record?.fields?.Title ?? "No Title"}
+              {record?.fields?.Title ?? "Title not found"}
             </h1>
             <ul className="space-y-2">
               {record?.fields &&
@@ -115,13 +117,12 @@ const PlaceDetail = ({
                     return (
                       <li key={key}>
                         <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                          {key}
-                          {" : "}&nbsp;&nbsp;
-                          {key === "Coordinates (lat, lng)" &&
-                            MapIcon(value as string)}
+                          {key} {" : "}&nbsp;&nbsp;
                         </span>
                         <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                          {Array.isArray(value) ? value.join(", ") : value}
+                          {(key === "Coordinates (lat, lng)") && MapIcon(value as string)}
+                          {(key === "URL") && (<a href={value as string} target="_blank"> {value} </a>)}
+                          {Array.isArray(value) ? value.join(", ") : (key !== "Coordinates (lat, lng)" && key !== "URL" && value)}
                         </span>
                       </li>
                     );
