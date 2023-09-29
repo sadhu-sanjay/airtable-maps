@@ -19,6 +19,7 @@ import ImageSlider from "./image-slider";
 import { MapIcon } from "../resources/svg/map-icon";
 import { Spinner3, Spinner4 } from "../spinner";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
+import { ImagePlaceHolder } from "../resources/placeHolder/image";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 interface ModalProps {
@@ -94,10 +95,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         } fixed left-0 top-0 flex flex-row-reverse shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden`}
       >
         <div className="bg-blue-900 img-container w-8/12 h-full right-0 shadow-lg">
-          <ImageSlider
-            key={record?.id}
-            images={record?.fields?.Image as [any]}
-          />
+          {record?.fields?.Image?.length === 0 ? (
+            <ImagePlaceHolder />
+          ) : (
+            <ImageSlider
+              key={record?.id}
+              images={record?.fields?.Image as [any]}
+            />
+          )}
         </div>
         <div
           className="relative w-4/12 flex flex-col space-y-6 justify-start p-8 overflow-auto"
