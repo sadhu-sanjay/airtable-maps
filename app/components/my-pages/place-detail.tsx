@@ -87,7 +87,7 @@ const PlaceDetail = ({
 
   return (
     <>
-      <div className="flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
+      <div className=" flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
         {/* Close button closes this component */}
         <CloseButton onClick={closeDetail} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">

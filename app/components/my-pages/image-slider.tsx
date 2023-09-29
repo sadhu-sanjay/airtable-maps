@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useState } from "react";
-import ImagePlaceHolder from "../resources/placeHolder/image";
+import { useCallback, useState } from "react";
+import BackButton from "~/app/components/resources/svg/back-button";
 
-const ImageSlider: React.FC<{ images: any[]}> = ({ images }) => {
+const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
 
   const handleNextClick = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
@@ -24,14 +22,13 @@ const ImageSlider: React.FC<{ images: any[]}> = ({ images }) => {
 
   return (
     <>
-      {isLoading && <ImagePlaceHolder />}
       <div
         id="default-carousel"
-        className={`${
-          isFullScreen ? "w-screen h-screen fixed" : "w-full h-full relative"
-        } left-0 bg-zinc-200 ${isLoading ? "hidden" : "block"}}`}
+        className={`${isFullScreen ? "fixed  z-50" : "static"}
+           left-0 bg-zinc-200 w-full h-full`}
         data-carousel="slide"
       >
+        <BackButton onClick={toggleFullScreen} classNames={`${isFullScreen ? 'block': 'hidden'} z-[51]`} />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&
             images?.map((item: any, index: number) => (
@@ -51,13 +48,12 @@ const ImageSlider: React.FC<{ images: any[]}> = ({ images }) => {
                   }
                   className="absolute  block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                   alt={`Slide ${index + 1}`}
-                  onLoad={() => setIsLoading(false)}
                 />
               </div>
             ))}
         </div>
 
-        <div className={`${images?.length > 1} ? block : hidden`}>
+        <div className={`${images?.length > 1 ? "block" : "hidden"}`}>
           <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
             {images?.map((_, index) => (
               <button

@@ -9,7 +9,7 @@ const CloseButton: React.FC<Props> = ({ classNames, onClick }) => (
   <button
     onClick={onClick}
     type="button"
-    className="z-50 absolute left-6 top-3 text-white bg-gradient-to-r from-zinc-500/20 via-zinc-600/20 to-zinc-700/20 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-zinc-300 dark:focus:ring-zinc-800 shadow-sm shadow-zinc-500/50 dark:shadow-sm dark:shadow-zinc-800/80 font-medium rounded-full text-sm  text-center "
+    className={`${classNames} z-40 absolute left-6 top-3 text-white bg-gradient-to-r from-zinc-500/20 via-zinc-600/20 to-zinc-700/20 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-zinc-300 dark:focus:ring-zinc-800 shadow-sm shadow-zinc-500/50 dark:shadow-sm dark:shadow-zinc-800/80 font-medium rounded-full text-sm  text-center `}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
