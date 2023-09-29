@@ -179,7 +179,7 @@ function MyMarker(record: Record) {
     content: pin.element,
   });
   marker.addListener("click", () => {
-
+    console.log("MARKER CLICKED", record);
   })
 
   return marker;

@@ -21,14 +21,17 @@ import { Spinner3, Spinner4 } from "../spinner";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
-const PlaceDetail = ({
-  recordId,
-  closeDetail,
-}: {
+interface ModalProps {
   recordId: string;
-  closeDetail: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const PlaceDetailModal: React.FC<ModalProps> = ({
+  recordId,
+  isOpen,
+  onClose,
 }) => {
-  const showPlaceHolder = false;
   const [record, setRecord] = useState<Record>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,9 +88,12 @@ const PlaceDetail = ({
 
   return (
     <>
-      <div className=" flex flex-col shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden">
-        {/* Close button closes this component */}
-        <div className="bg-blue-900 img-container w-8/12 h-full absolute right-0 shadow-lg">
+      <div
+        className={`${
+          isOpen ? "block" : "hidden"
+        } fixed left-0 top-0 flex flex-row-reverse shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden`}
+      >
+        <div className="bg-blue-900 img-container w-8/12 h-full right-0 shadow-lg">
           <ImageSlider
             key={record?.id}
             images={record?.fields?.Image as [any]}
@@ -101,11 +107,7 @@ const PlaceDetail = ({
             <CardPlaceHolder />
           ) : (
             <div>
-              <CloseButton
-                classNames="absolute right-8"
-                onClick={closeDetail}
-              />
-
+              <CloseButton classNames="absolute right-8" onClick={onClose} />
               <ul className="space-y-2">
                 <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
                   {record?.fields?.Title ?? "Title not found"}
@@ -157,4 +159,4 @@ const PlaceDetail = ({
   );
 };
 
-export default PlaceDetail;
+export default PlaceDetailModal;

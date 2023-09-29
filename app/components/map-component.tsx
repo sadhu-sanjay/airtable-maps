@@ -19,13 +19,14 @@ import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetail from "./my-pages/place-detail";
+import PlaceDetailModal from "./my-pages/place-detail";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
-  const detailAside = useRef<HTMLDivElement>(null);
   const [selectedRecord, setSelectedRecord] = useState<Record>();
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { recordsError, isLoadingRecords, records } = useRecords();
   const searchTerms = useRef<string[]>([]);
   const selectedRegions = useRef<string[]>([]);
@@ -133,23 +134,18 @@ export default function Home() {
           />
         );
       case Status.SUCCESS:
-        return (
-          <MyMap
-            handleZoom={handleZoom}
-            records={mapRecords}
-          />
-        );
+        return <MyMap handleZoom={handleZoom} records={mapRecords} />;
     }
   };
 
   const onRecordSelected = useCallback((record: Record) => {
     console.log("Record Selected", record.id);
     setSelectedRecord(record);
-    detailAside.current?.style.setProperty("display", "block");
+    setIsModalOpen(true);
   }, []);
 
   const closeDetail = () => {
-    detailAside.current?.style.setProperty("display", "none");
+    setIsModalOpen(false);
   };
 
   return (
@@ -185,13 +181,11 @@ export default function Home() {
       <main className="bg-red-500 h-1/2 sm:h-full w-full sm:w-[71%]">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
-      <aside
-        ref={detailAside}
-        className=" absolute hidden h-screen w-full sm:min-w-[320px]"
-      >
-        <PlaceDetail
-          closeDetail={closeDetail}
+      <aside>
+        <PlaceDetailModal
           recordId={selectedRecord?.id ?? ""}
+          onClose={closeDetail}
+          isOpen={isModalOpen}
         />
       </aside>
     </div>
