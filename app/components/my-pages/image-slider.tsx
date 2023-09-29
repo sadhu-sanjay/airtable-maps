@@ -35,7 +35,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
           onClick={toggleFullScreen}
           classNames={`${
             isFullScreen ? "block" : "hidden"
-          } z-[60] absolute top-6 right-6`}
+          } z-[60] absolute`}
         />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&
@@ -54,7 +54,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
                       ? item.thumbnails?.full.url
                       : item.thumbnails?.large.url
                   }
-                  className="absolute  block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                  className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                   alt={`Slide ${index + 1}`}
                 />
               </div>
