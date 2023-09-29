@@ -9,7 +9,7 @@ dotenv.config({
 const nextConfig = {
   output: 'export',
   images: {
-    domains: ['images.unsplash.com', 'source.unsplash.com'],
+    // domains: ['images.unsplash.com', 'source.unsplash.com'],
   },
 }
 
