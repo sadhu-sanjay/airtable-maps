@@ -35,7 +35,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
           onClick={toggleFullScreen}
           classNames={`${
             isFullScreen ? "block" : "hidden"
-          } z-[60] absolute top-4 left-4`}
+          } z-[60] absolute top-6 right-6`}
         />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&

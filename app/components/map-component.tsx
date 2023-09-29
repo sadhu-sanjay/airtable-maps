@@ -144,8 +144,6 @@ export default function Home() {
     }
   };
 
-  
-
   const closeDetail = () => {
     setIsModalOpen(false);
   };

@@ -112,11 +112,19 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
             <CardPlaceHolder />
           ) : (
             <div>
-              <CloseButton classNames="absolute right-8" onClick={onClose} />
+              <CloseButton classNames="fixed right-6 top-6" onClick={onClose} />
               <ul className="space-y-2">
-                <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-                  {record?.fields?.Title ?? "Title not found"}
-                </h1>
+                {/* A button to go to Airtable with this record id */}
+
+                <a
+                  href={`https://airtable.com/tbl7YQ2J9BQl1J6ZI/viwf5YKUwQx9GZJYb/${recordId}?blocks=hide`}
+                  target="_blank"
+                  className="text-blue-500"
+                >
+                  <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
+                    {record?.fields?.Title ?? "Title not found"}
+                  </h1>
+                </a>
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
                     if (
