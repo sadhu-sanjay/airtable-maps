@@ -92,9 +92,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       <div
         className={`${
           isOpen ? "block" : "hidden"
-        } fixed left-0 top-0 flex flex-row-reverse shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden`}
+        } fixed left-0 top-0 flex flex-col sm:flex-row-reverse shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden`}
       >
-        <div className="bg-blue-900 img-container w-8/12 h-full right-0 shadow-lg">
+        <div className="bg-blue-900 img-container w-full h-1/2 sm:w-8/12  sm:h-full right-0 shadow-lg">
           {record?.fields?.Image?.length === 0 ? (
             <ImagePlaceHolder />
           ) : (
@@ -105,7 +105,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           )}
         </div>
         <div
-          className="relative w-4/12 flex flex-col space-y-6 justify-start p-8 overflow-auto"
+          className="relative w-full sm:w-4/12 flex flex-col space-y-6 justify-start p-8 overflow-auto"
           style={{ scrollbarWidth: "none" }}
         >
           {isLoading ? (

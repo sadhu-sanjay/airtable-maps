@@ -6,7 +6,7 @@ export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
-  console.log("USE RECORDS");
+  console.log("USE RECORDS RENDER");
 
   const updateState = (records: Array<Record>) => {
     setTimeout(() => {
