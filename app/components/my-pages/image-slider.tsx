@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useState } from "react";
-import BackButton from "~/app/components/resources/svg/back-button";
 import ImagePlaceHolder from "../resources/placeHolder/image";
+import CloseButton from "../resources/svg/close-button";
 
 const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -31,9 +31,9 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
            left-0 bg-zinc-200 w-full h-full`}
         data-carousel="slide"
       >
-        <BackButton
+        <CloseButton
           onClick={toggleFullScreen}
-          classNames={`${isFullScreen ? "block" : "hidden"} z-[60]`}
+          classNames={`${isFullScreen ? "block" : "hidden"} z-[60] absolute top-4 left-4`}
         />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&

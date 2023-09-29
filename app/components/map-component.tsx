@@ -133,15 +133,21 @@ export default function Home() {
           />
         );
       case Status.SUCCESS:
-        return <MyMap handleZoom={handleZoom} records={mapRecords} />;
+        return (
+          <MyMap
+            handleZoom={handleZoom}
+            records={mapRecords}
+          />
+        );
     }
   };
 
-  const onRecordSelected = (record: Record) => {
+  const onRecordSelected = useCallback((record: Record) => {
     console.log("Record Selected", record.id);
     setSelectedRecord(record);
     detailAside.current?.style.setProperty("display", "block");
-  };
+  }, []);
+
   const closeDetail = () => {
     detailAside.current?.style.setProperty("display", "none");
   };

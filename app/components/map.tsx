@@ -102,6 +102,7 @@ function MyMap({
       }),
     });
 
+
     // get place id when a place is clicked
     const listener = mapRef.current.addListener(
       "click",
@@ -177,6 +178,9 @@ function MyMarker(record: Record) {
     title: record.fields.Title,
     content: pin.element,
   });
+  marker.addListener("click", () => {
+
+  })
 
   return marker;
 }
