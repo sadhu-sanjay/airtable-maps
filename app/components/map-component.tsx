@@ -122,6 +122,12 @@ export default function Home() {
     setListRecords(viewPortRecords);
   }, []);
 
+  const onRecordSelected = useCallback((record: Record) => {
+    console.log("Record Selected", record.id);
+    setSelectedRecord(record);
+    setIsModalOpen(true);
+  }, []);
+
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
@@ -134,15 +140,11 @@ export default function Home() {
           />
         );
       case Status.SUCCESS:
-        return <MyMap handleZoom={handleZoom} records={mapRecords} />;
+        return <MyMap handleZoom={handleZoom} records={mapRecords} onMarkerClick={onRecordSelected} />;
     }
   };
 
-  const onRecordSelected = useCallback((record: Record) => {
-    console.log("Record Selected", record.id);
-    setSelectedRecord(record);
-    setIsModalOpen(true);
-  }, []);
+  
 
   const closeDetail = () => {
     setIsModalOpen(false);

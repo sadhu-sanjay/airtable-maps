@@ -8,9 +8,11 @@ import { Record } from "~/app/components/types";
 function MyMap({
   records,
   handleZoom,
+  onMarkerClick
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
+  onMarkerClick: (record: Record) => void;
 }) {
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +30,7 @@ function MyMap({
     records?.forEach((record) => {
       if (!record.fields.lat || !record.fields.lng) return;
       if (record_to_marker_map.current.has(record)) return;
-      const marker = MyMarker(record);
+      const marker = MyMarker({record, onMarkerClick});
       if (!marker) return;
       record_to_marker_map.current.set(record, marker);
     });
@@ -161,10 +163,10 @@ export default memo(MyMap);
 
 interface MyMarkerProps {
   record: Record;
-  map: google.maps.Map;
+  onMarkerClick: (record: Record) => void;
 }
 
-function MyMarker(record: Record) {
+function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   if (!record.fields.lat || !record.fields.lng) return null;
 
   const pin = new window.google.maps.marker.PinElement({
@@ -180,6 +182,7 @@ function MyMarker(record: Record) {
   });
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
+    onMarkerClick(record);
   })
 
   return marker;
