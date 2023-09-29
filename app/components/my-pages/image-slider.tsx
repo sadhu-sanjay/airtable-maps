@@ -25,6 +25,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
 
   return (
     <>
+    
       <div
         id="default-carousel"
         className={`${isFullScreen ? "fixed  z-50" : "static"}

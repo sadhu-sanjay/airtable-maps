@@ -14,10 +14,9 @@ import React, {
 import Image from "next/image";
 import { Record } from "~/app/components/types";
 import CloseButton from "../resources/svg/close-button";
-import ImagePlaceHolder from "../resources/placeHolder/image";
 import { RECORD_GET } from "~/app/config";
 import ImageSlider from "./image-slider";
-import MapIcon from "../resources/svg/map-icon";
+import { MapIcon } from "../resources/svg/map-icon";
 import { Spinner3, Spinner4 } from "../spinner";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
@@ -91,7 +90,7 @@ const PlaceDetail = ({
         <div className="bg-blue-900 img-container w-8/12 h-full absolute right-0 shadow-lg">
           <ImageSlider
             key={record?.id}
-            images={record?.fields?.Image as [any]}
+            images={record?.fields?.Image}
           />
         </div>
         <div
@@ -125,10 +124,15 @@ const PlaceDetail = ({
                             {key} {" : "}&nbsp;&nbsp;
                           </span>
                           <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                            {key === "Coordinates (lat, lng)" &&
-                              MapIcon(value as string)}
+                            {key === "Coordinates (lat, lng)" && (
+                              <MapIcon cords={value as string} />
+                            )}
                             {key === "URL" && (
-                              <a href={value as string} target="_blank">
+                              <a
+                                className="text-blue-500"
+                                href={value as string}
+                                target="_blank"
+                              >
                                 {" "}
                                 {value}{" "}
                               </a>

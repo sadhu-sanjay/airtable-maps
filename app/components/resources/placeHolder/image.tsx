@@ -1,6 +1,10 @@
-export default function ImagePlaceHolder() {
+// pass className to the component
+
+export const ImagePlaceHolder: React.FC<{ className: string }> = ({ className }) => {
   return (
-    <div className=" animate-pulse flex border items-center justify-center h-full bg-gray-300 dark:bg-gray-700">
+    <div
+      className={`${className} animate-pulse flex border items-center justify-center h-full bg-gray-300 dark:bg-gray-700 ${className}`}
+    >
       <svg
         className="w-10 h-10 text-gray-200 dark:text-gray-600 "
         aria-hidden="true"
@@ -13,4 +17,4 @@ export default function ImagePlaceHolder() {
       </svg>
     </div>
   );
-}
+};
