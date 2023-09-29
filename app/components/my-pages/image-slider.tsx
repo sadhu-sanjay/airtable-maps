@@ -2,10 +2,13 @@
 
 import { useCallback, useState } from "react";
 import BackButton from "~/app/components/resources/svg/back-button";
+import ImagePlaceHolder from "../resources/placeHolder/image";
 
 const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [lastImages, setLastImages] = useState<any[]>(images);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNextClick = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
@@ -28,12 +31,15 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
            left-0 bg-zinc-200 w-full h-full`}
         data-carousel="slide"
       >
-        <BackButton onClick={toggleFullScreen} classNames={`${isFullScreen ? 'block': 'hidden'} z-[51]`} />
+        <BackButton
+          onClick={toggleFullScreen}
+          classNames={`${isFullScreen ? "block" : "hidden"} z-[60]`}
+        />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&
             images?.map((item: any, index: number) => (
               <div
-                onDoubleClick={toggleFullScreen}
+                onClick={toggleFullScreen}
                 key={index}
                 className={`duration-700 ease-in-out ${
                   index === currentImageIndex ? "block" : "hidden"

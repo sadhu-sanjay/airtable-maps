@@ -89,6 +89,9 @@ function MyMap({
       zoom: 2,
       mapId: "eb7b69cef73330bc",
       minZoom: 2,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_BOTTOM,
+      },
     });
 
     clusterRef.current = new MarkerClusterer({

@@ -91,7 +91,7 @@ const PlaceDetail = ({
         {/* Close button closes this component */}
         <CloseButton onClick={closeDetail} />
         <div className="img-container w-full h-1/3 min-h-[33.33%] shadow-lg">
-          <ImageSlider images={record?.fields?.Image as [any]} />
+          <ImageSlider key={record?.id} images={record?.fields?.Image as [any]} />
         </div>
         {isLoading ? (
           <CardPlaceHolder />
