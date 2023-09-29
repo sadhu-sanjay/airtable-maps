@@ -20,6 +20,7 @@ import { MapIcon } from "../resources/svg/map-icon";
 import { Spinner3, Spinner4 } from "../spinner";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
+import { fetchRecord } from "../airtable-helper";
 const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 interface ModalProps {
@@ -56,9 +57,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const getRecord = useCallback(
     async (recordId: string, signal: AbortSignal) => {
       try {
-        const req = await fetch(RECORD_GET + "/" + recordId, { signal });
-        const result = await req.json();
-        const record = cleanRecord(result);
+        
+        const respJson = await fetchRecord(recordId, signal)
+        const record = cleanRecord(respJson);
         return record;
       } catch (e: any) {
         if (e.name === "AbortError") {
