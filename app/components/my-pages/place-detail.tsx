@@ -91,10 +91,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   return (
     <>
       <div
-        className={`${isOpen ? "block" : "hidden"} 
-        fixed left-0 top-0 w-full h-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]
- flex flex-col shadow-lg bg-gray-100 dark:bg-gray-800 `}
+        className={`
+        absolute z-40 ${isOpen ? "left-0" : "-translate-x-full"}
+        h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]
+        flex flex-col shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-500  `}
       >
+
+        <CloseButton classNames="absolute w-8 h-8 z-40 top-4 right-4" onClick={onClose} />
+
         <div className="bg-blue-900 img-container w-full  h-1/3 shadow-lg">
           {record?.fields?.Image?.length === 0 ? (
             <ImagePlaceHolder />
@@ -109,7 +113,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           className="w-full h-2/3 flex flex-col space-y-6 justify-start p-8 overflow-auto"
           style={{ scrollbarWidth: "none" }}
         >
-          <CloseButton classNames="absolute w-8 h-8" onClick={onClose} />
+          
           {isLoading ? (
             <CardPlaceHolder />
           ) : (

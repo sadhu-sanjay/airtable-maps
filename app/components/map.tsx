@@ -2,7 +2,7 @@ import {
   MarkerClusterer,
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
-import { memo, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { Record } from "~/app/components/types";
 const zoom_out_img = "/zoom-out-area.png";
 
@@ -60,7 +60,7 @@ function MyMap({
     }, 0);
   }
 
-  function updateBounds() {
+  const updateBounds = useCallback(() => {
     if (mapRef.current && records && records.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
@@ -78,7 +78,7 @@ function MyMap({
         mapRef.current.setZoom(13);
       }
     }
-  }
+  }, [records])
   updateMarkers();
   /**
    * SETUP MARKERS END
@@ -108,19 +108,14 @@ function MyMap({
       // controlUI.appendChild(controlText);
       controlUI.appendChild(controlImg);
 
-      controlDiv.index = 1;
       controlUI.style.backgroundColor = "#fff";
       controlUI.style.border = "2px solid #fff";
       controlUI.style.borderRadius = "3px";
       controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
       controlUI.style.cursor = "pointer";
       controlUI.style.marginLeft = "10px";
-      // controlUI.style.marginBottom = "22px";
       controlUI.style.textAlign = "center";
-      controlUI.title = "Click to set the map to Home";
-      // controlText.style.lineHeight = "38px";
-      // controlText.style.paddingLeft = "5px";
-      // controlText.style.paddingRight = "5px";
+      controlUI.title = "Zoom out to show all filtered records";
       controlImg.src = zoom_out_img;
       controlImg.style.width = "36px";
       controlImg.style.height = "36px";
@@ -144,20 +139,12 @@ function MyMap({
       }),
     });
 
-    // get place id when a place is clicked
-    const listener = mapRef.current.addListener(
-      "click",
-      (event: google.maps.MapMouseEvent) => {
-        console.log("MAP CLICKED", event);
-        // if (event.placeId) {
-        //   console.log("PLACE ID", event.placeId);
-        // }
-      }
-    );
 
     return () => {
       mapRef.current = null;
       clusterRef.current = null;
+      record_to_marker_map.current.clear();
+      controlRef.current?.remove();
     };
   }, []);
   /**
