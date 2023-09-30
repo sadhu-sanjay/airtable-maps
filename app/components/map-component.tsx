@@ -140,7 +140,13 @@ export default function Home() {
           />
         );
       case Status.SUCCESS:
-        return <MyMap handleZoom={handleZoom} records={mapRecords} onMarkerClick={onRecordSelected} />;
+        return (
+          <MyMap
+            handleZoom={handleZoom}
+            records={mapRecords}
+            onMarkerClick={onRecordSelected}
+          />
+        );
     }
   };
 
@@ -152,7 +158,7 @@ export default function Home() {
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
       <aside
         ref={asideRef}
-        className="h-1/2 sm:h-full w-full md:w-1/3 lg:w-[29%] sm:min-w-[320px]"
+        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar handleSearchChange={myDebounce(searchHandler, 500)} />
@@ -178,7 +184,8 @@ export default function Home() {
           />
         </div>
       </aside>
-      <main className="bg-red-500 h-1/2 sm:h-full w-full sm:w-[71%]">
+
+      <main className="bg-red-500 w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-9/12 ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
       <aside>

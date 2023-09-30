@@ -91,12 +91,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   return (
     <>
       <div
-        className={`${
-          isOpen ? "block" : "hidden"
-        } fixed left-0 top-0 flex flex-col sm:flex-row-reverse shadow-lg w-full h-full bg-gray-100 dark:bg-gray-800 mx-auto overflow-hidden`}
+        className={`${isOpen ? "block" : "hidden"} 
+        fixed left-0 top-0 w-full h-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]
+ flex flex-col shadow-lg bg-gray-100 dark:bg-gray-800 `}
       >
-        <CloseButton classNames="fixed" onClick={onClose} />
-        <div className="bg-blue-900 img-container w-full h-1/2 sm:w-8/12  sm:h-full right-0 shadow-lg">
+        <div className="bg-blue-900 img-container w-full  h-1/3 shadow-lg">
           {record?.fields?.Image?.length === 0 ? (
             <ImagePlaceHolder />
           ) : (
@@ -107,16 +106,17 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           )}
         </div>
         <div
-          className="relative w-full sm:w-4/12 flex flex-col space-y-6 justify-start p-8 overflow-auto"
+          className="w-full h-2/3 flex flex-col space-y-6 justify-start p-8 overflow-auto"
           style={{ scrollbarWidth: "none" }}
         >
+          <CloseButton classNames="absolute w-8 h-8" onClick={onClose} />
           {isLoading ? (
             <CardPlaceHolder />
           ) : (
             <div>
               <ul className="space-y-2">
                 <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-                  {record?.fields?.Title ?? "Title not found"}
+                  {record?.fields?.Title ?? "Not Available"}
                 </h1>
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {

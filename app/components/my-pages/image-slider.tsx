@@ -8,8 +8,6 @@ import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [lastImages, setLastImages] = useState<any[]>(images);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleNextClick = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
@@ -58,7 +56,8 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
                   className={`absolute block w-full h-full ${
                     isFullScreen ? "object-contain" : "object-cover"
                   } -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-                  alt={`Place Image ${index + 1}`}
+                  // alt={`Place Image ${index + 1}`}
+                  alt = ''
                 />
               </div>
             ))}
