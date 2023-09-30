@@ -28,8 +28,9 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
     <>
       <div
         id="default-carousel"
-        className={`${isFullScreen ? "fixed  z-50" : "static"}
-           left-0 bg-zinc-200 w-full h-full`}
+        className={`${isFullScreen ? "fixed " : "static"}
+           left-0 w-full h-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 
+            `}
         data-carousel="slide"
       >
         <CloseButton
