@@ -58,7 +58,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
                   className={`absolute block w-full h-full ${
                     isFullScreen ? "object-contain" : "object-cover"
                   } -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-                  alt={`Slide ${index + 1}`}
+                  alt={`Place Image ${index + 1}`}
                 />
               </div>
             ))}
