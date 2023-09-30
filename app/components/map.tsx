@@ -49,7 +49,7 @@ function MyMap({
     });
 
     if (clusterRef.current) {
-      
+
       // setTimeout(() => {
         clusterRef.current.removeMarkers(markersToRemove);
         clusterRef.current.addMarkers(markersToAdd);
@@ -97,7 +97,6 @@ function MyMap({
     });
 
     if (mapRef.current) {
-      console.log("MAP REF CAMe inside ", mapRef.current);
       const controlDiv = document.createElement("div");
       const controlUI = document.createElement("div");
       const controlImg = document.createElement("img");
@@ -220,26 +219,6 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
 
   return marker;
 }
-
-/**
- * Adjust the bounds on receiving new new records
- */
-// useEffect(() => {
-//   if (mapRef.current && records && records.length > 0) {
-//     const bounds = new google.maps.LatLngBounds();
-
-//     records.forEach((record) => {
-//       if (!record.lat || !record.lng) return;
-//       const latLng = new window.google.maps.LatLng(record.lat, record.lng);
-//       bounds.extend(latLng);
-//     });
-//     mapRef.current.fitBounds(bounds);
-
-//     if (records.length === 1) {
-//       mapRef.current.setZoom(13);
-//     }
-//   }
-// }, [records]);
 
 // useEffect(() => {
 //   if (selectedRecord && mapRef.current) {
