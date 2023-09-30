@@ -60,7 +60,7 @@ function MyMap({
     }, 0);
   }
 
-  const updateBounds = useCallback(() => {
+  function updateBounds(){
     if (mapRef.current && records && records.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
@@ -78,7 +78,7 @@ function MyMap({
         mapRef.current.setZoom(13);
       }
     }
-  }, [records])
+  }
   updateMarkers();
   /**
    * SETUP MARKERS END

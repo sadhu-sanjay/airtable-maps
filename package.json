@@ -10,7 +10,6 @@
     "deploy": "node_modules/.bin/firebase deploy --only hosting:airtable-maps"
   },
   "dependencies": {
-    "@googlemaps/extended-component-library": "^0.4.2",
     "@googlemaps/markerclusterer": "^2.4.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@types/node": "20.4.9",
