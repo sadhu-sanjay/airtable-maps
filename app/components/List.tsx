@@ -27,7 +27,7 @@ export function MyList({
       >
         <div className="flex space-x-2">
           <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-            <strong>{index }</strong>
+            <strong>{index + 1 }</strong>
           </p>
           <div className="flex flex-col items-start space-x-4">
             <div className="flex-1 min-w-0">

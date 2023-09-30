@@ -49,11 +49,10 @@ function MyMap({
     });
 
     if (clusterRef.current) {
-
       // setTimeout(() => {
-        clusterRef.current.removeMarkers(markersToRemove);
-        clusterRef.current.addMarkers(markersToAdd);
-        updateBounds();
+      clusterRef.current.removeMarkers(markersToRemove);
+      clusterRef.current.addMarkers(markersToAdd);
+      updateBounds();
       // }, 0);
     }
   }
@@ -178,6 +177,19 @@ function MyMap({
     }
   }, [handleZoom, records]);
 
+  // useEffect(() => {
+  //   if (selectedRecord && mapRef.current) {
+  //     const { lat, lng } = selectedRecord.fields;
+  //     if (!lat || !lng) {
+  //       return alert("No coordinates found for this record");
+  //     }
+  //     setTimeout(() => {
+  //       mapRef.current?.setZoom(18); // ADDED THIS
+  //       mapRef.current?.panTo({ lat, lng });
+  //     }, 0);
+  //   }
+  // }, [selectedRecord]);
+
   return (
     <>
       {/* <button
@@ -219,14 +231,3 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
 
   return marker;
 }
-
-// useEffect(() => {
-//   if (selectedRecord && mapRef.current) {
-//     const { lat, lng } = selectedRecord;
-//     if (!lat || !lng) {
-//       return alert("No coordinates found for this record");
-//     }
-//     mapRef.current.setZoom(18); // ADDED THIS
-//     mapRef.current.panTo({ lat, lng });
-//   }
-// }, [selectedRecord]);
