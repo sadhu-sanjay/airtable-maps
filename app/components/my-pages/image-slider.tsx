@@ -28,14 +28,14 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
     <>
       <div
         id="default-carousel"
-        className={`${isFullScreen ? "fixed " : "static"}
-           left-0 w-full h-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 
+        className={`${isFullScreen ? "fixed" : "static"}
+           left-0 w-full h-full bg-gradient-to-r from-zinc-500 via-zinc-600 to-zinc-700 
             `}
         data-carousel="slide"
       >
         <CloseButton
           onClick={toggleFullScreen}
-          classNames={`${isFullScreen ? "block" : "hidden"} z-[60] absolute`}
+          classNames={`${isFullScreen ? "block" : "hidden"} z-[60] absolute h-8 w-8 top-5 right-5`}
         />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&
