@@ -5,9 +5,9 @@ import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import CloseButton from "../resources/svg/close-button";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 
-const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
+const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images, isFullScreen }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  // const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleNextClick = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
@@ -28,15 +28,9 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
     <>
       <div
         id="default-carousel"
-        className={`${isFullScreen ? "fixed" : "static"}
-           left-0 w-full h-full bg-gradient-to-r from-zinc-500 via-zinc-600 to-zinc-700 
-            `}
+        className={` w-full h-full `}
         data-carousel="slide"
       >
-        <CloseButton
-          onClick={toggleFullScreen}
-          classNames={`${isFullScreen ? "block" : "hidden"} z-[60] absolute h-8 w-8 top-5 right-5`}
-        />
         <div className="relative h-full overflow-hidden cursor-pointer">
           {images &&
             images?.map((item: any, index: number) => (
@@ -55,10 +49,10 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
                       : item.thumbnails?.large.url
                   }
                   className={`absolute block w-full h-full ${
-                    isFullScreen ? "object-contain" : "object-cover"
+                    isFullScreen ? "object-cover" : "object-cover"
                   } -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
                   // alt={`Place Image ${index + 1}`}
-                  alt = ''
+                  alt=""
                 />
               </div>
             ))}

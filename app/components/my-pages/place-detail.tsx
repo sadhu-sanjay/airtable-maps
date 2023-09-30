@@ -86,18 +86,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         className={`
         absolute z-40 h-full
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        ${isFullScreen ? "w-full flex-row-reverse" : "w-3/12 flex-col"}
+        ${isFullScreen ? "w-full flex-row h-full" : "w-3/12 flex-col h-full"}
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out transform`}
       >
         <CloseButton
-          classNames="absolute w-8 h-8 z-40 top-4 left-8"
+          classNames="absolute w-8 h-8 z-40 top-6 left-6"
           onClick={onClose}
         />
 
         <div
           onClick={() => setIsFullScreen(!isFullScreen)}
-          className={`bg-blue-900 img-container shadow-lg 
-          ${isFullScreen ? "w-9/12 h-full" : "h-1/3 w-full"}
+          className={` img-container  
+          ${isFullScreen ? "w-8/12 h-full" : "h-1/3 w-full shadow-lg"}
  duration-500 ease-in-out transition-all transform
           `}
         >
@@ -107,13 +107,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
             <ImageSlider
               key={record?.id}
               images={record?.fields?.Image as [any]}
+              isFullScreen={isFullScreen}
             />
           )}
         </div>
         {/* List container */}
         <div
           className={`
-          ${isFullScreen ? "w-3/12 h-full pt-16 " : "h-2/3 w-full"}
+          ${isFullScreen ? "w-4/12 h-full " : "h-2/3 w-full"}
           flex flex-col space-y-6 justify-start p-8 overflow-auto`}
           style={{ scrollbarWidth: "none" }}
         >
@@ -122,7 +123,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           ) : (
             <div>
               <ul className="space-y-2">
-                <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-2xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
+                <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
                   {record?.fields?.Title ?? "Not Available"}
                 </h1>
                 {record?.fields &&

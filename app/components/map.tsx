@@ -121,6 +121,7 @@ function MyMap({
       controlImg.style.height = "36px";
 
       controlUI.addEventListener("click", () => {
+        console.log("CLICKED");
         updateBounds();
       });
 
