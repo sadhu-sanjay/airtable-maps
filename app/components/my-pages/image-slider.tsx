@@ -19,7 +19,7 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
     );
   };
   const toggleFullScreen = useCallback(() => {
-    setIsFullScreen(!isFullScreen);
+    // setIsFullScreen(!isFullScreen);
   }, [isFullScreen]);
 
   if (!images) return <ImagePlaceHolder />;

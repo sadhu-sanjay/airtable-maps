@@ -88,18 +88,29 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     };
   }, [cleanRecord, getRecord, recordId]);
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   return (
     <>
       <div
         className={`
-        absolute z-40 ${isOpen ? "left-0" : "-translate-x-full"}
-        h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]
-        flex flex-col shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-500  `}
+        absolute z-40 h-full
+        ${isOpen ? "block" : "-translate-x-full"}
+        ${isFullScreen ? "w-full flex-row-reverse" : "w-3/12 flex-col"}
+        flex  shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
+        <CloseButton
+          classNames="absolute w-8 h-8 z-40 top-4 right-4"
+          onClick={onClose}
+        />
 
-        <CloseButton classNames="absolute w-8 h-8 z-40 top-4 right-4" onClick={onClose} />
-
-        <div className="bg-blue-900 img-container w-full  h-1/3 shadow-lg">
+        <div
+          onClick={() => setIsFullScreen(!isFullScreen)}
+          className={`bg-blue-900 img-container shadow-lg 
+          ${isFullScreen ? "w-9/12 " : "h-1/3 "}
+ duration-500 ease-in-out transition-all transform
+          `}
+        >
           {record?.fields?.Image?.length === 0 ? (
             <ImagePlaceHolder />
           ) : (
@@ -110,10 +121,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           )}
         </div>
         <div
-          className="w-full h-2/3 flex flex-col space-y-6 justify-start p-8 overflow-auto"
+          className={`
+          ${isFullScreen ? "w-3/12 h-full" : "h-2/3 w-full"}
+          flex flex-col space-y-6 justify-start p-8 overflow-auto`}
           style={{ scrollbarWidth: "none" }}
         >
-          
           {isLoading ? (
             <CardPlaceHolder />
           ) : (
