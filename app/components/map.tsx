@@ -121,8 +121,7 @@ function MyMap({
       controlImg.style.height = "36px";
 
       controlUI.addEventListener("click", () => {
-        console.log("CLICKED");
-        updateBounds();
+        mapRef.current?.setZoom(2);
       });
 
       mapRef.current.controls[window.google.maps.ControlPosition.LEFT_CENTER].push(
