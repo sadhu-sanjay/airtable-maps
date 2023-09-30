@@ -4,11 +4,12 @@ import {
 } from "@googlemaps/markerclusterer";
 import { memo, useEffect, useRef } from "react";
 import { Record } from "~/app/components/types";
+const zoom_out_img = "/zoom-out-area.png";
 
 function MyMap({
   records,
   handleZoom,
-  onMarkerClick
+  onMarkerClick,
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
@@ -17,6 +18,7 @@ function MyMap({
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
+  const controlRef = useRef<HTMLDivElement | null>(null);
   const clusterRef = useRef<MarkerClusterer | null>(null);
   const record_to_marker_map = useRef<
     Map<Record, google.maps.marker.AdvancedMarkerElement>
@@ -30,7 +32,7 @@ function MyMap({
     records?.forEach((record) => {
       if (!record.fields.lat || !record.fields.lng) return;
       if (record_to_marker_map.current.has(record)) return;
-      const marker = MyMarker({record, onMarkerClick});
+      const marker = MyMarker({ record, onMarkerClick });
       if (!marker) return;
       record_to_marker_map.current.set(record, marker);
     });
@@ -70,7 +72,7 @@ function MyMap({
         );
         bounds.extend(latLng);
       });
-      mapRef.current.fitBounds(bounds, 100);
+      mapRef.current.fitBounds(bounds, 50);
 
       if (records.length === 1) {
         mapRef.current.setZoom(13);
@@ -96,6 +98,44 @@ function MyMap({
       },
     });
 
+    if (mapRef.current) {
+      console.log("MAP REF CAMe inside ", mapRef.current);
+      const controlDiv = document.createElement("div");
+      const controlUI = document.createElement("div");
+      const controlImg = document.createElement("img");
+
+      controlDiv.appendChild(controlUI);
+      // controlUI.appendChild(controlText);
+      controlUI.appendChild(controlImg);
+
+      controlDiv.index = 1;
+      controlUI.style.backgroundColor = "#fff";
+      controlUI.style.border = "2px solid #fff";
+      controlUI.style.borderRadius = "3px";
+      controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+      controlUI.style.cursor = "pointer";
+      controlUI.style.marginLeft = "10px";
+      // controlUI.style.marginBottom = "22px";
+      controlUI.style.textAlign = "center";
+      controlUI.title = "Click to set the map to Home";
+      // controlText.style.lineHeight = "38px";
+      // controlText.style.paddingLeft = "5px";
+      // controlText.style.paddingRight = "5px";
+      controlImg.src = zoom_out_img;
+      controlImg.style.width = "36px";
+      controlImg.style.height = "36px";
+
+      controlUI.addEventListener("click", () => {
+        mapRef.current?.setZoom(0);
+      });
+
+      mapRef.current.controls[window.google.maps.ControlPosition.LEFT_CENTER].push(
+        controlDiv
+      );
+
+      controlRef.current = controlDiv;
+    }
+
     clusterRef.current = new MarkerClusterer({
       markers: Array.from(record_to_marker_map.current.values()),
       map: mapRef.current,
@@ -103,7 +143,6 @@ function MyMap({
         viewportPadding: 0,
       }),
     });
-
 
     // get place id when a place is clicked
     const listener = mapRef.current.addListener(
@@ -156,7 +195,17 @@ function MyMap({
     }
   }, [handleZoom, records]);
 
-  return <div ref={divRef} className="h-full w-full overflow-clip" />;
+  return (
+    <>
+      {/* <button
+        type="button"
+        className="absolute top-0 left- text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br  shadow-sm shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
+      >
+        Zoom
+      </button> */}
+      <div ref={divRef} className="h-full w-full"></div>
+    </>
+  );
 }
 
 export default memo(MyMap);
@@ -183,7 +232,7 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
     onMarkerClick(record);
-  })
+  });
 
   return marker;
 }
