@@ -165,7 +165,7 @@ export default function Home() {
       </aside>
       <aside
         ref={asideRef}
-        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
+        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-[30%] sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar handleSearchChange={myDebounce(searchHandler, 500)} />
@@ -192,7 +192,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="bg-red-500 w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-9/12 ">
+      <main className="bg-red-500 w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-[70%] ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
     </div>

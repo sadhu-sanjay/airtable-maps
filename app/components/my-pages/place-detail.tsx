@@ -86,7 +86,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         className={`
         absolute z-40 h-full
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        ${isFullScreen ? "w-full flex-row h-full" : "w-3/12 flex-col h-full"}
+        ${isFullScreen ? "w-full flex-row h-full" : "w-[30%] flex-col h-full"}
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out transform`}
       >
         <CloseButton

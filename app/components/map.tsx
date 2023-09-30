@@ -48,19 +48,17 @@ function MyMap({
       }
     });
 
-    // UPDATE UI AFTER 0ms so that the UI is not blocked
-    setTimeout(() => {
-      console.error("CLUSTER CURENT REF", clusterRef.current);
-      console.error("CLUSTER REF", clusterRef);
-      console.error("MARKERS TO REMOVE", markersToRemove.length);
-      console.error("MARKERS TO ADD", markersToAdd.length);
-      clusterRef.current?.removeMarkers(markersToRemove);
-      clusterRef.current?.addMarkers(markersToAdd);
-      updateBounds();
-    }, 0);
+    if (clusterRef.current) {
+      
+      // setTimeout(() => {
+        clusterRef.current.removeMarkers(markersToRemove);
+        clusterRef.current.addMarkers(markersToAdd);
+        updateBounds();
+      // }, 0);
+    }
   }
 
-  function updateBounds(){
+  function updateBounds() {
     if (mapRef.current && records && records.length > 0) {
       const bounds = new google.maps.LatLngBounds();
 
@@ -124,9 +122,9 @@ function MyMap({
         mapRef.current?.setZoom(2);
       });
 
-      mapRef.current.controls[window.google.maps.ControlPosition.LEFT_CENTER].push(
-        controlDiv
-      );
+      mapRef.current.controls[
+        window.google.maps.ControlPosition.LEFT_CENTER
+      ].push(controlDiv);
 
       controlRef.current = controlDiv;
     }
@@ -138,7 +136,6 @@ function MyMap({
         viewportPadding: 0,
       }),
     });
-
 
     return () => {
       mapRef.current = null;

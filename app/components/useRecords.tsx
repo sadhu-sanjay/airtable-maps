@@ -46,7 +46,8 @@ export default function useRecords() {
           localRecords.push(...newRecords);
 
           if (localRecords.length > 500) {
-            // updateState(localRecords.slice(50, 100));
+            
+            // updateState(localRecords.slice(150, 200));
             updateState(localRecords);
             localRecords = [];
             // setIsLoadingRecords(false);
