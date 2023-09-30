@@ -1,6 +1,10 @@
 // pass className to the component
 
-export const ImagePlaceHolder: React.FC<{ className?: string }> = ({ className }) => {
+import { FronnyFace } from "../svg/fronyface";
+
+export const ImagePlaceHolder: React.FC<{
+  className?: string;
+}> = ({ className }) => {
   return (
     <div
       className={`${className} flex border items-center justify-center h-full bg-gray-300 dark:bg-gray-700 ${className}`}

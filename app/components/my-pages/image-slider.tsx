@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import CloseButton from "../resources/svg/close-button";
+import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 
 const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -22,6 +23,8 @@ const ImageSlider: React.FC<{ images: any[] }> = ({ images }) => {
   const toggleFullScreen = useCallback(() => {
     setIsFullScreen(!isFullScreen);
   }, [isFullScreen]);
+
+  if (!images) return <ImagePlaceHolder />;
 
   return (
     <>
