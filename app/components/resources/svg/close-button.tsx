@@ -10,18 +10,20 @@ const CloseButton: React.FC<Props> = ({ classNames, onClick }) => (
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
-    strokeWidth="1.5"
+    strokeWidth="1"
     stroke="white"
     className={`cursor-pointer  text-white bg-gradient-to-r from-zinc-500/20 via-zinc-600/20 to-zinc-700/20 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-zinc-300 dark:focus:ring-zinc-800 shadow-sm shadow-zinc-500/50 dark:shadow-sm dark:shadow-zinc-800/80 font-medium rounded-full text-sm  text-center 
     ${classNames}`}
     onClick={onClick}
   >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M16 8l-8 8"></path>
+    <path d="M8 8l8 8"></path>
   </svg>
 );
 
 export default CloseButton;
+
+// <svg xmlns="http://www.w3.org/2000/svg" className={`${classNames} icon icon-tabler icon-tabler-x`} width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" >
+
+// </svg>

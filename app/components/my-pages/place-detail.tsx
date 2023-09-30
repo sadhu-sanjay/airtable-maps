@@ -1,27 +1,17 @@
-import * as GMPX from "@googlemaps/extended-component-library/react";
 
-const DEFAULT_CENTER = "45,-98";
-const DEFAULT_ZOOM = 4;
-const DEFAULT_ZOOM_WITH_LOCATION = 16;
 import React, {
-  RefObject,
-  forwardRef,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import Image from "next/image";
 import { Record } from "~/app/components/types";
 import CloseButton from "../resources/svg/close-button";
-import { RECORD_GET } from "~/app/config";
 import ImageSlider from "./image-slider";
 import { MapIcon } from "../resources/svg/map-icon";
-import { Spinner3, Spinner4 } from "../spinner";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import { fetchRecord } from "../airtable-helper";
-const placeId = "ChIJ-dz__yM3L4kRNk6Sk3Th_uI";
 
 interface ModalProps {
   recordId: string;
