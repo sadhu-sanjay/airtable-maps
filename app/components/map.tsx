@@ -126,7 +126,7 @@ function MyMap({
       controlImg.style.height = "36px";
 
       controlUI.addEventListener("click", () => {
-        mapRef.current?.setZoom(0);
+        updateBounds();
       });
 
       mapRef.current.controls[window.google.maps.ControlPosition.LEFT_CENTER].push(
