@@ -95,19 +95,19 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       <div
         className={`
         absolute z-40 h-full
-        ${isOpen ? "block" : "-translate-x-full"}
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
         ${isFullScreen ? "w-full flex-row-reverse" : "w-3/12 flex-col"}
-        flex  shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
+        flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out transform`}
       >
         <CloseButton
-          classNames="absolute w-8 h-8 z-40 top-4 right-4"
+          classNames="absolute w-8 h-8 z-40 top-4 left-8"
           onClick={onClose}
         />
 
         <div
           onClick={() => setIsFullScreen(!isFullScreen)}
           className={`bg-blue-900 img-container shadow-lg 
-          ${isFullScreen ? "w-9/12 " : "h-1/3 "}
+          ${isFullScreen ? "w-9/12 h-full" : "h-1/3 w-full"}
  duration-500 ease-in-out transition-all transform
           `}
         >
@@ -120,9 +120,10 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
             />
           )}
         </div>
+        {/* List container */}
         <div
           className={`
-          ${isFullScreen ? "w-3/12 h-full" : "h-2/3 w-full"}
+          ${isFullScreen ? "w-3/12 h-full pt-16 " : "h-2/3 w-full"}
           flex flex-col space-y-6 justify-start p-8 overflow-auto`}
           style={{ scrollbarWidth: "none" }}
         >
