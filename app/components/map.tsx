@@ -111,7 +111,7 @@ function MyMap({
       controlUI.style.cursor = "pointer";
       controlUI.style.marginLeft = "10px";
       controlUI.style.textAlign = "center";
-      controlUI.title = "Zoom out to show all filtered records";
+      controlUI.title = "Zoom out completely";
       controlImg.src = zoom_out_img;
       controlImg.style.width = "36px";
       controlImg.style.height = "36px";
