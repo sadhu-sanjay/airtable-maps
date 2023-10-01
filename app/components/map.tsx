@@ -217,20 +217,20 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   imgElement.style.width = "24px";
   imgElement.style.height = "24px";
   imgElement.style.borderRadius = "50%";
-  imgElement.style.border = "1px solid rgba(255, 0, 0, 0.5)";
+  imgElement.style.border = "2px solid rgba(255, 0, 0, 0.5)";
   
 
-  // const pin = new window.google.maps.marker.PinElement({
-  //   borderColor: "white",
-  //   background: "#ea580c",
-  //   glyphColor: "white",
-  //   glyph: imgElement
-  // });
+  const pin = new window.google.maps.marker.PinElement({
+    borderColor: "white",
+    background: "#ea580c",
+    glyphColor: "white",
+    glyph: imgElement
+  });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
     title: record.fields.Title,
-    content: imgElement,
+    content: pin.element,
   });
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
