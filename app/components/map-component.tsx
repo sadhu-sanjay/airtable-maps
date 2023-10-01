@@ -7,7 +7,6 @@ import { Record } from "~/app/components/types";
 
 import {
   MAPS_API_KEY,
-  RECORDS_FETCH_URL,
   REGIONS_FETCH_URL,
   TAGS_FETCH_URL,
 } from "~/app/config";
@@ -18,7 +17,6 @@ import { SearchBar } from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
-import PlaceDetail from "./my-pages/place-detail";
 import PlaceDetailModal from "./my-pages/place-detail";
 
 export default function Home() {
