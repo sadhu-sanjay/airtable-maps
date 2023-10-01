@@ -138,8 +138,7 @@ function MyMap({
     return () => {
       mapRef.current = null;
       clusterRef.current = null;
-      record_to_marker_map.current.clear();
-      controlRef.current?.remove();
+      controlRef.current = null
     };
   }, []);
   /**
@@ -215,22 +214,23 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
 
   const imgElement = document.createElement("img");
   imgElement.src = record.fields.markerImage
-  imgElement.style.width = "23px";
-  imgElement.style.height = "23px";
+  imgElement.style.width = "24px";
+  imgElement.style.height = "24px";
   imgElement.style.borderRadius = "50%";
-  // imgElement.style.border = "1px solid white";
+  imgElement.style.border = "1px solid rgba(255, 0, 0, 0.5)";
+  
 
-  const pin = new window.google.maps.marker.PinElement({
-    borderColor: "white",
-    background: "#ea580c",
-    glyphColor: "white",
-    glyph: imgElement
-  });
+  // const pin = new window.google.maps.marker.PinElement({
+  //   borderColor: "white",
+  //   background: "#ea580c",
+  //   glyphColor: "white",
+  //   glyph: imgElement
+  // });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
     title: record.fields.Title,
-    content: pin.element
+    content: imgElement,
   });
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
