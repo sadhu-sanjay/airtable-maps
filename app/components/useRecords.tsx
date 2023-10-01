@@ -45,13 +45,13 @@ export default function useRecords() {
           });
           localRecords.push(...newRecords);
 
-          if (localRecords.length > 500) {
+          if (localRecords.length > 2000) {
             
-            // updateState(localRecords.slice(150, 2000));
+            updateState(localRecords.slice(1500, 2000));
+            break;
             updateState(localRecords);
             localRecords = [];
             // setIsLoadingRecords(false);
-            // break;
           }
         } catch (error: any) {
           console.log("Error parsing JSON", error);

@@ -138,7 +138,7 @@ function MyMap({
     return () => {
       mapRef.current = null;
       clusterRef.current = null;
-      controlRef.current = null
+      controlRef.current = null;
     };
   }, []);
   /**
@@ -212,19 +212,24 @@ interface MyMarkerProps {
 function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   if (!record.fields.lat || !record.fields.lng) return null;
 
-  // const imgElement = document.createElement("img");
+  const markerElement = document.createElement("div");
   // imgElement.src = record.fields.markerImage
-  // imgElement.style.width = "24px";
-  // imgElement.style.height = "24px";
-  // imgElement.style.borderRadius = "50%";
-  // imgElement.style.border = "2px solid rgba(255, 0, 0, 0.5)";
-  
+  markerElement.style.width = "auto";
+  markerElement.style.height = "36px";
+  markerElement.style.backgroundColor = "#db2777";
+  markerElement.style.borderRadius = "8px";
+  // markerElement.style.borderRadius = "50%";
+  markerElement.style.border = "1px solid white";
+  markerElement.style.padding = "4px 10px"
+  markerElement.innerText = record.fields.Title.split(" ").slice(0, 2).join(" ")
+  markerElement.style.color = "white";
+  markerElement.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)"
 
   const pin = new window.google.maps.marker.PinElement({
-    borderColor: "white",
-    background: "#ea580c",
-    glyphColor: "white",
-    // glyph: imgElement ?? null
+    // borderColor: "white",
+    background: "#db2777",
+    // glyphColor: "white",
+    glyph: markerElement ?? null
   });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
