@@ -27,7 +27,6 @@ function MyMap({
   /**
    * SETUP MARKERS
    */
-
   const updateBounds = useCallback(() => {
     if (mapRef.current && records && records.length > 0) {
     }
@@ -53,35 +52,33 @@ function MyMap({
       }
     });
 
-    if (clusterRef.current) {
-      setTimeout(() => {
-        clusterRef.current?.removeMarkers(markersToRemove);
-        clusterRef.current?.addMarkers(markersToAdd);
+    // Update UI
+    setTimeout(() => {
+      clusterRef.current?.removeMarkers(markersToRemove);
+      clusterRef.current?.addMarkers(markersToAdd);
 
-        const bounds = new google.maps.LatLngBounds();
+      const bounds = new google.maps.LatLngBounds();
 
-        records?.forEach((record) => {
-          if (!record.fields.lat || !record.fields.lng) return;
-          const latLng = new window.google.maps.LatLng(
-            record.fields.lat,
-            record.fields.lng
-          );
-          bounds.extend(latLng);
-        });
-        mapRef.current?.fitBounds(bounds, 50);
-
-        if (records?.length === 1) {
-          mapRef.current?.setZoom(13);
-        }
-      }, 0);
-    }
+      records?.forEach((record) => {
+        if (!record.fields.lat || !record.fields.lng) return;
+        const latLng = new window.google.maps.LatLng(
+          record.fields.lat,
+          record.fields.lng
+        );
+        bounds.extend(latLng);
+      });
+      mapRef.current?.fitBounds(bounds, 100);
+      if (records?.length === 1) {
+        mapRef.current?.setZoom(13);
+      }
+    }, 0);
+    // update UI
 
     return () => {
       markersToAdd.length = 0;
       markersToRemove.length = 0;
     };
   }, [onMarkerClick, records, updateBounds]);
-
   /**
    * SETUP MARKERS END
    * */
@@ -106,7 +103,6 @@ function MyMap({
       const controlImg = document.createElement("img");
 
       controlDiv.appendChild(controlUI);
-      // controlUI.appendChild(controlText);
       controlUI.appendChild(controlImg);
 
       controlUI.style.backgroundColor = "#fff";
@@ -159,7 +155,6 @@ function MyMap({
     let initialIdle = true;
     if (mapRef.current) {
       const listener = mapRef.current.addListener("idle", () => {
-        console.log("INITIAL IDLE");
         if (initialIdle) {
           initialIdle = false;
           return;
@@ -174,7 +169,6 @@ function MyMap({
           );
           return bounds?.contains(latLng);
         });
-        console.log("RECORDS IN VIEWPORT", recordsInViewport?.length);
         handleZoom(recordsInViewport || []);
       });
       return () => {
@@ -182,6 +176,7 @@ function MyMap({
       };
     }
   }, [handleZoom, records]);
+  // SET UP LISTENER FOR ZOOM CHANGED
 
   // useEffect(() => {
   //   if (selectedRecord && mapRef.current) {
@@ -190,23 +185,12 @@ function MyMap({
   //       return alert("No coordinates found for this record");
   //     }
   //     setTimeout(() => {
-  //       mapRef.current?.setZoom(18); // ADDED THIS
   //       mapRef.current?.panTo({ lat, lng });
   //     }, 0);
   //   }
   // }, [selectedRecord]);
 
-  return (
-    <>
-      {/* <button
-        type="button"
-        className="absolute top-0 left- text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br  shadow-sm shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-sm text-sm px-5 py-2.5 text-center"
-      >
-        Zoom
-      </button> */}
-      <div ref={divRef} className="h-full w-full"></div>
-    </>
-  );
+  return <div ref={divRef} className="h-full w-full" />;
 }
 
 export default memo(MyMap);

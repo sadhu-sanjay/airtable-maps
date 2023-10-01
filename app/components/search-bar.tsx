@@ -5,7 +5,14 @@ export function SearchBar({
 }: {
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
- 
+  const onClearButtonClick = () => {
+    setSearchValue("");
+    handleSearchChange({
+      target: { value: "" },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const [searchValue, setSearchValue] = useState("");
 
   return (
     <form>
@@ -36,12 +43,39 @@ export function SearchBar({
         <input
           type="search"
           id="default-search"
+          value={searchValue}
           className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-4pixel bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Title, Tags, Cities, Regions, Countries"
-          
-          onChange={handleSearchChange}
+          // onChange={handleSearchChange}
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+            handleSearchChange(event);
+          }}
           required
         />
+        {searchValue && (
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
+            onClick={onClearButtonClick}
+          >
+            <svg
+              className="w-4 h-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </form>
   );

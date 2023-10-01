@@ -3,7 +3,7 @@ export function Spinner() {
     <>
 
       <div className=" w-full min-h-[86dvh] flex justify-center place-items-center ">
-        <h3 className=" font-semibold text-gray-800 text-lg self-center absolute translate-y-full pt-2">
+        <h3 className=" font-semibold text-gray-800 dark:text-gray-200 text-lg self-center absolute translate-y-full pt-2">
           Loading...
         </h3>
         <div role="status">
