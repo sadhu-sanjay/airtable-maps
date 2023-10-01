@@ -49,11 +49,11 @@ function MyMap({
     });
 
     if (clusterRef.current) {
-      // setTimeout(() => {
-      clusterRef.current.removeMarkers(markersToRemove);
-      clusterRef.current.addMarkers(markersToAdd);
-      updateBounds();
-      // }, 0);
+      setTimeout(() => {
+        clusterRef.current?.removeMarkers(markersToRemove);
+        clusterRef.current?.addMarkers(markersToAdd);
+        updateBounds();
+      }, 0);
     }
   }
 
@@ -213,30 +213,15 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   if (!record.fields.lat || !record.fields.lng) return null;
 
   const markerElement = document.createElement("div");
-  // imgElement.src = record.fields.markerImage
-  markerElement.style.width = "auto";
-  markerElement.style.height = "36px";
-  markerElement.style.backgroundColor = "#db2777";
-  markerElement.style.borderRadius = "8px";
-  // markerElement.style.borderRadius = "50%";
-  markerElement.style.border = "1px solid white";
-  markerElement.style.padding = "4px 10px"
-  markerElement.innerText = record.fields.Title.split(" ").slice(0, 2).join(" ")
-  markerElement.style.color = "white";
-  markerElement.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)"
-
-  const pin = new window.google.maps.marker.PinElement({
-    // borderColor: "white",
-    background: "#db2777",
-    // glyphColor: "white",
-    glyph: markerElement ?? null
-  });
+  markerElement.innerText = record.fields.Title;
+  markerElement.className = "price-tag";
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
     title: record.fields.Title,
-    content: pin.element,
+    content: markerElement,
   });
+
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
     onMarkerClick(record);

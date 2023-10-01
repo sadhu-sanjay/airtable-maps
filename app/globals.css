@@ -23,6 +23,8 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+  
+  
 }
 
 body {
@@ -30,4 +32,27 @@ body {
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+.price-tag {
+  background-color: #db2777;
+  border-radius: 8px;
+  color: #FFFFFF;
+  padding: 4px 12px;
+  position: relative;
+  border: 1px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+
+.price-tag::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid white;
 }
