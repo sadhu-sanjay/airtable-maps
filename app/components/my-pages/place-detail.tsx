@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useState,
+  memo
 } from "react";
 import Image from "next/image";
 import { Record } from "~/app/components/types";
@@ -173,4 +174,4 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   );
 };
 
-export default PlaceDetailModal;
+export default memo(PlaceDetailModal)

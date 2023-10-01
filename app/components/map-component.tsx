@@ -5,11 +5,7 @@ import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { Record } from "~/app/components/types";
 
-import {
-  MAPS_API_KEY,
-  REGIONS_FETCH_URL,
-  TAGS_FETCH_URL,
-} from "~/app/config";
+import { MAPS_API_KEY, REGIONS_FETCH_URL, TAGS_FETCH_URL } from "~/app/config";
 import MyList from "./List";
 import MyMap from "./map";
 import Dropdown from "./dropdown";
@@ -148,9 +144,9 @@ export default function Home() {
     }
   };
 
-  const closeDetail = () => {
+  const closeDetail = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row ">
@@ -165,7 +161,6 @@ export default function Home() {
         ref={asideRef}
         className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-[30%] sm:min-w-[320px]"
       >
-        
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar handleSearchChange={myDebounce(searchHandler, 500)} />
           <div className="flex justify-between align-middle">
