@@ -212,19 +212,19 @@ interface MyMarkerProps {
 function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   if (!record.fields.lat || !record.fields.lng) return null;
 
-  const imgElement = document.createElement("img");
-  imgElement.src = record.fields.markerImage
-  imgElement.style.width = "24px";
-  imgElement.style.height = "24px";
-  imgElement.style.borderRadius = "50%";
-  imgElement.style.border = "2px solid rgba(255, 0, 0, 0.5)";
+  // const imgElement = document.createElement("img");
+  // imgElement.src = record.fields.markerImage
+  // imgElement.style.width = "24px";
+  // imgElement.style.height = "24px";
+  // imgElement.style.borderRadius = "50%";
+  // imgElement.style.border = "2px solid rgba(255, 0, 0, 0.5)";
   
 
   const pin = new window.google.maps.marker.PinElement({
     borderColor: "white",
     background: "#ea580c",
     glyphColor: "white",
-    glyph: imgElement
+    // glyph: imgElement ?? null
   });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
