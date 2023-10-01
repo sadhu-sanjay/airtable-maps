@@ -1,11 +1,10 @@
-import { CSSProperties } from "react";
+import { CSSProperties, memo } from "react";
 import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
 import EmptyList from "./common/empty-states/empty-list";
 import { PageStatus } from "./Paginator";
-import { Spinner, Spinner4 } from "./spinner";
 
-export function MyList({
+function MyList({
   asideRef,
   isLoadingRecords,
   records,
@@ -96,3 +95,5 @@ export function MyList({
     </>
   );
 }
+
+export default memo(MyList)
