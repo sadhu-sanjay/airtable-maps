@@ -31,11 +31,7 @@ export type Record = {
     "County / AAL2": string;
     RecommendedBy: string;
     Phone: string;
+    markerImage: string;
   }
 };
-
-type ShicaneImage = {
-  large: string;
-  original: string;
-}
 

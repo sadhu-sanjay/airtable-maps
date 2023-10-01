@@ -213,16 +213,24 @@ interface MyMarkerProps {
 function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
   if (!record.fields.lat || !record.fields.lng) return null;
 
+  const imgElement = document.createElement("img");
+  imgElement.src = record.fields.markerImage
+  imgElement.style.width = "23px";
+  imgElement.style.height = "23px";
+  imgElement.style.borderRadius = "50%";
+  // imgElement.style.border = "1px solid white";
+
   const pin = new window.google.maps.marker.PinElement({
     borderColor: "white",
     background: "#ea580c",
     glyphColor: "white",
+    glyph: imgElement
   });
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
     title: record.fields.Title,
-    content: pin.element,
+    content: pin.element
   });
   marker.addListener("click", () => {
     console.log("MARKER CLICKED", record);
