@@ -28,7 +28,12 @@ function MyMap({
    * SETUP MARKERS
    */
 
-  function updateMarkers() {
+  const updateBounds = useCallback(() => {
+    if (mapRef.current && records && records.length > 0) {
+    }
+  }, [records]);
+
+  useEffect(() => {
     records?.forEach((record) => {
       if (!record.fields.lat || !record.fields.lng) return;
       if (record_to_marker_map.current.has(record)) return;
@@ -52,31 +57,31 @@ function MyMap({
       setTimeout(() => {
         clusterRef.current?.removeMarkers(markersToRemove);
         clusterRef.current?.addMarkers(markersToAdd);
-        updateBounds();
+
+        const bounds = new google.maps.LatLngBounds();
+
+        records?.forEach((record) => {
+          if (!record.fields.lat || !record.fields.lng) return;
+          const latLng = new window.google.maps.LatLng(
+            record.fields.lat,
+            record.fields.lng
+          );
+          bounds.extend(latLng);
+        });
+        mapRef.current?.fitBounds(bounds, 50);
+
+        if (records?.length === 1) {
+          mapRef.current?.setZoom(13);
+        }
       }, 0);
     }
-  }
 
-  function updateBounds() {
-    if (mapRef.current && records && records.length > 0) {
-      const bounds = new google.maps.LatLngBounds();
+    return () => {
+      markersToAdd.length = 0;
+      markersToRemove.length = 0;
+    };
+  }, [onMarkerClick, records, updateBounds]);
 
-      records.forEach((record) => {
-        if (!record.fields.lat || !record.fields.lng) return;
-        const latLng = new window.google.maps.LatLng(
-          record.fields.lat,
-          record.fields.lng
-        );
-        bounds.extend(latLng);
-      });
-      mapRef.current.fitBounds(bounds, 50);
-
-      if (records.length === 1) {
-        mapRef.current.setZoom(13);
-      }
-    }
-  }
-  updateMarkers();
   /**
    * SETUP MARKERS END
    * */
@@ -136,9 +141,11 @@ function MyMap({
     });
 
     return () => {
+      // this happens when the component unmounts so clear and clean up
       mapRef.current = null;
       clusterRef.current = null;
       controlRef.current = null;
+      record_to_marker_map.current = new Map();
     };
   }, []);
   /**
