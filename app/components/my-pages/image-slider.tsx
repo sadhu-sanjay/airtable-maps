@@ -18,10 +18,7 @@ const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images
       (currentImageIndex - 1 + images.length) % images.length
     );
   };
-  const toggleFullScreen = useCallback(() => {
-    // setIsFullScreen(!isFullScreen);
-  }, [isFullScreen]);
-
+  
   if (!images) return <ImagePlaceHolder />;
 
   return (
@@ -35,7 +32,6 @@ const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images
           {images &&
             images?.map((item: any, index: number) => (
               <div
-                onClick={toggleFullScreen}
                 key={index}
                 className={`duration-700 ease-in-out ${
                   index === currentImageIndex ? "block" : "hidden"
@@ -51,7 +47,6 @@ const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images
                   className={`absolute block w-full h-full ${
                     isFullScreen ? "object-contain" : "object-cover"
                   } -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-                  // alt={`Place Image ${index + 1}`}
                   alt=""
                 />
               </div>

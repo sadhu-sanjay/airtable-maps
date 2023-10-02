@@ -139,6 +139,7 @@ export default function Home() {
             handleZoom={handleZoom}
             records={mapRecords}
             onMarkerClick={onRecordSelected}
+            selectedRecord={selectedRecord}
           />
         );
     }
@@ -149,17 +150,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col-reverse sm:flex-row ">
-      <aside>
-        <PlaceDetailModal
-          recordId={selectedRecord?.id ?? ""}
-          onClose={closeDetail}
-          isOpen={isModalOpen}
-        />
-      </aside>
+    <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
+      
       <aside
         ref={asideRef}
-        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-[30%] sm:min-w-[320px]"
+        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar handleSearchChange={myDebounce(searchHandler, 500)} />
@@ -186,9 +181,17 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className=" w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-[70%] ">
+      <main className=" w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-9/12 ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
+
+      <aside>
+        <PlaceDetailModal
+          recordId={selectedRecord?.id ?? ""}
+          onClose={closeDetail}
+          isOpen={isModalOpen}
+        />
+      </aside>
     </div>
   );
 }

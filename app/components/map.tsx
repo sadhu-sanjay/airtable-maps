@@ -10,10 +10,12 @@ function MyMap({
   records,
   handleZoom,
   onMarkerClick,
+  selectedRecord,
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
   onMarkerClick: (record: Record) => void;
+  selectedRecord?: Record;
 }) {
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -178,17 +180,15 @@ function MyMap({
   }, [handleZoom, records]);
   // SET UP LISTENER FOR ZOOM CHANGED
 
-  // useEffect(() => {
-  //   if (selectedRecord && mapRef.current) {
-  //     const { lat, lng } = selectedRecord.fields;
-  //     if (!lat || !lng) {
-  //       return alert("No coordinates found for this record");
-  //     }
-  //     setTimeout(() => {
-  //       mapRef.current?.panTo({ lat, lng });
-  //     }, 0);
-  //   }
-  // }, [selectedRecord]);
+  useEffect(() => {
+    if (selectedRecord && mapRef.current) {
+      // find the selected marker in the map 
+      const marker = record_to_marker_map.current.get(selectedRecord)
+      if (!marker) return
+      mapRef.current.panTo(marker?.position!) 
+      marker.element.classList.add("animate-bounce")
+    }
+  }, [selectedRecord]);
 
   return <div ref={divRef} className="h-full w-full" />;
 }

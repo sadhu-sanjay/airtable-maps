@@ -1,10 +1,4 @@
-
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  memo
-} from "react";
+import React, { useCallback, useEffect, useState, memo } from "react";
 import Image from "next/image";
 import { Record } from "~/app/components/types";
 import CloseButton from "../resources/svg/close-button";
@@ -27,6 +21,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 }) => {
   const [record, setRecord] = useState<Record>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   function getDate(date: string) {
     return new Date(date).toLocaleDateString("en-US", {
@@ -79,19 +74,38 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     };
   }, [cleanRecord, getRecord, recordId]);
 
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (isFullScreen) setIsFullScreen(false);
+        else onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFullScreen, onClose]);
 
   return (
     <>
       <div
         className={`
-        absolute left-0 top-0 z-40 h-full sm:min-w-[320px] w-full
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        ${isFullScreen ? "w-full flex-row h-full" : "sm:w-[30%] flex-col h-full"}
-        flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out transform`}
+        absolute right-0 top-0 z-40 h-full sm:min-w-[320px] w-full
+        ${isOpen ? "block" : "translate-x-full"}
+        ${
+          isFullScreen
+            ? "w-full flex-row-reverse h-full"
+            : "sm:w-[30%] flex-col h-full"
+        }
+        flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          classNames="absolute w-8 h-8 z-40 top-6 left-6"
+          classNames={`absolute w-8 h-8 z-40 top-6  ${
+            isFullScreen ? "right-6" : "left-6"
+          }`}
           onClick={onClose}
         />
 
@@ -99,7 +113,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           onClick={() => setIsFullScreen(!isFullScreen)}
           className={` img-container  
           ${isFullScreen ? "w-8/12 h-full" : "h-1/3 w-full shadow-lg"}
- duration-500 ease-in-out transition-all transform
           `}
         >
           {record?.fields?.Image?.length === 0 ? (
@@ -112,12 +125,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
             />
           )}
         </div>
-        {/* List container */}
         <div
           className={`
           ${isFullScreen ? "w-4/12 h-full " : "h-2/3 w-full"}
           flex flex-col space-y-6 justify-start p-8 overflow-auto`}
-          style={{ scrollbarWidth: "none" }}
+          style={{ scrollbarWidth: "thin" }}
         >
           {isLoading ? (
             <CardPlaceHolder />
@@ -174,4 +186,4 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   );
 };
 
-export default memo(PlaceDetailModal)
+export default memo(PlaceDetailModal);
