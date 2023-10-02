@@ -46,7 +46,6 @@ export default function useRecords() {
           localRecords.push(...newRecords);
 
           if (localRecords.length > 2000) {
-            
             updateState(localRecords.slice(1500, 2000));
             break;
             updateState(localRecords);
@@ -78,6 +77,7 @@ export default function useRecords() {
 
     return () => {
       abortController.abort();
+      setRecords([]);
     };
   }, [fetchRecords]);
 

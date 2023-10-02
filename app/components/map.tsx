@@ -182,15 +182,15 @@ function MyMap({
 
   useEffect(() => {
     if (selectedRecord && mapRef.current) {
-      // find the selected marker in the map 
-      const marker = record_to_marker_map.current.get(selectedRecord)
-      if (!marker) return
-      mapRef.current.panTo(marker?.position!) 
-      marker.element.classList.add("animate-bounce")
+      const marker = record_to_marker_map.current.get(selectedRecord);
+      if (!marker?.position) return;
+
+      mapRef.current.panTo(marker.position);
+      mapRef.current.setZoom(3);
     }
   }, [selectedRecord]);
 
-  return <div ref={divRef} className="h-full w-full" />;
+  return <div ref={divRef} className="h-full w-full " />;
 }
 
 export default memo(MyMap);
@@ -205,7 +205,7 @@ function MyMarker({ record, onMarkerClick }: MyMarkerProps) {
 
   const markerElement = document.createElement("div");
   markerElement.innerText = record.fields.Title;
-  markerElement.className = "price-tag";
+  markerElement.className = "marker";
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },

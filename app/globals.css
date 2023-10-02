@@ -34,30 +34,13 @@ body {
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
-.price-tag {
+.marker {
   background-color: #db2777;
   border-radius: 8px;
-  transition: transform 0.1s ease-in-out;
+  /* transition: transform 0.1s ease-in-out; */
   color: #FFFFFF;
   padding: 4px 12px;
   position: relative;
   border: 1px solid white;
   /* box-shadow: 0 2px 6px rgba(0,0,0,.3); */
-}
-
-.price-tag:hover {
-  transform: scale(1.03);
-}
-
-.price-tag::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #db2777;
 }

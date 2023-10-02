@@ -93,12 +93,12 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     <>
       <div
         className={`
-        absolute right-0 top-0 z-40 h-full sm:min-w-[320px] w-full
-        ${isOpen ? "block" : "translate-x-full"}
+        absolute left-0 top-0 z-40 h-full sm:min-w-[320px] w-full
+        ${isOpen ? "block" : "-translate-x-full"}
         ${
           isFullScreen
             ? "w-full flex-row-reverse h-full"
-            : "sm:w-[30%] flex-col h-full"
+            : "sm:w-1/4 flex-col h-full"
         }
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
