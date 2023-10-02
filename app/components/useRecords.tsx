@@ -27,9 +27,9 @@ export default function useRecords() {
         const { done, value } = await reader.read();
         console.log("READ");
         if (done) {
-          setIsLoadingRecords(false);
           updateState(localRecords);
           localRecords = [];
+          setIsLoadingRecords(false);
           break;
         }
 
@@ -46,8 +46,8 @@ export default function useRecords() {
           localRecords.push(...newRecords);
 
           if (localRecords.length > 2000) {
-            updateState(localRecords.slice(1500, 2000));
-            break;
+            // updateState(localRecords.slice(1500, 2000));
+            // break;
             updateState(localRecords);
             localRecords = [];
             // setIsLoadingRecords(false);

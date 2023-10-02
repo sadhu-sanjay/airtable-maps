@@ -189,7 +189,7 @@ function MyMap({
       marker.element.classList.add("marker-selected");
       setTimeout(() => {
         marker.element.classList.remove("marker-selected");
-      }, 2000);
+      }, 1000);
     }
   }, [selectedRecord]);
 
