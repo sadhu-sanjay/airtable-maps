@@ -186,10 +186,10 @@ function MyMap({
       if (!marker?.position) return;
 
       mapRef.current.panTo(marker.position);
-
-      if (mapRef.current.getZoom() && mapRef.current.getZoom()! < 3) {
-        mapRef.current.setZoom(3);
-      }
+      marker.element.classList.add("marker-selected");
+      setTimeout(() => {
+        marker.element.classList.remove("marker-selected");
+      }, 2000);
     }
   }, [selectedRecord]);
 
