@@ -186,7 +186,10 @@ function MyMap({
       if (!marker?.position) return;
 
       mapRef.current.panTo(marker.position);
-      mapRef.current.setZoom(3);
+
+      if (mapRef.current.getZoom() && mapRef.current.getZoom()! < 3) {
+        mapRef.current.setZoom(3);
+      }
     }
   }, [selectedRecord]);
 
