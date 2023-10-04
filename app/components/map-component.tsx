@@ -139,7 +139,7 @@ export default function Home() {
             handleZoom={handleZoom}
             records={mapRecords}
             onMarkerClick={onRecordSelected}
-            selectedRecord={selectedRecord}
+            // selectedRecord={selectedRecord}
           />
         );
     }
