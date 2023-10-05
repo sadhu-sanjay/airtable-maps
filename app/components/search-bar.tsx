@@ -45,7 +45,7 @@ export function SearchBar({
           id="default-search"
           value={searchValue}
           className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-4pixel bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search Anything..use spaces"
+          placeholder="Eg. Safari Africa, Lakes Canada"
           onChange={(event) => {
             setSearchValue(event.target.value);
             handleSearchChange(event);
@@ -64,12 +64,12 @@ export function SearchBar({
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
