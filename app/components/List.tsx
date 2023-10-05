@@ -22,14 +22,14 @@ function MyList({
         key={record.id}
         onClick={() => onRecordSelect(record)}
         style={style}
-        className="border-b p-1.5 sm:p-2 hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
+        className=" border-b p-1.5 sm:p-2 hover:scale-105 transition-transform ease-in-out 0.5s cursor-pointer"
       >
-        <div className="flex space-x-2">
+        <div className=" flex space-x-2">
           <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
             <strong>{index + 1 }</strong>
           </p>
-          <div className="flex flex-col items-start space-x-4">
-            <div className="flex-1 min-w-0">
+          <div className=" flex flex-col items-start space-x-4">
+            <div className=" w-64 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
               <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
                 <strong>{record.fields.Title}</strong>
               </p>
@@ -72,11 +72,10 @@ function MyList({
         <>
           <List
             height={screen.height}
-            width={asideRef.current?.style.width!}
+            width={asideRef.current?.style.width ?? (80 * 4)}
             itemCount={records.length}
             itemSize={60} // adjust this according to your needs
-            style={{ scrollbarWidth: "none" }}
-            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
+            className="list-none overflow-auto  divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
           >
             {Row}
           </List>
