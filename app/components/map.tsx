@@ -10,8 +10,8 @@ function MyMap({
   records,
   handleZoom,
   onMarkerClick,
-  // selectedRecord,
-}: {
+}: // selectedRecord,
+{
   records?: Record[];
   handleZoom: (record: Record[]) => void;
   onMarkerClick: (record: Record) => void;
@@ -74,12 +74,7 @@ function MyMap({
         mapRef.current?.setZoom(13);
       }
     }, 0);
-    // update UI
 
-    return () => {
-      markersToAdd.length = 0;
-      markersToRemove.length = 0;
-    };
   }, [onMarkerClick, records, updateBounds]);
   /**
    * SETUP MARKERS END
