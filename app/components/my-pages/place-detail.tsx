@@ -95,11 +95,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         className={`
         absolute left-0 top-0 z-40 h-full sm:min-w-[320px] w-full
         ${isOpen ? "block" : "-translate-x-full"}
-        ${
-          isFullScreen
-            ? "w-full flex-row h-full"
-            : "sm:w-1/4 flex-col h-full"
-        }
+        ${isFullScreen ? "w-full flex-row h-full" : "sm:w-1/4 flex-col h-full"}
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
@@ -148,7 +144,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       (Array.isArray(value) &&
                         value.every((v) => typeof v === "string"))
                     ) {
-                      // const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+                      if (key === "Title") return null;
                       return (
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
