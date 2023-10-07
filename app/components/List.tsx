@@ -75,7 +75,8 @@ function MyList({
             width={asideRef.current?.style.width ?? (80 * 4)}
             itemCount={records.length}
             itemSize={60} // adjust this according to your needs
-            className="list-none overflow-auto  divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden"
+            style={{ overflowX: "hidden"} }
+            className=" list-none divide-y divide-gray-200 dark:divide-gray-700 "
           >
             {Row}
           </List>
