@@ -93,9 +93,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     <>
       <div
         className={`
-        absolute left-0 top-0 z-40 h-full sm:min-w-[320px] w-full
+        fixed left-0 top-0 z-40 h-full sm:min-w-[320px] w-full
         ${isOpen ? "block" : "-translate-x-full"}
-        ${isFullScreen ? "w-full flex-row h-full" : "sm:w-1/4 flex-col h-full"}
+        ${isFullScreen ? "w-full flex-row sm:w-full" : "sm:w-1/4 flex-col "}
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
@@ -109,8 +109,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
         <div
           onClick={() => setIsFullScreen(!isFullScreen)}
-          className={` img-container  
-          ${isFullScreen ? "w-8/12 h-full" : "h-1/3 w-full shadow-lg"}
+          className={` img-container
+          ${isFullScreen ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full" : "w-full h-1/2 lg:h-1/3 shadow-lg"}
+          transition-all duration-300 ease-in-out
           `}
         >
           {record?.fields?.Image?.length === 0 ? (
@@ -124,10 +125,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           )}
         </div>
         <div
-          className={`
-          ${isFullScreen ? "w-4/12 h-full " : "h-2/3 w-full"}
-          flex flex-col space-y-6 justify-start p-8 overflow-auto`}
-          style={{ scrollbarWidth: "thin" }}
+          className={`fixed 
+          ${
+            isFullScreen
+              ? "w-4/12 h-full right-0 "
+              : "left-0 bottom-0 h-2/3 w-full sm:w-1/3 lg:w-1/4 top-1/3"
+          }
+          flex flex-col space-y-6 justify-start p-8 overflow-auto hide-scrollbar
+          `}
         >
           {isLoading ? (
             <CardPlaceHolder />
