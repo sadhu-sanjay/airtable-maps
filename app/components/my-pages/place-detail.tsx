@@ -102,15 +102,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           classNames={`absolute w-10 h-10 z-40 top-6  ${
             isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8"
           }
-          transition-all duration-300 ease-in-out 
-          `}
+          transition-all duration-300 ease-in-out `}
           onClick={onClose}
         />
 
         <div
           onClick={() => setIsFullScreen(!isFullScreen)}
           className={` img-container
-          ${isFullScreen ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full" : "w-full h-1/2 lg:h-1/3 shadow-lg"}
+          ${
+            isFullScreen
+              ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full"
+              : "w-full h-1/2 lg:h-1/3 shadow-lg"
+          }
           transition-all duration-300 ease-in-out
           `}
         >
@@ -125,11 +128,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           )}
         </div>
         <div
-          className={`fixed 
+          className={` 
           ${
             isFullScreen
-              ? "w-4/12 h-full right-0 "
-              : "left-0 bottom-0 h-2/3 w-full sm:w-1/3 lg:w-1/4 top-1/3"
+              ? " w-4/12 h-full right-0 "
+              : "left-0 bottom-0 h-2/3 w-full  top-1/3"
           }
           flex flex-col space-y-6 justify-start p-8 overflow-auto hide-scrollbar
           `}
