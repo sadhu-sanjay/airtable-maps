@@ -9,7 +9,7 @@ import { MAPS_API_KEY, REGIONS_FETCH_URL, TAGS_FETCH_URL } from "~/app/config";
 import MyList from "./List";
 import MyMap from "./map";
 import Dropdown from "./dropdown";
-import { SearchBar } from "./search-bar";
+import SearchBar from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
@@ -25,8 +25,6 @@ export default function Home() {
   const searchTerms = useRef<string[]>([]);
   const selectedRegions = useRef<string[]>([]);
   const selectedTags = useRef<string[]>([]);
-
-  console.log("HOME RENDER");
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -85,10 +83,8 @@ export default function Home() {
   }, [records, updateRecords]);
 
   const searchHandler = useCallback(
-    (searchEvent: React.ChangeEvent<HTMLInputElement>) => {
-      const value = searchEvent.target.value;
+    (value: string) => {
       searchTerms.current = value.split(" ");
-
       filterHandler();
     },
     [filterHandler]
@@ -136,9 +132,7 @@ export default function Home() {
       case Status.SUCCESS:
         return (
           <MyMap
-            handleZoom={handleZoom}
             records={mapRecords}
-            onMarkerClick={onRecordSelected}
             // selectedRecord={selectedRecord}
           />
         );
@@ -151,15 +145,14 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
-      
       <aside
         ref={asideRef}
         className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <SearchBar handleSearchChange={myDebounce(searchHandler, 500)} />
+          <SearchBar handleSearchChange={searchHandler} />
           <div className="flex justify-between align-middle">
-            <Dropdown
+            {/* <Dropdown
               label="Region"
               placeholder="Region"
               doneCallBack={regionHandler}
@@ -170,7 +163,7 @@ export default function Home() {
               placeholder="Tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
-            />
+            /> */}
           </div>
           <MyList
             asideRef={asideRef}

@@ -5,7 +5,10 @@ import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import CloseButton from "../resources/svg/close-button";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 
-const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images, isFullScreen }) => {
+const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
+  images,
+  isFullScreen,
+}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -18,7 +21,7 @@ const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images
       (currentImageIndex - 1 + images.length) % images.length
     );
   };
-  
+
   if (!images) return <ImagePlaceHolder />;
 
   return (
@@ -44,9 +47,9 @@ const ImageSlider: React.FC<{ images: any[], isFullScreen: boolean}> = ({ images
                       ? item.thumbnails?.full.url
                       : item.thumbnails?.large.url
                   }
-                  className={`absolute block w-full h-full ${
-                    isFullScreen ? "object-contain" : "object-contain"
-                  } -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
+                  className={`absolute block w-full h-full 
+                  ${isFullScreen ? "object-contain" : "object-cover"}
+                    -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
                   alt=""
                 />
               </div>

@@ -8,66 +8,60 @@ export default function useRecords() {
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
   console.log("USE RECORDS RENDER");
 
-  const updateState = (records: Array<Record>) => {
+  const updateState = useCallback((records: Array<Record>) => {
     setTimeout(() => {
       setRecords((prevRecords) => [...prevRecords, ...records]);
     }, 0);
-  };
-
-  const fetchRecords = useCallback(async (signal: AbortSignal) => {
-    try {
-      setIsLoadingRecords(true);
-      const res = await fetch(RECORDS_FETCH_URL, { signal });
-      // const res = await fetch("https://shicane-test.ey.r.appspot.com/api/records", { signal });
-      const reader = res.body!.getReader();
-      let buffer = "";
-      let localRecords: Array<Record> = [];
-
-      while (true) {
-        const { done, value } = await reader.read();
-        console.log("READ");
-        if (done) {
-          updateState(localRecords);
-          localRecords = [];
-          setIsLoadingRecords(false);
-          break;
-        }
-
-        try {
-          let recordsJson = new TextDecoder().decode(value);
-          buffer += recordsJson;
-
-          const recordsStringArray = buffer.split("\n");
-          buffer = recordsStringArray.pop() || ""; // last element might not be proper object so pull it out
-
-          const newRecords = recordsStringArray.map((record) => {
-            return JSON.parse(record);
-          });
-          localRecords.push(...newRecords);
-
-          if (localRecords.length > 2000) {
-            // updateState(localRecords.slice(1500, 2000));
-            // break;
-            updateState(localRecords);
-            localRecords = [];
-            // setIsLoadingRecords(false);
-          }
-        } catch (error: any) {
-          console.log("Error parsing JSON", error);
-          setRecordsError(error);
-          break;
-        }
-      }
-    } catch (error: any) {
-      setIsLoadingRecords(false);
-      if (error.name === "AbortError") {
-        console.log("Fetch aborted");
-      } else {
-        console.error("FETCHE FETCH Fetch Error: ", typeof error);
-        setRecordsError(error.message);
-      }
-    }
   }, []);
+
+  const fetchRecords = useCallback(
+    async (signal: AbortSignal) => {
+      try {
+        setIsLoadingRecords(true);
+        const res = await fetch(RECORDS_FETCH_URL, { signal });
+        const reader = res.body!.getReader();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          console.log("READ");
+
+          try {
+            if (done) {
+              setIsLoadingRecords(false);
+              break;
+            }
+
+            let recordsJson = new TextDecoder().decode(value);
+            buffer += recordsJson;
+
+            const recordsStringArray = buffer.split("\n");
+            buffer = recordsStringArray.pop() || ""; // last element might not be proper object so pull it out
+
+            const newRecords = recordsStringArray.map((record) =>
+              JSON.parse(record)
+            );
+
+            updateState(newRecords);
+
+          } catch (error: any) {
+            console.log("Error =>", error);
+            setRecordsError(error);
+            break;
+          }
+        }
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          console.error("FETCHE FETCH Fetch Error: ", typeof error);
+          setIsLoadingRecords(false);
+          setRecordsError(error.message);
+        }
+      }
+    },
+    [updateState]
+  );
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -78,6 +72,7 @@ export default function useRecords() {
     return () => {
       abortController.abort();
       setRecords([]);
+      console.log("CLEANUP USE RECORDS ");
     };
   }, [fetchRecords]);
 

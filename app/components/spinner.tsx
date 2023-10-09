@@ -1,7 +1,8 @@
+import React from "react";
+
 export function Spinner() {
   return (
     <>
-
       <div className=" w-full min-h-[86dvh] flex justify-center place-items-center ">
         <h3 className=" font-semibold text-gray-800 dark:text-gray-200 text-lg self-center absolute translate-y-full pt-2">
           Loading...
@@ -30,10 +31,22 @@ export function Spinner() {
   );
 }
 
-export function Spinner2() {
+export const SpinnerWithoutBackground = ({
+  className,
+}: {
+  className?: string;
+}) => {
   return (
     <>
-      <div className="h-full min-h-[86dvh] w-full flex justify-center place-items-center ">
+      <div
+        className={`${className} flex justify-center place-items-center `}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
         <div role="status">
           <svg
             aria-hidden="true"
@@ -51,12 +64,12 @@ export function Spinner2() {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
+          <span className="text-l font-semibold text-zinc-800 dark:text-zinc-200">Planting Markers..</span>
         </div>
       </div>
     </>
   );
-}
+};
 
 export function Spinner3() {
   return (
