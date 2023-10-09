@@ -99,9 +99,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          classNames={`absolute w-10 h-10 z-40 top-6  ${
-            isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8"
-          }
+          classNames={`absolute w-10 h-10 z-40 top-6  
+          ${ isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8" }
+          transition-all
           `}
           onClick={onClose}
         />
@@ -115,7 +115,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
               ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full"
               : "w-full h-1/2 lg:h-1/3 shadow-lg"
           }
-          transition-all duration-500 ease-in-out
+          transition-all duration-300 ease-in-out
           `}
         >
           {record?.fields?.Image?.length === 0 ? (
