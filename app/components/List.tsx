@@ -13,14 +13,14 @@ function MyList({
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
-  onRecordSelect: (record: Record) => void;
+  onRecordSelect: (recordId: string) => void;
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
     return (
       <li
         key={record.id}
-        onClick={() => onRecordSelect(record)}
+        onClick={() => onRecordSelect(record.id)}
         style={style}
         className=" border-b p-1.5 sm:p-2 hover:scale-105 transition-transform ease-in-out 0.5s cursor-pointer"
       >
