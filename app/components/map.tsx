@@ -91,9 +91,11 @@ function MyMap({
       map: mapRef.current,
       markers: [],
       algorithm: new SuperClusterViewportAlgorithm({
-        maxZoom: 16,
         viewportPadding: 10,
       }),
+      algorithmOptions: {
+        maxZoom: 15,
+      }
     });
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {

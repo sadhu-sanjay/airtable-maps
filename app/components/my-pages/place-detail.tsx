@@ -157,7 +157,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       return (
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                            {key} {" : "}&nbsp;&nbsp;
+                            {key === "Description" ? "" : `${key} : `}
                           </span>
                           <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                             {key === "Coordinates (lat, lng)" && (
