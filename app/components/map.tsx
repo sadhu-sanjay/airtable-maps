@@ -28,6 +28,8 @@ function MyMap({
   useEffect(() => {
     if (!flag || !records ) return;
 
+    console.log("RECORDS CHANGED");
+
     setIsLoading(true);
 
     const createMarker = async () => {

@@ -8,26 +8,22 @@ const SearchBar = ({
 }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  const debouncedFucntion = myDebounce(() => {
-    console.log("SEARCH VALUE", searchValue);
-    onValueChange(searchValue);
-  }, 1000);
+  // const debounedChange = myDebounce((value: string) => {
+  //   onValueChange(value);
+  // }, 1300);
 
-  useEffect(() => {
-    debouncedFucntion();
-  }, [debouncedFucntion, onValueChange, searchValue]);
+  // useEffect(() => {
+  //   debounedChange(searchValue);
+  // }, [debounedChange, searchValue]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onValueChange(searchValue);
   };
 
-  const deBounceSearchResult = myDebounce(() => {
-    setSearchValue(searchValue);
-  }, 500);
-
   return (
     <form onSubmit={onSubmit}>
+    {/* <form > */}
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -63,9 +59,13 @@ const SearchBar = ({
           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search anything ..."
           // required
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e) => {
+            let vl = e.target.value;
+            setSearchValue(vl);
+            // debounedChange(vl)
+          }}
         />
-        {/* <button
+        <button
           type="submit"
           className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full px-3 py-2 text-center
           text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
@@ -74,8 +74,8 @@ const SearchBar = ({
           dark:shadow-blue-800/80 font-medium text-sm "
         >
           search
-        </button> */}
-        {searchValue && (
+        </button>
+        {/* {searchValue && (
           <button
             type="button"
             className="primary-bg rounded-full absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center "
@@ -96,7 +96,7 @@ const SearchBar = ({
               />
             </svg>
           </button>
-        )}
+        )} */}
       </div>
     </form>
   );
