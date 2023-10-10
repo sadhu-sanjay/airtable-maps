@@ -49,7 +49,7 @@ body {
   background-color: #ffffff;
   border-radius: 8px;
   scale: 1.3;
-  box-shadow: 0 3px 6px rgba(0,0,0,.3);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
 }
 
 .marker:hover {
@@ -79,9 +79,6 @@ input[type="search"]::-webkit-search-results-decoration {
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* &::-webkit-scrollbar {
-    display: none;
-  } */
 }
 
 /* *::-webkit-scrollbar {
@@ -91,3 +88,13 @@ input[type="search"]::-webkit-search-results-decoration {
 /* *::-webkit-scrollbar-track {
   background: red;
 }  */
+
+@layer components {
+
+  .primary-bg {
+    @apply bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+    dark:bg-gradient-to-r dark:from-zinc-500 dark:via-zinc-600 dark:to-zinc-700
+    shadow-sm shadow-blue-500/50 dark:shadow-zinc-500/50;
+  }
+
+}

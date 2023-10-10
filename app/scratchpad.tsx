@@ -45,3 +45,18 @@
 // move creating markers to useMemo
 // move map configuration to outer object
 // only clear markers on dismount
+
+ // const simulateLoading = async () => {
+    //   return new Promise<void>((resolve) => {
+
+    //     setTimeout(() => {
+    //       return resolve();
+    //     }, 0);
+    //   });
+    // };
+
+    // setTimeout(() => {
+    //   simulateLoading().then(() => {
+    //     setIsLoading(false);
+    //   });
+    // }, 0);

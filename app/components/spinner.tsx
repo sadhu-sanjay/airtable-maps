@@ -39,7 +39,7 @@ export const SpinnerWithoutBackground = ({
   return (
     <>
       <div
-        className={`${className} flex justify-center place-items-center `}
+        className={`${className} py-2 px-4 font-medium text-sm rounded-sm primary-bg flex justify-center place-items-center `}
         style={{
           position: "absolute",
           top: "50%",
@@ -50,7 +50,7 @@ export const SpinnerWithoutBackground = ({
         <div role="status">
           <svg
             aria-hidden="true"
-            className="inline w-10 h-10 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="inline w-6 h-6 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,9 @@ export const SpinnerWithoutBackground = ({
               fill="currentFill"
             />
           </svg>
-          <span className="text-l font-semibold text-zinc-800 dark:text-zinc-200">Planting Markers..</span>
+          <span className="text-l font-semibold text-zinc-800 dark:text-zinc-200">
+            Planting Markers..
+          </span>
         </div>
       </div>
     </>

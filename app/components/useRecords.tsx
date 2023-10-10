@@ -52,9 +52,9 @@ export default function useRecords() {
         }
       } catch (error: any) {
         if (error.name === "AbortError") {
-          console.log("Fetch aborted");
+          console.log("Abort ERRor");
         } else {
-          console.error("FETCHE FETCH Fetch Error: ", typeof error);
+          console.error("Error: ", error);
           setIsLoadingRecords(false);
           setRecordsError(error.message);
         }

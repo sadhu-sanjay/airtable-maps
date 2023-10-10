@@ -17,7 +17,7 @@ import PlaceDetailModal from "./my-pages/place-detail";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
-  const [selectedRecord, setSelectedRecord] = useState<Record>();
+  const [selectedRecordId, setSelectedRecordId] = useState<string>();
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,9 +112,8 @@ export default function Home() {
     setListRecords(viewPortRecords);
   }, []);
 
-  const onRecordSelected = useCallback((record: Record) => {
-    console.log("Record Selected", record.id);
-    setSelectedRecord(record);
+  const onRecordSelected = useCallback((selectedId: string) => {
+    setSelectedRecordId(selectedId);
     setIsModalOpen(true);
   }, []);
 
@@ -132,8 +131,9 @@ export default function Home() {
       case Status.SUCCESS:
         return (
           <MyMap
+            handleZoom={handleZoom}
             records={mapRecords}
-            // selectedRecord={selectedRecord}
+            onRecordSelected={onRecordSelected}
           />
         );
     }
@@ -180,7 +180,7 @@ export default function Home() {
 
       <aside>
         <PlaceDetailModal
-          recordId={selectedRecord?.id ?? ""}
+          recordId={selectedRecordId ?? ""}
           onClose={closeDetail}
           isOpen={isModalOpen}
         />
