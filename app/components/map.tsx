@@ -25,11 +25,19 @@ function MyMap({
   const [flag, setFlag] = useState(false);
   const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
 
+  const updateBounds = () => {
+    const bounds = new google.maps.LatLngBounds();
+    // console.log("MARKERS", clusterRef.current!["markers"]);
+    for (const marker of clusterRef.current!["markers"]) {
+      bounds.extend(marker.position);
+    }
+    mapRef.current!.fitBounds(bounds);
+  };
+
   useEffect(() => {
-    if (!flag || !records ) return;
+    if (!flag || !records) return;
 
     console.log("RECORDS CHANGED");
-
     setIsLoading(true);
 
     const createMarker = async () => {
@@ -58,6 +66,7 @@ function MyMap({
       createMarker().then(() => {
         setTimeout(() => {
           setIsLoading(false);
+          updateBounds();
         }, 50);
       });
     }, 100);
