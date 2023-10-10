@@ -1,29 +1,30 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
+import { myDebounce } from "./utility/utilityFunctions";
 
 const SearchBar = ({
-  handleSearchChange,
+  onValueChange,
 }: {
-  handleSearchChange: (value: string) => void;
+  onValueChange: (value: string) => void;
 }) => {
+  const [searchValue, setSearchValue] = useState("");
 
-  // const onClearButtonClick = () => {
-  //   setSearchValue("");
-  //   handleSearchChange({
-  //     target: { value: "" },
-  //   } as React.ChangeEvent<HTMLInputElement>);
-  // };
+  const debouncedFucntion = myDebounce(() => {
+    console.log("SEARCH VALUE", searchValue);
+    onValueChange(searchValue);
+  }, 1000);
 
-  const onChange = (e: any) => {
-    const value = e.target.value;
-    setSearchValue(value);
-  };
+  useEffect(() => {
+    debouncedFucntion();
+  }, [debouncedFucntion, onValueChange, searchValue]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSearchChange(searchValue)
+    onValueChange(searchValue);
   };
 
-  const [searchValue, setSearchValue] = useState("");
+  const deBounceSearchResult = myDebounce(() => {
+    setSearchValue(searchValue);
+  }, 500);
 
   return (
     <form onSubmit={onSubmit}>
@@ -62,9 +63,9 @@ const SearchBar = ({
           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search anything ..."
           // required
-          onChange={onChange}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
-        <button
+        {/* <button
           type="submit"
           className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full px-3 py-2 text-center
           text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
@@ -73,12 +74,12 @@ const SearchBar = ({
           dark:shadow-blue-800/80 font-medium text-sm "
         >
           search
-        </button>
-        {/* {searchValue && (
+        </button> */}
+        {searchValue && (
           <button
             type="button"
-            className="rounded-full  m-2 bg-zinc-200 dark:bg-zinc-800 absolute inset-y-0 right-0 flex items-center pr-2 pl-1"
-            onClick={onClearButtonClick}
+            className="primary-bg rounded-full absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center "
+            onClick={() => setSearchValue("")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +87,7 @@ const SearchBar = ({
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="w-6 h-6 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              className="w-6 h-6 text-gray-200 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               <path
                 strokeLinecap="round"
@@ -95,10 +96,10 @@ const SearchBar = ({
               />
             </svg>
           </button>
-        )} */}
+        )}
       </div>
     </form>
   );
-}
+};
 
 export default memo(SearchBar);

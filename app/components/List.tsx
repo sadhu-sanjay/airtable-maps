@@ -22,7 +22,7 @@ function MyList({
         key={record.id}
         onClick={() => onRecordSelect(record.id)}
         style={style}
-        className=" border-b p-1.5 sm:p-2 hover:scale-105 transition-transform ease-in-out 0.5s cursor-pointer"
+        className=" border-b p-1.5 sm:p-1 hover:scale-105 transition-transform ease-in-out 0.5s cursor-pointer"
       >
         <div className=" flex space-x-2">
           <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
@@ -30,13 +30,13 @@ function MyList({
           </p>
           <div className=" flex flex-col items-start space-x-4">
             <div className=" w-64 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
+              <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white truncate" >
                 <strong>{record.fields.Title}</strong>
               </p>
-              <p className="text-xs text-gray-600 truncate dark:text-gray-400">
+              <p className=" truncate text-xs leading-5 text-gray-500 dark:text-gray-300">
                 {record.fields.Tags ? record.fields.Tags.join(", ") : ""}
               </p>
-              <p className=" text-xs text-gray-700 font-medium truncate dark:text-gray-400">
+              <p className=" truncate text-xs leading-5 font-medium text-gray-500 dark:text-gray-300">
                 {record.fields.Region ? record.fields.Region.join(", ") : ""}
               </p>{" "}
             </div>
@@ -72,10 +72,10 @@ function MyList({
         <>
           <List
             height={screen.height}
-            width={asideRef.current?.style.width ?? (80 * 4)}
+            width={asideRef.current?.style.width ?? 80 * 4}
             itemCount={records.length}
-            itemSize={60} // adjust this according to your needs
-            style={{ overflowX: "hidden"} }
+            itemSize={75} // adjust this according to your needs
+            style={{ overflowX: "hidden" }}
             className=" list-none divide-y divide-gray-200 dark:divide-gray-700 "
           >
             {Row}
@@ -96,4 +96,4 @@ function MyList({
   );
 }
 
-export default memo(MyList)
+export default memo(MyList);

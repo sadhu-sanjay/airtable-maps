@@ -39,7 +39,7 @@ export const SpinnerWithoutBackground = ({
   return (
     <>
       <div
-        className={`${className} py-2 px-4 font-medium text-sm rounded-sm primary-bg flex justify-center place-items-center `}
+        className={`${className} py-2 px-4 font-medium text-sm rounded-sm  lex justify-center place-items-center `}
         style={{
           position: "absolute",
           top: "50%",
