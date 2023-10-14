@@ -84,17 +84,7 @@ export default function useRecords() {
   /**
    * Handle RealTime Events
    */
-  const deleteRecords = useCallback(
-    (recordsIDs: string[]) => {
-      const newRecords = records.filter((r) => !recordsIDs.includes(r.id));
-      setRecords(newRecords);
-    },
-    [records]
-  );
-
   useEffect(() => {
-    console.log("EVENT EFFECT TRIGGER");
-
     const eventSource = new EventSource(AIRTABLE_EVENTS_URL);
 
     eventSource.onopen = (event) => {
@@ -104,7 +94,8 @@ export default function useRecords() {
     eventSource.addEventListener("delete", (e) => {
       console.log("DELETE EVENT TRIGGERED", e.data);
       const recordsIDs = JSON.parse(e.data);
-      deleteRecords(recordsIDs);
+      const newRecords = records.filter((r) => !recordsIDs.includes(r.id));
+      setRecords(newRecords);
     });
 
     eventSource.onerror = (event) => {
@@ -115,7 +106,7 @@ export default function useRecords() {
     return () => {
       eventSource.close();
     };
-  }, [deleteRecords]);
+  }, [records]);
 
   return { recordsError, isLoadingRecords, records };
 }
