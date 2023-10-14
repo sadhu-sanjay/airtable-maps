@@ -12,6 +12,7 @@ const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 export async function fetchRecord( signal: AbortSignal, recordId?: string) {
 
   const finalUrl = `${baseUrl}/${baseId}/${tableName}/${recordId}`;
+  console.log("finalUrl: " + finalUrl);
   const res = await fetch(finalUrl, {
     signal,
     method: "GET",

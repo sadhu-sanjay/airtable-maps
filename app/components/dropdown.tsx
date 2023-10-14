@@ -29,7 +29,7 @@ function Dropdown({
     fetch(fetchUrl, { signal })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Fetched Regions==>", data);
+        console.log(`Fetched ${label}==>`, data);
         setItems(data);
         setIsLoading(false);
       })
@@ -44,7 +44,7 @@ function Dropdown({
     return () => {
       abortController.abort();
     };
-  }, [fetchUrl]);
+  }, [fetchUrl, label]);
 
   const handleSelected = (item: string) => {
     setSelectedItems((prevItems) =>

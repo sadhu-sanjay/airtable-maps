@@ -23,6 +23,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
+  // useEffect(() => {
+  //   const description = "This is a map showing the location of various places.";
+  //   if (!record?.fields?.Description) return;
+  //   const speech = new SpeechSynthesisUtterance(record?.fields.Description);
+  //   window.speechSynthesis.speak(speech);
+
+  //   return () => {
+  //     console.log("Cancelling speech");
+  //     window.speechSynthesis.cancel();
+  //   };
+  // }, [record]);
+
   function getDate(date: string) {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -100,7 +112,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       >
         <CloseButton
           classNames={`absolute w-10 h-10 z-40 top-6  
-          ${ isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8" }
+          ${isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8"}
           transition-all
           `}
           onClick={onClose}

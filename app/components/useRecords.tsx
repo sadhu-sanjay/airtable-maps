@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Record } from "~/app/components/types";
-import { RECORDS_FETCH_URL } from "~/app/config";
+import { RECORDS_FETCH_URL, AIRTABLE_EVENTS_URL } from "~/app/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
@@ -36,14 +36,19 @@ export default function useRecords() {
             buffer += recordsJson;
 
             const recordsStringArray = buffer.split("\n");
-            buffer = recordsStringArray.pop() || ""; // last element might not be proper object so pull it out
+            const lastRecord =
+              recordsStringArray[recordsStringArray.length - 1];
+            try {
+              JSON.parse(lastRecord);
+            } catch (error) {
+              buffer = recordsStringArray.pop() || "";
+            }
 
             const newRecords = recordsStringArray.map((record) =>
               JSON.parse(record)
             );
 
             updateState(newRecords);
-
           } catch (error: any) {
             console.log("Error =>", error);
             setRecordsError(error);
@@ -75,6 +80,42 @@ export default function useRecords() {
       console.log("CLEANUP USE RECORDS ");
     };
   }, [fetchRecords]);
+
+  /**
+   * Handle RealTime Events
+   */
+  const deleteRecords = useCallback(
+    (recordsIDs: string[]) => {
+      const newRecords = records.filter((r) => !recordsIDs.includes(r.id));
+      setRecords(newRecords);
+    },
+    [records]
+  );
+
+  useEffect(() => {
+    console.log("EVENT EFFECT TRIGGER");
+
+    const eventSource = new EventSource(AIRTABLE_EVENTS_URL);
+
+    eventSource.onopen = (event) => {
+      console.log("EVENT SOURCE OPEN", event);
+    };
+
+    eventSource.addEventListener("delete", (e) => {
+      console.log("DELETE EVENT TRIGGERED", e.data);
+      const recordsIDs = JSON.parse(e.data);
+      deleteRecords(recordsIDs);
+    });
+
+    eventSource.onerror = (event) => {
+      console.log("EVENT SOURCE ERROR", event);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [deleteRecords]);
 
   return { recordsError, isLoadingRecords, records };
 }

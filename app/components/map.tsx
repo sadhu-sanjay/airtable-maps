@@ -29,6 +29,8 @@ function MyMap({
     const bounds = new google.maps.LatLngBounds();
     // console.log("MARKERS", clusterRef.current!["markers"]);
     for (const marker of clusterRef.current!["markers"]) {
+
+      // @ts-ignore
       bounds.extend(marker.position);
     }
     mapRef.current!.fitBounds(bounds);
@@ -93,9 +95,6 @@ function MyMap({
       algorithm: new SuperClusterViewportAlgorithm({
         viewportPadding: 10,
       }),
-      algorithmOptions: {
-        maxZoom: 15,
-      }
     });
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {

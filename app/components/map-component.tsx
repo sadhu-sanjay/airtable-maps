@@ -152,7 +152,7 @@ export default function Home() {
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar onValueChange={searchHandler} />
           <div className="flex justify-between align-middle">
-            <Dropdown
+            {/* <Dropdown
               label="Region"
               placeholder="Region"
               doneCallBack={regionHandler}
@@ -163,7 +163,7 @@ export default function Home() {
               placeholder="Tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
-            />
+            /> */}
           </div>
           <MyList
             asideRef={asideRef}

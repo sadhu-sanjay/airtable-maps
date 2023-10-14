@@ -6,6 +6,7 @@
     "dev": "next dev ",
     "build": "NODE_ENV=production next build",
     "start": "next start",
+    "serve": "npx serve@latest out", 
     "lint": "next lint",
     "deploy": "node_modules/.bin/firebase deploy --only hosting:airtable-maps"
   },
