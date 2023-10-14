@@ -174,7 +174,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className=" w-full h-1/2 sm:h-full  sm:w-8/12 lg:w-9/12 ">
+      <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
