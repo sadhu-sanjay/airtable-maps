@@ -93,9 +93,11 @@ export default function useRecords() {
 
     eventSource.addEventListener("delete", (e) => {
       console.log("DELETE EVENT TRIGGERED", e.data);
-      const recordsIDs = JSON.parse(e.data);
-      const newRecords = records.filter((r) => !recordsIDs.includes(r.id));
-      setRecords(newRecords);
+      const deletedRecordIds: string[] = JSON.parse(e.data);
+
+      setRecords((prevRecords) =>
+        prevRecords.filter((each) => !deletedRecordIds.includes(each.id))
+      );
     });
 
     eventSource.onerror = (event) => {
@@ -106,7 +108,7 @@ export default function useRecords() {
     return () => {
       eventSource.close();
     };
-  }, [records]);
+  }, []);
 
   return { recordsError, isLoadingRecords, records };
 }
