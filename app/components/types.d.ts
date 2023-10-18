@@ -3,7 +3,6 @@ export type Record = {
   constructor: (record: MyRecord) => void;
   id: string;
   fields: {
-    id: string;
     sNo: number;
     searchStr: string;
     lat: number;
@@ -31,7 +30,6 @@ export type Record = {
     "County / AAL2": string;
     RecommendedBy: string;
     Phone: string;
-    markerImage: string;
   }
 };
 

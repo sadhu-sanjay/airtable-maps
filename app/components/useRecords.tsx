@@ -84,31 +84,62 @@ export default function useRecords() {
   /**
    * Handle RealTime Events
    */
-  useEffect(() => {
-    const eventSource = new EventSource(AIRTABLE_EVENTS_URL);
+  // useEffect(() => {
+  //   const eventSource = new EventSource(AIRTABLE_EVENTS_URL);
 
-    eventSource.onopen = (event) => {
-      console.log("EVENT SOURCE OPEN", event);
-    };
+  //   eventSource.onopen = (event) => {
+  //     console.log("EVENT SOURCE OPEN", event);
+  //   };
 
-    eventSource.addEventListener("delete", (e) => {
-      console.log("DELETE EVENT TRIGGERED", e.data);
-      const deletedRecordIds: string[] = JSON.parse(e.data);
+  //   eventSource.addEventListener("add", (e) => {
+  //     console.log("ADD EVENT TRIGGERED", e.data);
+  //     const newRecords: Record[] = JSON.parse(e.data);
+  //     console.log("ADDED RECORDS", newRecords);
 
-      setRecords((prevRecords) =>
-        prevRecords.filter((each) => !deletedRecordIds.includes(each.id))
-      );
-    });
+  //     setRecords((prevRecords) => {
+  //       return [...prevRecords, ...newRecords];
+  //     });
+  //   });
 
-    eventSource.onerror = (event) => {
-      console.log("EVENT SOURCE ERROR", event);
-      eventSource.close();
-    };
+  //   eventSource.addEventListener("update", (e) => {
 
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+  //     console.log("UPDATE EVENT TRIGGERED", e.data);
+  //     const updatedRecords: Record[] = JSON.parse(e.data);
+  //     console.log("UPDATED RECORDS", updatedRecords);
+
+  //     setRecords((prevRecords) => {
+  //       const newRecords = prevRecords.map((each) => {
+  //         const updatedRecord = updatedRecords.find(
+  //           (record) => record.id === each.id
+  //         );
+  //         if (updatedRecord) {
+  //           return updatedRecord;
+  //         } else {
+  //           return each;
+  //         }
+  //       });
+  //       return newRecords;
+  //     });
+  //   })
+
+
+  //   eventSource.addEventListener("delete", (e) => {
+  //     console.log("DELETE EVENT TRIGGERED", e.data);
+  //     const deletedRecordIds: string[] = JSON.parse(e.data);
+  //     setRecords((prevRecords) =>
+  //       prevRecords.filter((each) => !deletedRecordIds.includes(each.id))
+  //     );
+  //   });
+
+  //   eventSource.onerror = (event) => {
+  //     console.log("EVENT SOURCE ERROR", event);
+  //     eventSource.close();
+  //   };
+
+  //   return () => {
+  //     eventSource.close();
+  //   };
+  // }, []);
 
   return { recordsError, isLoadingRecords, records };
 }
