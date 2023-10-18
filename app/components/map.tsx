@@ -59,7 +59,8 @@ function MyMap({
             const fileName = record.fields.Title.replace(/\s/g, "")
               .toLowerCase()
               .replace(/[^a-zA-Z ]/g, "");
-            const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
+            // const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
+            const imgUrl = SERVER_URL + '/images' + "/" + "cuba" + ".jpeg";
             imgDiv.src = imgUrl;
 
             markerDiv.innerHTML = record.fields.Title;

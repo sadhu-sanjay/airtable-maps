@@ -40,7 +40,7 @@ body {
   /* width: 200px; */
   /* height: 34px; */
   /* transition: transform 0.1s ease-in-out; */
-  max-width: 150px;
+  max-width: 170px;
   max-height: 34px;
   color: gray;
   position: relative;
@@ -50,8 +50,8 @@ body {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-between;
-  gap: 2px;
+  justify-content: space-around;
+  gap: 4px;
   padding: 3px 4px;
 }
 
