@@ -5,6 +5,7 @@ import {
 import { memo, use, useEffect, useRef, useState } from "react";
 import { Record } from "~/app/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
+import { SERVER_URL } from "../config";
 const zoom_out_img = "/zoom-out-area.png";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
@@ -27,9 +28,7 @@ function MyMap({
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
-    // console.log("MARKERS", clusterRef.current!["markers"]);
     for (const marker of clusterRef.current!["markers"]) {
-
       // @ts-ignore
       bounds.extend(marker.position);
     }
@@ -51,8 +50,24 @@ function MyMap({
           if (marker) {
             newMarkers.push(marker);
           } else {
+            
+            const markerDiv = document.createElement("div");
+            markerDiv.classList.add("marker");
+            const imgDiv = document.createElement("img");
+            imgDiv.classList.add("marker-img");
+
+            const fileName = record.fields.Title.replace(/\s/g, "")
+              .toLowerCase()
+              .replace(/[^a-zA-Z ]/g, "");
+            const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
+            imgDiv.src = imgUrl;
+
+            markerDiv.innerHTML = record.fields.Title;
+            markerDiv.appendChild(imgDiv);
+
             const marker = new window.google.maps.marker.AdvancedMarkerElement({
               position: { lat: record.fields.lat, lng: record.fields.lng },
+              content: markerDiv,
             });
             markerMap.current.set(record.id, marker);
             newMarkers.push(marker);

@@ -9,7 +9,8 @@ dotenv.config({
 const nextConfig = {
   output: 'export',
   images: {
-    // domains: ['images.unsplash.com', 'source.unsplash.com'],
+    // load images from localhost:8080/images/
+    domains: ['localhost'],
   },
 }
 
