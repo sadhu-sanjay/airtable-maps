@@ -35,17 +35,18 @@ body {
 }
 
 .marker {
-  background-color: #ffffff;
+  background-color: #e3e3e3;
   border-radius: 25px;
-  /* width: 200px; */
-  /* height: 34px; */
+  /* width: 2000px;
+  height: 340px; */
   /* transition: transform 0.1s ease-in-out; */
   max-width: 170px;
   max-height: 34px;
-  color: gray;
+  color: rgb(33, 33, 33);
+  font-size: 12px;
   position: relative;
-  /* border: 1px solid lightslategray; */
-  /* add shadow */
+  /* border: 1px solid blue; */
+  border: 2px solid rgb(255, 255, 255);
   box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
   display: flex;
   flex-direction: row-reverse;

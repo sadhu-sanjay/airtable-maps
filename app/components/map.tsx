@@ -59,11 +59,11 @@ function MyMap({
             const fileName = record.fields.Title.replace(/\s/g, "")
               .toLowerCase()
               .replace(/[^a-zA-Z ]/g, "");
-            // const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
-            const imgUrl = SERVER_URL + '/images' + "/" + "cuba" + ".jpeg";
+            const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
+            // const imgUrl = SERVER_URL + '/images' + "/" + "cuba" + ".jpeg";
             imgDiv.src = imgUrl;
 
-            markerDiv.innerHTML = record.fields.Title;
+            markerDiv.innerText = record.fields.Title;
             markerDiv.appendChild(imgDiv);
 
             const marker = new window.google.maps.marker.AdvancedMarkerElement({
