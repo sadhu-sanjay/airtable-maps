@@ -35,18 +35,19 @@ body {
 }
 
 .marker {
-  background-color: #e8e8e8;
+  background-color: #eeeeee;
   border-radius: 25px;
   /* width: 2000px;
   height: 340px; */
   /* transition: transform 0.1s ease-in-out; */
   max-width: 170px;
   max-height: 34px;
-  color: rgb(33, 33, 33);
+  /* color: rgb(33, 33, 33); */
   font-size: 12px;
   position: relative;
   /* border: 1px solid blue; */
   border: 2px solid rgb(255, 255, 255);
+  /* border-style: */
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
   display: flex;
   flex-direction: row-reverse;
@@ -57,11 +58,11 @@ body {
 }
 
 .marker-img {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgb(255, 255, 255);
+  border: 2px solid rgb(255, 255, 255);
 }
 
 
@@ -113,9 +114,7 @@ input[type="search"]::-webkit-search-results-decoration {
 @layer components {
 
   .primary-bg {
-    @apply bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
-    dark:bg-gradient-to-r dark:from-zinc-500 dark:via-zinc-600 dark:to-zinc-700
-    shadow-sm shadow-blue-500/50 dark:shadow-zinc-500/50;
+    @apply bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:bg-gradient-to-r dark:from-zinc-500 dark:via-zinc-600 dark:to-zinc-700 shadow-sm shadow-blue-500/50 dark:shadow-zinc-500/50;
   }
 
 }
