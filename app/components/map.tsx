@@ -55,6 +55,7 @@ function MyMap({
             markerDiv.classList.add("marker");
             const imgDiv = document.createElement("img");
             imgDiv.classList.add("marker-img");
+            
 
             const fileName = record.fields.Title.replace(/\s/g, "")
               .toLowerCase()
