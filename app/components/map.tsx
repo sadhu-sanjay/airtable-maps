@@ -1,5 +1,6 @@
 import {
   MarkerClusterer,
+  SuperClusterAlgorithm,
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { memo, use, useEffect, useRef, useState } from "react";
@@ -50,26 +51,7 @@ function MyMap({
           if (marker) {
             newMarkers.push(marker);
           } else {
-            
-            const markerDiv = document.createElement("div");
-            markerDiv.classList.add("marker");
-            const imgDiv = document.createElement("img");
-            imgDiv.classList.add("marker-img");
-
-            const fileName = record.fields.Title.replace(/\s/g, "")
-              .toLowerCase()
-              .replace(/[^a-zA-Z ]/g, "");
-            const imgUrl = SERVER_URL + '/images' + "/" + fileName + ".jpeg";
-            // const imgUrl = SERVER_URL + '/images' + "/" + "cuba" + ".jpeg";
-            imgDiv.src = imgUrl;
-
-            markerDiv.innerText = record.fields.Title;
-            markerDiv.appendChild(imgDiv);
-
-            const marker = new window.google.maps.marker.AdvancedMarkerElement({
-              position: { lat: record.fields.lat, lng: record.fields.lng },
-              content: markerDiv,
-            });
+            const marker = Marker(record);
             markerMap.current.set(record.id, marker);
             newMarkers.push(marker);
           }
@@ -99,7 +81,7 @@ function MyMap({
     mapRef.current = new window.google.maps.Map(divRef.current, {
       center: { lat: 40.710553322002546, lng: -74.0085778809653 },
       zoom: 2,
-      minZoom: 2,
+      minZoom: 0,
       mapId: "eb7b69cef73330bc",
     });
 
@@ -109,8 +91,15 @@ function MyMap({
       map: mapRef.current,
       markers: [],
       algorithm: new SuperClusterViewportAlgorithm({
-        viewportPadding: 10,
+        maxZoom: 8,
+        viewportPadding: -20,
       }),
+    });
+
+    google.maps.event.addListener(mapRef.current!, "zoom_changed", () => {
+      // get current zoom
+      const zoom = mapRef.current!.getZoom();
+      console.log("ZOOM", zoom);
     });
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {
@@ -127,3 +116,61 @@ function MyMap({
 }
 
 export default memo(MyMap);
+
+function Marker(record: Record) {
+  const markerDiv = document.createElement("div");
+  markerDiv.classList.add("marker");
+
+  const imgDiv = document.createElement("img");
+  imgDiv.classList.add("marker-img");
+  imgDiv.src = markerImage(record.fields.Title);
+
+  markerDiv.innerText = record.fields.Title + " " + markerCategory(record.fields.Tags);
+  markerDiv.appendChild(imgDiv);
+
+  const marker = new window.google.maps.marker.AdvancedMarkerElement({
+    position: { lat: record.fields.lat, lng: record.fields.lng },
+    title: record.fields.Title,
+    content: markerDiv,
+  });
+  return marker;
+}
+
+function markerImage(title: string): string {
+  const fileName = title
+    .replace(/\s/g, "")
+    .toLowerCase()
+    .replace(/[^a-zA-Z ]/g, "");
+  const imgUrl = SERVER_URL + "/images" + "/" + fileName + ".jpeg";
+  return imgUrl;
+}
+
+function markerCategory(tags: string[]): string {
+  if (!tags) return "";
+  console.log("TAGS", tags.join(","));
+  if (tags.join(",").includes("Activities")) return "🏄";
+  if (tags.join(",").includes("Hotel")) return "🏨";
+  if (tags.join(",").includes("Swimming")) return "🏊";
+  if (tags.join(",").includes("ToTry")) return "🎯";
+  if (tags.join(",").includes("Art")) return "🎨";
+  if (tags.join(",").includes("Food")) return "🍔";
+  if (tags.join(",").includes("Hiking")) return "🥾";
+  if (tags.join(",").includes("Nature")) return "🌳";
+  if (tags.join(",").includes("Shopping")) return "🛍️";
+  if (tags.join(",").includes("Sightseeing")) return "🏛️";
+  if (tags.join(",").includes("Sports")) return "🏀";
+  if (tags.join(",").includes("Drive")) return "🚗";
+  if (tags.join(",").includes("Culture")) return "🎭";
+  if (tags.join(",").includes("History")) return "📜";
+  if (tags.join(",").includes("Relax")) return "🧘";
+  if (tags.join(",").includes("Beach")) return "🏖️";
+  if (tags.join(",").includes("Nightlife")) return "🍻";
+  if (tags.join(",").includes("Music")) return "🎵";
+  if (tags.join(",").includes("Architecture")) return "🏛️";
+  if (tags.join(",").includes("Museum")) return "🏛️";
+  if (tags.join(",").includes("Park")) return "🌳";
+  if (tags.join(",").includes("Zoo")) return "🐘";
+  if (tags.join(",").includes("Aquarium")) return "🐠";
+
+  return "";
+}
