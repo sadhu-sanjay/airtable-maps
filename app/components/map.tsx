@@ -68,9 +68,6 @@ function MyMap({
       });
     };
 
-    
-
-
     setTimeout(() => {
       createMarker().then(() => {
         setTimeout(() => {
@@ -83,7 +80,7 @@ function MyMap({
     return () => {
       clusterRef.current!.clearMarkers();
     };
-  }, [records, flag]);
+  }, [records, flag, onRecordSelected]);
 
   useEffect(() => {
     if (!divRef.current || mapRef.current) return; // return if container is not there or map is already initialized
