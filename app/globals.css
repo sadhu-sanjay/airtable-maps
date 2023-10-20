@@ -35,49 +35,50 @@ body {
 }
 
 .marker {
-  background-color: #f1f1f1;
-  border-radius: 25px;
-  /* transition: transform 0.1s ease-in-out; */
-  max-width: 170px;
-  max-height: 34px;
-  font-size: 12px;
+  border-radius: 18px;
+  max-height: 44px;
+  width: auto;
+  height: auto;
   position: relative;
-  border: 2px solid rgb(255, 255, 255);
-  /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: space-around;
-  gap: 3px;
-  /* padding: 2px 2px; */
+  background-color: white;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 25px;
 }
+
+.marker:hover {
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 3px 3px;
+  width: auto;
+  gap: 2px;
+  padding: 1px 3px;
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
+}
+
+.marker-title {
+  /* hide if there is not space for this entire view to fit */
+  display: none;
+}
+
+.marker:hover .marker-title {
+  display: inline;
+}
+
 
 .marker-img {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  /* background-color: #f1f1f1; */
-  /* border-style: double; */
-  /* object-fit: cover; */
-  border: 1px solid rgb(255, 255, 255);
+  object-fit: cover;
+  margin: 2px;
+
+  /* border: 2px solid rgb(255, 255, 255); */
   /* font-size: 24px; */
-  /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
 }
 
-
-/* .marker-selected {
-  transition: scale 0.1s ease-in-out;
-  background-color: #ffffff;
-  border-radius: 8px;
-  scale: 1.3;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
-} */
-
-/* .marker:hover {
-  transform: scale(1.03);
-} */
-
-.marker::after {
+/* .marker::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -87,8 +88,8 @@ body {
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid #ffffff;
-}
+  border-top: 8px solid #dfe8fd;
+} */
 
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,

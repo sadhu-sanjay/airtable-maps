@@ -81,7 +81,7 @@ function MyMap({
     mapRef.current = new window.google.maps.Map(divRef.current, {
       center: { lat: 40.710553322002546, lng: -74.0085778809653 },
       zoom: 2,
-      minZoom: 0,
+      minZoom: 1,
       mapId: "eb7b69cef73330bc",
     });
 
@@ -94,12 +94,6 @@ function MyMap({
         maxZoom: 8,
         viewportPadding: -20,
       }),
-    });
-
-    google.maps.event.addListener(mapRef.current!, "zoom_changed", () => {
-      // get current zoom
-      const zoom = mapRef.current!.getZoom();
-      console.log("ZOOM", zoom);
     });
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {
@@ -118,23 +112,30 @@ function MyMap({
 export default memo(MyMap);
 
 function Marker(record: Record) {
+  const title = record.fields.Title ?? "";
   const markerDiv = document.createElement("div");
   markerDiv.classList.add("marker");
 
   const imgDiv = document.createElement("img");
   imgDiv.classList.add("marker-img");
-  imgDiv.src = markerImage(record.fields.Title);
+  imgDiv.src = markerImage(title);
 
-  markerDiv.innerText = record.fields.Title + " " + markerCategory(record.fields.Tags);
+  // Create a new div for the title
+  const titleDiv = document.createElement("div");
+  titleDiv.classList.add("marker-title");
+  titleDiv.innerText = title + " " + markerCategory(record.fields.Tags);
+
   markerDiv.appendChild(imgDiv);
+  markerDiv.appendChild(titleDiv);  // Append the title div to the marker div
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
-    title: record.fields.Title,
     content: markerDiv,
   });
+
   return marker;
 }
+
 
 function markerImage(title: string): string {
   const fileName = title
@@ -146,31 +147,65 @@ function markerImage(title: string): string {
 }
 
 function markerCategory(tags: string[]): string {
+  
   if (!tags) return "";
-  console.log("TAGS", tags.join(","));
-  if (tags.join(",").includes("Activities")) return "🏄";
-  if (tags.join(",").includes("Hotel")) return "🏨";
-  if (tags.join(",").includes("Swimming")) return "🏊";
-  if (tags.join(",").includes("ToTry")) return "🎯";
-  if (tags.join(",").includes("Art")) return "🎨";
-  if (tags.join(",").includes("Food")) return "🍔";
-  if (tags.join(",").includes("Hiking")) return "🥾";
-  if (tags.join(",").includes("Nature")) return "🌳";
-  if (tags.join(",").includes("Shopping")) return "🛍️";
-  if (tags.join(",").includes("Sightseeing")) return "🏛️";
-  if (tags.join(",").includes("Sports")) return "🏀";
-  if (tags.join(",").includes("Drive")) return "🚗";
-  if (tags.join(",").includes("Culture")) return "🎭";
-  if (tags.join(",").includes("History")) return "📜";
-  if (tags.join(",").includes("Relax")) return "🧘";
-  if (tags.join(",").includes("Beach")) return "🏖️";
-  if (tags.join(",").includes("Nightlife")) return "🍻";
-  if (tags.join(",").includes("Music")) return "🎵";
-  if (tags.join(",").includes("Architecture")) return "🏛️";
-  if (tags.join(",").includes("Museum")) return "🏛️";
-  if (tags.join(",").includes("Park")) return "🌳";
-  if (tags.join(",").includes("Zoo")) return "🐘";
-  if (tags.join(",").includes("Aquarium")) return "🐠";
 
-  return "";
+  // turn array of tags into a string and remove whitespace and commas
+  const tagsString = tags.join(",").replace(/\s/g, "").replace(/,/g, "");
+
+  if (tagsString.includes("Camping")) {
+    return "🏕️";
+  } else if (tagsString.includes("Hotel")) {
+    return "🏨";
+  } else if (tagsString.includes("Swimming")) {
+    return "🏊";
+  } else if (tagsString.includes("ToTry")) {
+    return "🎯";
+  } else if (tagsString.includes("Art")) {
+    return "🎨";
+  } else if (tagsString.includes("Food")) {
+    return "🍔";
+  } else if (tagsString.includes("Hiking")) {
+    return "🥾";
+  } else if (tagsString.includes("Nature")) {
+    return "🌳";
+  } else if (tagsString.includes("Shopping")) {
+    return "🛍️";
+  } else if (tagsString.includes("Sightseeing")) {
+    return "🏛️";
+  } else if (tagsString.includes("Sports")) {
+    return "🏀";
+  } else if (tagsString.includes("Drive")) {
+    return "🚗";
+  } else if (tagsString.includes("Culture")) {
+    return "🎭";
+  } else if (tagsString.includes("History")) {
+    return "📜";
+  } else if (tagsString.includes("Relax")) {
+    return "🧘";
+  } else if (tagsString.includes("Beach")) {
+    return "🏖️";
+  } else if (tagsString.includes("Nightlife")) {
+    return "🍻";
+  } else if (tagsString.includes("Music")) {
+    return "🎵";
+  } else if (tagsString.includes("Architecture")) {
+    return "🏛️";
+  } else if (tagsString.includes("Museum")) {
+    return "🏛️";
+  } else if (tagsString.includes("Park")) {
+    return "🌳";
+  } else if (tagsString.includes("Zoo")) {
+    return "🐘";
+  } else if (tagsString.includes("Aquarium")) {
+    return "🐠";
+  } else if (tagsString.includes("Bar")) {
+    return "🍻";
+  } else if (tagsString.includes("Activities")) {
+    return "🏄";
+  } else if (tagsString.includes("Restaurant")) {
+    return "🍔";
+  } else {
+    return "🎲";
+  }
 }
