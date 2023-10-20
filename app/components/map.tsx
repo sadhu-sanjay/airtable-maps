@@ -52,6 +52,10 @@ function MyMap({
             newMarkers.push(marker);
           } else {
             const marker = Marker(record);
+            marker.addListener("click", () => {
+              onRecordSelected(record.id);
+            });
+
             markerMap.current.set(record.id, marker);
             newMarkers.push(marker);
           }
@@ -81,7 +85,7 @@ function MyMap({
     mapRef.current = new window.google.maps.Map(divRef.current, {
       center: { lat: 40.710553322002546, lng: -74.0085778809653 },
       zoom: 2,
-      minZoom: 1,
+      minZoom: 0,
       mapId: "eb7b69cef73330bc",
     });
 
@@ -147,65 +151,65 @@ function markerImage(title: string): string {
 }
 
 function markerCategory(tags: string[]): string {
-  
   if (!tags) return "";
 
   // turn array of tags into a string and remove whitespace and commas
   const tagsString = tags.join(",").replace(/\s/g, "").replace(/,/g, "");
+  switch (true) {
+    case tagsString.includes("Camping"):
+      return "🏕️";
+    case tagsString.includes("Hotel"):
+      return "🏨";
+    case tagsString.includes("Swimming"):
+      return "🏊";
+    case tagsString.includes("ToTry"):
+      return "🎯";
+    case tagsString.includes("Art"):
+      return "🎨";
+    case tagsString.includes("Food"):
+      return "🍔";
+    case tagsString.includes("Hiking"):
+      return "🥾";
+    case tagsString.includes("Nature"):
+      return "🌳";
+    case tagsString.includes("Shopping"):
+      return "🛍️";
+    case tagsString.includes("Sightseeing"):
+      return "🏛️";
+    case tagsString.includes("Sports"):
+      return "🏀";
+    case tagsString.includes("Drive"):
+      return "🚗";
+    case tagsString.includes("Culture"):
+      return "🎭";
+    case tagsString.includes("History"):
+      return "📜";
+    case tagsString.includes("Relax"):
+      return "🧘";
+    case tagsString.includes("Beach"):
+      return "🏖️";
+    case tagsString.includes("Nightlife"):
+      return "🍻";
+    case tagsString.includes("Music"):
+      return "🎵";
+    case tagsString.includes("Architecture"):
+      return "🏛️";
+    case tagsString.includes("Museum"):
+      return "🏛️";
+    case tagsString.includes("Park"):
+      return "🌳";
+    case tagsString.includes("Zoo"):
+      return "🐘";
+    case tagsString.includes("Aquarium"):
+      return "🐠";
+    case tagsString.includes("Bar"):
+      return "🍻";
+    case tagsString.includes("Activities"):
+      return "🏄";
+    case tagsString.includes("Restaurant"):
+      return "🍔";
 
-  if (tagsString.includes("Camping")) {
-    return "🏕️";
-  } else if (tagsString.includes("Hotel")) {
-    return "🏨";
-  } else if (tagsString.includes("Swimming")) {
-    return "🏊";
-  } else if (tagsString.includes("ToTry")) {
-    return "🎯";
-  } else if (tagsString.includes("Art")) {
-    return "🎨";
-  } else if (tagsString.includes("Food")) {
-    return "🍔";
-  } else if (tagsString.includes("Hiking")) {
-    return "🥾";
-  } else if (tagsString.includes("Nature")) {
-    return "🌳";
-  } else if (tagsString.includes("Shopping")) {
-    return "🛍️";
-  } else if (tagsString.includes("Sightseeing")) {
-    return "🏛️";
-  } else if (tagsString.includes("Sports")) {
-    return "🏀";
-  } else if (tagsString.includes("Drive")) {
-    return "🚗";
-  } else if (tagsString.includes("Culture")) {
-    return "🎭";
-  } else if (tagsString.includes("History")) {
-    return "📜";
-  } else if (tagsString.includes("Relax")) {
-    return "🧘";
-  } else if (tagsString.includes("Beach")) {
-    return "🏖️";
-  } else if (tagsString.includes("Nightlife")) {
-    return "🍻";
-  } else if (tagsString.includes("Music")) {
-    return "🎵";
-  } else if (tagsString.includes("Architecture")) {
-    return "🏛️";
-  } else if (tagsString.includes("Museum")) {
-    return "🏛️";
-  } else if (tagsString.includes("Park")) {
-    return "🌳";
-  } else if (tagsString.includes("Zoo")) {
-    return "🐘";
-  } else if (tagsString.includes("Aquarium")) {
-    return "🐠";
-  } else if (tagsString.includes("Bar")) {
-    return "🍻";
-  } else if (tagsString.includes("Activities")) {
-    return "🏄";
-  } else if (tagsString.includes("Restaurant")) {
-    return "🍔";
-  } else {
-    return "🎲";
+    default:
+      return "";
   }
 }
