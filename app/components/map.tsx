@@ -68,6 +68,7 @@ function MyMap({
       });
     };
 
+
     setTimeout(() => {
       createMarker().then(() => {
         setTimeout(() => {
@@ -158,8 +159,11 @@ function markerCategory(tags: string[]): string {
   if (!tags) return "";
 
   // turn array of tags into a string and remove whitespace and commas
-  const tagsString = tags.join(",")
+  const tagsString = tags.join(",");
   if (tagsString.includes("Camping")) return "🏕️";
+  if (tagsString.includes("UNESCO")) return "🏛️";
+  if (tagsString.includes("Amusement Park")) return "🎡";
+  if (tagsString.includes("Restaurant")) return "🍽️";
   if (tagsString.includes("Hotel")) return "🏨";
   if (tagsString.includes("Swimming")) return "🏊";
   if (tagsString.includes("ToTry")) return "🎯";
