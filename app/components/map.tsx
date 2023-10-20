@@ -68,6 +68,8 @@ function MyMap({
       });
     };
 
+    
+
 
     setTimeout(() => {
       createMarker().then(() => {

@@ -22,15 +22,12 @@ function MyList({
         key={record.id}
         onClick={() => onRecordSelect(record.id)}
         style={style}
-        className=" border-b p-1.5 sm:p-1 hover:scale-105 transition-transform ease-in-out 0.5s cursor-pointer"
+        className=" border-b p-1.5 sm:p-1  hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >
         <div className=" flex space-x-2">
-          <p className="text-xs font-medium text-gray-900 truncate dark:text-white">
-            <strong>{index + 1 }</strong>
-          </p>
           <div className=" flex flex-col items-start space-x-4">
             <div className=" w-64 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
-              <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white truncate" >
+              <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white truncate">
                 <strong>{record.fields.Title}</strong>
               </p>
               <p className=" truncate text-xs leading-5 text-gray-500 dark:text-gray-300">
