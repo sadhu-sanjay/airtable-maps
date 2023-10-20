@@ -38,8 +38,6 @@ body {
   border-radius: 18px;
   max-height: 44px;
   position: relative;
-  background-color: white;
-  border: 1px solid rgb(255, 255, 255);
   border-radius: 25px;
 }
 
@@ -50,7 +48,9 @@ body {
   padding: 3px 3px;
   width: auto;
   gap: 2px;
-  padding: 1px 3px;
+  padding: 3px 6px;
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(255, 255, 255);
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
 }
 
@@ -65,12 +65,10 @@ body {
 
 
 .marker-img {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 2px;
-
   /* border: 2px solid rgb(255, 255, 255); */
   /* font-size: 24px; */
 }

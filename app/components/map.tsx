@@ -8,6 +8,7 @@ import { Record } from "~/app/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import { SERVER_URL } from "../config";
 const zoom_out_img = "/zoom-out-area.png";
+const marker_icon = "/marker.png";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -53,6 +54,7 @@ function MyMap({
           } else {
             const marker = Marker(record);
             marker.addListener("click", () => {
+              console.log("marker clicked,", record.id);
               onRecordSelected(record.id);
             });
 
@@ -122,7 +124,18 @@ function Marker(record: Record) {
 
   const imgDiv = document.createElement("img");
   imgDiv.classList.add("marker-img");
-  imgDiv.src = markerImage(title);
+  imgDiv.src = marker_icon;
+
+  const actualImg = new Image();
+  actualImg.onload = function () {
+    imgDiv.src = markerImage(record.id);
+    imgDiv.style.border = " 2px solid #fff";
+  };
+  actualImg.onerror = function (err) {
+    console.error("error ", err);
+  }
+  console.log("marker image", markerImage(record.id));
+  actualImg.src = markerImage(record.id);
 
   // Create a new div for the title
   const titleDiv = document.createElement("div");
@@ -130,7 +143,7 @@ function Marker(record: Record) {
   titleDiv.innerText = title + " " + markerCategory(record.fields.Tags);
 
   markerDiv.appendChild(imgDiv);
-  markerDiv.appendChild(titleDiv);  // Append the title div to the marker div
+  markerDiv.appendChild(titleDiv); // Append the title div to the marker div
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
     position: { lat: record.fields.lat, lng: record.fields.lng },
@@ -140,14 +153,8 @@ function Marker(record: Record) {
   return marker;
 }
 
-
-function markerImage(title: string): string {
-  const fileName = title
-    .replace(/\s/g, "")
-    .toLowerCase()
-    .replace(/[^a-zA-Z ]/g, "");
-  const imgUrl = SERVER_URL + "/images" + "/" + fileName + ".jpeg";
-  return imgUrl;
+function markerImage(recordId: string): string {
+  return SERVER_URL + "/images" + "/" + recordId + ".jpeg";
 }
 
 function markerCategory(tags: string[]): string {
