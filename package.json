@@ -6,7 +6,7 @@
     "dev": "next dev ",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "serve": "npx serve@latest out", 
+    "serve": "npx serve@latest out",
     "lint": "next lint",
     "deploy": "node_modules/.bin/firebase deploy --only hosting:airtable-maps"
   },
@@ -18,7 +18,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "eslint-config-next": "13.4.13",
-    "next": "^13.5.4",
+    "next": "^13.5.6",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",

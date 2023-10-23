@@ -3,8 +3,9 @@ export type Record = {
   constructor: (record: MyRecord) => void;
   id: string;
   fields: {
+    id: string;
     sNo: number;
-    searchStr: string;
+    SearchString: string;
     lat: number;
     lng: number;
     Title: string;

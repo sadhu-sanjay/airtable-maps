@@ -54,7 +54,6 @@ function MyMap({
           } else {
             const marker = Marker(record);
             marker.addListener("click", () => {
-              console.log("marker clicked,", record.id);
               onRecordSelected(record.id);
             });
 
@@ -131,7 +130,6 @@ function Marker(record: Record) {
     imgDiv.src = markerImage(record.id);
     imgDiv.style.border = " 2px solid #fff";
   };
-  console.log("marker image", markerImage(record.id));
   actualImg.src = markerImage(record.id);
 
   // Create a new div for the title
@@ -159,6 +157,7 @@ function markerCategory(tags: string[]): string {
 
   // turn array of tags into a string and remove whitespace and commas
   const tagsString = tags.join(",");
+  if (tagsString.includes("Motorcycle")) return "🏍️";
   if (tagsString.includes("Camping")) return "🏕️";
   if (tagsString.includes("UNESCO")) return "🏛️";
   if (tagsString.includes("Amusement Park")) return "🎡";

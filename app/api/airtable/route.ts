@@ -60,7 +60,7 @@ export async function GET() {
 //         data.records.forEach((record: Record) => {
 
 //             // making searching easier
-//             record.fields.searchStr = record.fields.Title + " " + record.fields.Tags + " " + record.fields.Region + " " + record.fields["State / AAL1"] + " " + record.fields.City + " " + record.fields.Country;
+//             record.fields.SearchString = record.fields.Title + " " + record.fields.Tags + " " + record.fields.Region + " " + record.fields["State / AAL1"] + " " + record.fields.City + " " + record.fields.Country;
 
 //             if (!record.fields["Coordinates (lat, lng)"]) return;
 //             const [lat, lng] = record.fields["Coordinates (lat, lng)"].split(",");

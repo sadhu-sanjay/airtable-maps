@@ -1,8 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { read } from "fs";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { Record } from "~/app/components/types";
-import { RECORDS_FETCH_URL, AIRTABLE_EVENTS_URL } from "~/app/config";
+import {
+  RECORDS_FETCH_URL,
+  AIRTABLE_EVENTS_URL,
+  REGIONS_FETCH_URL,
+} from "~/app/config";
 
-export default function useRecords() {
+export default function useRecords(selectedRegion: string[]) {
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
@@ -15,46 +20,61 @@ export default function useRecords() {
   }, []);
 
   const fetchRecords = useCallback(
-    async (signal: AbortSignal) => {
+    async (signal: AbortSignal, selectedRegion: string[]) => {
       try {
         setIsLoadingRecords(true);
-        const res = await fetch(RECORDS_FETCH_URL, { signal });
-        const reader = res.body!.getReader();
-        let buffer = "";
 
-        while (true) {
-          const { done, value } = await reader.read();
-          console.log("READ");
+        // encode selected regions to be sent in query params
+        const encodedRegions = selectedRegion.map((region) =>
+          encodeURIComponent(region)
+        );
+        const RECORDS_FETCH_URL_WITH_REGIONS = `${RECORDS_FETCH_URL}?regions=${encodedRegions.join(
+          ","
+        )}`;
 
-          try {
-            if (done) {
-              setIsLoadingRecords(false);
-              break;
-            }
+        console.log("FETCHING RECORDS", RECORDS_FETCH_URL_WITH_REGIONS);
 
-            let recordsJson = new TextDecoder().decode(value);
-            buffer += recordsJson;
+        const res = await fetch(RECORDS_FETCH_URL_WITH_REGIONS, { signal });
+        const jsonbody = await res.json();
 
-            const recordsStringArray = buffer.split("\n");
-            const lastRecord =
-              recordsStringArray[recordsStringArray.length - 1];
-            try {
-              JSON.parse(lastRecord);
-            } catch (error) {
-              buffer = recordsStringArray.pop() || "";
-            }
+        // updateState(jsonbody);
+        console.log("JSON BODY", typeof jsonbody);
 
-            const newRecords = recordsStringArray.map((record) =>
-              JSON.parse(record)
-            );
+        // let buffer = "";
 
-            updateState(newRecords);
-          } catch (error: any) {
-            console.log("Error =>", error);
-            setRecordsError(error);
-            break;
-          }
-        }
+        // while (true) {
+        //   const { done, value } = await reader.read();
+        //   console.log("READ");
+
+        //   try {
+        //     if (done) {
+        //       setIsLoadingRecords(false);
+        //       break;
+        //     }
+
+        //     let recordsJson = new TextDecoder().decode(value);
+        //     buffer += recordsJson;
+
+        //     const recordsStringArray = buffer.split("\n");
+        //     const lastRecord =
+        //       recordsStringArray[recordsStringArray.length - 1];
+        //     try {
+        //       JSON.parse(lastRecord);
+        //     } catch (error) {
+        //       buffer = recordsStringArray.pop() || "";
+        //     }
+
+        //     const newRecords = recordsStringArray.map((record) =>
+        //       JSON.parse(record)
+        //     );
+
+        //     updateState(newRecords);
+        //   } catch (error: any) {
+        //     console.log("Error =>", error);
+        //     setRecordsError(error);
+        //     break;
+        //   }
+        // }
       } catch (error: any) {
         if (error.name === "AbortError") {
           console.log("Abort ERRor");
@@ -68,18 +88,37 @@ export default function useRecords() {
     [updateState]
   );
 
+  // function createSharableLink() {
+  //   const url = new URL(window.location.href);
+  //   url.searchParams.set("region", selectedRegion);
+  //   console.log("URL", url.href);
+  //   return url.href;
+  // }
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    fetchRecords(signal);
+    fetch(REGIONS_FETCH_URL, { signal })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log("REGIONS Sanjay");
+        // get the regions named North America
+        fetchRecords(
+          signal,
+          json.filter(
+            (each: string) =>
+              each === "North America" || each === "South America"
+          )
+        );
+      });
 
     return () => {
       abortController.abort();
       setRecords([]);
       console.log("CLEANUP USE RECORDS ");
     };
-  }, [fetchRecords]);
+  }, [fetchRecords, selectedRegion]);
 
   /**
    * Handle RealTime Events
@@ -121,7 +160,6 @@ export default function useRecords() {
   //       return newRecords;
   //     });
   //   })
-
 
   //   eventSource.addEventListener("delete", (e) => {
   //     console.log("DELETE EVENT TRIGGERED", e.data);

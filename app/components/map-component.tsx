@@ -21,10 +21,12 @@ export default function Home() {
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { recordsError, isLoadingRecords, records } = useRecords();
   const searchTerms = useRef<string[]>([]);
   const selectedRegions = useRef<string[]>([]);
   const selectedTags = useRef<string[]>([]);
+  const { recordsError, isLoadingRecords, records } = useRecords(
+    selectedRegions.current
+  );
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -70,7 +72,7 @@ export default function Home() {
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
         searchMatch = searchTerms.current.every((term) =>
-          record.fields.searchStr?.includes(term.toLowerCase())
+          record.fields.SearchString?.includes(term.toLowerCase())
         );
       } else {
         searchMatch = true;
@@ -113,6 +115,7 @@ export default function Home() {
   }, []);
 
   const onRecordSelected = useCallback((selectedId: string) => {
+    console.log("selectedId", selectedId);
     setSelectedRecordId(selectedId);
     setIsModalOpen(true);
   }, []);
@@ -152,13 +155,13 @@ export default function Home() {
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar onValueChange={searchHandler} />
           <div className="flex justify-between align-middle">
-            {/* <Dropdown
+            <Dropdown
               label="Region"
               placeholder="Region"
               doneCallBack={regionHandler}
               fetchUrl={REGIONS_FETCH_URL}
             />
-            <Dropdown
+            {/* <Dropdown
               label="Tags"
               placeholder="Tags"
               doneCallBack={tagsHandler}
@@ -174,9 +177,9 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
+      {/* <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
-      </main>
+      </main> */}
 
       <aside>
         <PlaceDetailModal
