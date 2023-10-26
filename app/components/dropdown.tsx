@@ -5,21 +5,28 @@ function Dropdown({
   placeholder,
   doneCallBack,
   fetchUrl,
+  labelAndValue,
 }: {
   label: string;
   placeholder: string;
   doneCallBack: (selectedItems: string[]) => void;
   fetchUrl: string;
+  labelAndValue: { label: string; value: string };
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [items, setItems] = useState<string[]>([]);
-  const clearAllSelected = () => {
-    setSelectedItems([]);
-  };
+  const [items, setItems] = useState<Array<any>>([]);
+  const clearAllSelected = () => setSelectedItems([]);
+  const filteredItems =
+    items.length > 0
+      ? items.filter((item) => {
+          if (!item) return;
+          return item.label.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+      : [];
 
   useEffect(() => {
     setIsLoading(true);
@@ -29,8 +36,13 @@ function Dropdown({
     fetch(fetchUrl, { signal })
       .then((res) => res.json())
       .then((data) => {
-        console.log(`Fetched ${label}==>`, data);
-        setItems(data);
+        const mappedData = data.map((item: any) => {
+          return {
+            label: item[labelAndValue.label],
+            value: item[labelAndValue.value],
+          };
+        });
+        setItems(mappedData);
         setIsLoading(false);
       })
       .catch((e) => {
@@ -46,12 +58,12 @@ function Dropdown({
     };
   }, [fetchUrl, label]);
 
-  const handleSelected = (item: string) => {
-    setSelectedItems((prevItems) =>
-      prevItems.includes(item)
-        ? prevItems.filter((i) => i !== item)
-        : [...prevItems, item]
-    );
+  const handleSelected = (item: any) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(selectedItems.filter((i) => i !== item));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
   };
 
   function doneButtonClicked() {
@@ -79,14 +91,6 @@ function Dropdown({
     setIsOpen(!isOpen);
   };
 
-  const filteredItems =
-    items.length > 0
-      ? items.filter((item) => {
-          if (!item) return;
-          return item.toLowerCase().includes(searchTerm.toLowerCase());
-        })
-      : [];
-
   return (
     <>
       <div className="relative inline-block text-left" ref={dropdownRef}>
@@ -98,8 +102,8 @@ function Dropdown({
         >
           {selectedItems.length > 0 && (
             <span className="mr-2 inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
-            {selectedItems.length}
-          </span>
+              {selectedItems.length}
+            </span>
           )}
           {isLoading ? `Loading...` : label}
           <svg
@@ -180,20 +184,20 @@ function Dropdown({
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item) => (
-                <li key={item}>
+                <li key={item.value}>
                   <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <input
-                      id={`checkbox-item-${item}`}
+                      id={`checkbox-item-${item.value}`}
                       type="checkbox"
                       checked={selectedItems.includes(item)}
                       onChange={() => handleSelected(item)}
                       className="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 rounded focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
                     <label
-                      htmlFor={`checkbox-item-${item}`}
+                      htmlFor={`checkbox-item-${item.value}`}
                       className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                     >
-                      {item}
+                      {item.label}
                     </label>
                   </div>
                 </li>

@@ -160,6 +160,7 @@ export default function Home() {
               placeholder="Region"
               doneCallBack={regionHandler}
               fetchUrl={REGIONS_FETCH_URL}
+              labelAndValue={{ label: "RegionName", value: "RegionKey" }}
             />
             {/* <Dropdown
               label="Tags"

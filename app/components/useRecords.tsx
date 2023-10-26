@@ -1,16 +1,20 @@
-import { read } from "fs";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Record } from "~/app/components/types";
 import {
   RECORDS_FETCH_URL,
   AIRTABLE_EVENTS_URL,
   REGIONS_FETCH_URL,
+  defaultRegions,
+  defaultCountries,
+  defaultCities,
+  defaultTags,
 } from "~/app/config";
 
 export default function useRecords(selectedRegion: string[]) {
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
+
   console.log("USE RECORDS RENDER");
 
   const updateState = useCallback((records: Array<Record>) => {
@@ -20,7 +24,7 @@ export default function useRecords(selectedRegion: string[]) {
   }, []);
 
   const fetchRecords = useCallback(
-    async (signal: AbortSignal, selectedRegion: string[]) => {
+    async (signal: AbortSignal) => {
       try {
         setIsLoadingRecords(true);
 
@@ -31,8 +35,6 @@ export default function useRecords(selectedRegion: string[]) {
         const RECORDS_FETCH_URL_WITH_REGIONS = `${RECORDS_FETCH_URL}?regions=${encodedRegions.join(
           ","
         )}`;
-
-        console.log("FETCHING RECORDS", RECORDS_FETCH_URL_WITH_REGIONS);
 
         const res = await fetch(RECORDS_FETCH_URL_WITH_REGIONS, { signal });
         const jsonbody = await res.json();
@@ -88,30 +90,50 @@ export default function useRecords(selectedRegion: string[]) {
     [updateState]
   );
 
-  // function createSharableLink() {
-  //   const url = new URL(window.location.href);
-  //   url.searchParams.set("region", selectedRegion);
-  //   console.log("URL", url.href);
-  //   return url.href;
-  // }
+  /**
+   *
+   * @returns Array of regions from url query params else default regions
+   */
+  function getQueryParameters(signal: AbortSignal) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const regions = urlParams.get("regions");
+    // const countries = urlParams.get("countries");
+    // const cities = urlParams.get("cities");
+    // const tags = urlParams.get("tags");
+
+    const regionsArray = regions?.split(",") || defaultRegions;
+    // const countriesArray = countries?.split(",") || defaultCountries;
+    // const citiesArray = cities?.split(",") || defaultCities;
+    // const tagsArray = tags?.split(",") || defaultTags;
+
+    // Create get Query
+    const query = RECORDS_FETCH_URL + "?";
+    const regionsQuery = regionsArray.map((region) => `regions=${region}`);
+    // const countriesQuery = countriesArray.map((country) => `countries=${country}`);
+    // const citiesQuery = citiesArray.map((city) => `cities=${city}`);
+    // const tagsQuery = tagsArray.map((tag) => `tags=${tag}`);
+
+    // const queryString = query + [...regionsQuery, ...countriesQuery, ...citiesQuery, ...tagsQuery].join("&");
+    const queryString = query + [...regionsQuery].join("&");
+    const url = new URL(queryString);
+
+    console.log("URL", url);
+    fetch(url.toString(), { signal })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("RES", res);
+      })
+      .finally(() => {
+        console.log("FINALLY");
+      });
+  }
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    fetch(REGIONS_FETCH_URL, { signal })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log("REGIONS Sanjay");
-        // get the regions named North America
-        fetchRecords(
-          signal,
-          json.filter(
-            (each: string) =>
-              each === "North America" || each === "South America"
-          )
-        );
-      });
+    // fetchRecords(signal);
+    getQueryParameters(signal);
 
     return () => {
       abortController.abort();

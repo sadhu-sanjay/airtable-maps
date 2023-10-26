@@ -19,3 +19,8 @@ export const RECORD_GET = process.env.NEXT_PUBLIC_SERVER_URL + "/api/record"
 export const TAGS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/tags"
 export const REGIONS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/regions"
 
+// DEFAULT FILTERS
+export const defaultRegions = ["selVupXcUQUluj5QH", "selFtahXJowxQc55V"]; // North America Vs South America
+export const defaultCountries = ["United States"];
+export const defaultCities = ["New York"];
+export const defaultTags = [""]

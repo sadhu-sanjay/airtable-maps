@@ -33,4 +33,3 @@ export type Record = {
     Phone: string;
   }
 };
-
