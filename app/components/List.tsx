@@ -19,8 +19,8 @@ function MyList({
     const record = records[index];
     return (
       <li
-        key={record.id}
-        onClick={() => onRecordSelect(record.id)}
+        key={record.RecordKey}
+        onClick={() => onRecordSelect(record.RecordKey)}
         style={style}
         className=" border-b p-1.5 sm:p-1  hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >
@@ -28,13 +28,13 @@ function MyList({
           <div className=" flex flex-col items-start space-x-4">
             <div className=" w-64 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
               <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white truncate">
-                <strong>{record.fields.Title}</strong>
+                <strong>{record.Title}</strong>
               </p>
               <p className=" truncate text-xs leading-5 text-gray-500 dark:text-gray-300">
-                {record.fields.Tags ? record.fields.Tags.join(", ") : ""}
+                {record.Tags ? record.Tags.join(", ") : ""}
               </p>
               <p className=" truncate text-xs leading-5 font-medium text-gray-500 dark:text-gray-300">
-                {record.fields.Region ? record.fields.Region.join(", ") : ""}
+                {record.Region ? record.Region.join(", ") : ""}
               </p>{" "}
             </div>
           </div>

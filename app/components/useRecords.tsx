@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Record } from "~/app/components/types";
+import { use, useCallback, useEffect, useRef, useState } from "react";
+import { DropdownItem, Record } from "~/app/components/types";
 import {
   RECORDS_FETCH_URL,
   AIRTABLE_EVENTS_URL,
@@ -10,7 +10,8 @@ import {
   defaultTags,
 } from "~/app/config";
 
-export default function useRecords(selectedRegion: string[]) {
+export default function useRecords(selectedView?: DropdownItem) {
+  const isFirstLoad = useRef(true);
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
@@ -28,55 +29,21 @@ export default function useRecords(selectedRegion: string[]) {
       try {
         setIsLoadingRecords(true);
 
-        // encode selected regions to be sent in query params
-        const encodedRegions = selectedRegion.map((region) =>
-          encodeURIComponent(region)
-        );
-        const RECORDS_FETCH_URL_WITH_REGIONS = `${RECORDS_FETCH_URL}?regions=${encodedRegions.join(
-          ","
-        )}`;
+        // encode selected view to be sent in query params
+        const viewKey = selectedView?.value;
+        if (!viewKey) throw new Error("No view key found");
 
-        const res = await fetch(RECORDS_FETCH_URL_WITH_REGIONS, { signal });
+        const encodedView = encodeURIComponent(viewKey);
+        const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${encodedView}`;
+
+        console.log("FETCHING RECORDS URL", RECORDS_FETCH_URL_WITH_VIEW);
+        const res = await fetch(RECORDS_FETCH_URL_WITH_VIEW, { signal });
         const jsonbody = await res.json();
 
-        // updateState(jsonbody);
-        console.log("JSON BODY", typeof jsonbody);
+        console.log("FETCHED RECORDS", jsonbody);
+        updateState(jsonbody);
 
-        // let buffer = "";
-
-        // while (true) {
-        //   const { done, value } = await reader.read();
-        //   console.log("READ");
-
-        //   try {
-        //     if (done) {
-        //       setIsLoadingRecords(false);
-        //       break;
-        //     }
-
-        //     let recordsJson = new TextDecoder().decode(value);
-        //     buffer += recordsJson;
-
-        //     const recordsStringArray = buffer.split("\n");
-        //     const lastRecord =
-        //       recordsStringArray[recordsStringArray.length - 1];
-        //     try {
-        //       JSON.parse(lastRecord);
-        //     } catch (error) {
-        //       buffer = recordsStringArray.pop() || "";
-        //     }
-
-        //     const newRecords = recordsStringArray.map((record) =>
-        //       JSON.parse(record)
-        //     );
-
-        //     updateState(newRecords);
-        //   } catch (error: any) {
-        //     console.log("Error =>", error);
-        //     setRecordsError(error);
-        //     break;
-        //   }
-        // }
+        setIsLoadingRecords(false);
       } catch (error: any) {
         if (error.name === "AbortError") {
           console.log("Abort ERRor");
@@ -87,7 +54,7 @@ export default function useRecords(selectedRegion: string[]) {
         }
       }
     },
-    [updateState]
+    [selectedView, updateState]
   );
 
   /**
@@ -97,50 +64,81 @@ export default function useRecords(selectedRegion: string[]) {
   function getQueryParameters(signal: AbortSignal) {
     const urlParams = new URLSearchParams(window.location.search);
     const regions = urlParams.get("regions");
-    // const countries = urlParams.get("countries");
-    // const cities = urlParams.get("cities");
-    // const tags = urlParams.get("tags");
 
-    const regionsArray = regions?.split(",") || defaultRegions;
-    // const countriesArray = countries?.split(",") || defaultCountries;
-    // const citiesArray = cities?.split(",") || defaultCities;
-    // const tagsArray = tags?.split(",") || defaultTags;
+    if (regions) {
+      // come here you have any query parameter
+      // const regionsArray = regions?.split(",");
+      // const query = RECORDS_FETCH_URL + "?";
+      // const regionsQuery = regionsArray.map((region) => `regions=${region}`);
+      // const queryString = query + [...regionsQuery].join("&");
+      // fetchRecordsWithQueryParams(queryString);
+    } else {
+      // come here if you don't have any query parameter
 
-    // Create get Query
-    const query = RECORDS_FETCH_URL + "?";
-    const regionsQuery = regionsArray.map((region) => `regions=${region}`);
-    // const countriesQuery = countriesArray.map((country) => `countries=${country}`);
-    // const citiesQuery = citiesArray.map((city) => `cities=${city}`);
-    // const tagsQuery = tagsArray.map((tag) => `tags=${tag}`);
+      if (isFirstLoad.current) {
+        isFirstLoad.current = false;
 
-    // const queryString = query + [...regionsQuery, ...countriesQuery, ...citiesQuery, ...tagsQuery].join("&");
-    const queryString = query + [...regionsQuery].join("&");
-    const url = new URL(queryString);
+        const query = RECORDS_FETCH_URL + "?";
 
-    console.log("URL", url);
-    fetch(url.toString(), { signal })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("RES", res);
-      })
-      .finally(() => {
-        console.log("FINALLY");
-      });
+        const regionsParams = defaultRegions.map(
+          (region) => `regions=${region}`
+        );
+        const countriesParams = defaultCountries.map(
+          (country) => `countries=${country}`
+        );
+        const citiesParams = defaultCities.map((city) => `cities=${city}`);
+        const tagsParams = defaultTags.map((tag) => `tags=${tag}`);
+
+        const queryString =
+          query +
+          [
+            ...regionsParams,
+            ...tagsParams,
+            ...countriesParams,
+            ...citiesParams,
+          ].join("&");
+
+        fetchRecordsWithQueryParams(queryString);
+      } else {
+        console.log("NOT FIRST LOAD");
+      }
+    }
+
+    function fetchRecordsWithQueryParams(url: string) {
+      fetch(url.toString(), { signal })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((res) => {
+          console.info("FETCHED RECORDS", res);
+          updateState(res);
+        })
+        .catch((e) => {
+          console.log("ERROR", e);
+        })
+        .finally(() => {
+          console.log("FINALLY");
+        });
+    }
   }
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    // fetchRecords(signal);
-    getQueryParameters(signal);
+    fetchRecords(signal);
+    // getQueryParameters(signal);
 
     return () => {
       abortController.abort();
+      isFirstLoad.current = true;
       setRecords([]);
       console.log("CLEANUP USE RECORDS ");
     };
-  }, [fetchRecords, selectedRegion]);
+  }, [fetchRecords]);
 
   /**
    * Handle RealTime Events

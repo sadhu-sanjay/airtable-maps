@@ -47,7 +47,7 @@ function MyMap({
       await new Promise((resolve) => {
         const newMarkers: AdvancedMarker[] = [];
         for (const record of records) {
-          if (!record.fields.lat || !record.fields.lng) continue;
+          if (!record.lat || !record.lng) continue;
           const marker = markerMap.current.get(record.id);
           if (marker) {
             newMarkers.push(marker);
@@ -117,7 +117,7 @@ function MyMap({
 export default memo(MyMap);
 
 function Marker(record: Record) {
-  const title = record.fields.Title ?? "";
+  const title = record.Title ?? "";
   const markerDiv = document.createElement("div");
   markerDiv.classList.add("marker");
 
@@ -127,21 +127,21 @@ function Marker(record: Record) {
 
   const actualImg = new Image();
   actualImg.onload = function () {
-    imgDiv.src = markerImage(record.id);
+    imgDiv.src = markerImage(record.RecordKey);
     imgDiv.style.border = " 2px solid #fff";
   };
-  actualImg.src = markerImage(record.id);
+  actualImg.src = markerImage(record.RecordKey);
 
   // Create a new div for the title
   const titleDiv = document.createElement("div");
   titleDiv.classList.add("marker-title");
-  titleDiv.innerText = title + " " + markerCategory(record.fields.Tags);
+  titleDiv.innerText = title + " " + markerCategory(record.Tags);
 
   markerDiv.appendChild(imgDiv);
   markerDiv.appendChild(titleDiv); // Append the title div to the marker div
 
   const marker = new window.google.maps.marker.AdvancedMarkerElement({
-    position: { lat: record.fields.lat, lng: record.fields.lng },
+    position: { lat: record.lat, lng: record.lng },
     content: markerDiv,
   });
 

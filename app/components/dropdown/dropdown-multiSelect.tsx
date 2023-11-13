@@ -1,6 +1,6 @@
 import React, { use, useEffect, useRef, useState } from "react";
 
-function Dropdown({
+function DropdownMultiSelect({
   label,
   placeholder,
   doneCallBack,
@@ -24,7 +24,7 @@ function Dropdown({
     items.length > 0
       ? items.filter((item) => {
           if (!item) return;
-          return item.label.toLowerCase().includes(searchTerm.toLowerCase());
+          return item.label?.toLowerCase().includes(searchTerm.toLowerCase());
         })
       : [];
 
@@ -180,7 +180,7 @@ function Dropdown({
               </div>
             </div>
             <ul
-              className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="h-[30rem] px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item) => (
@@ -232,4 +232,4 @@ function Dropdown({
   );
 }
 
-export default React.memo(Dropdown);
+export default React.memo(DropdownMultiSelect);

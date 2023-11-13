@@ -3,17 +3,18 @@
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
-import { Record } from "~/app/components/types";
+import { DropdownItem, Record } from "~/app/components/types";
 
-import { MAPS_API_KEY, REGIONS_FETCH_URL, TAGS_FETCH_URL } from "~/app/config";
+import { MAPS_API_KEY, REGIONS_FETCH_URL, VIEWS_FETCH_URL } from "~/app/config";
 import MyList from "./List";
 import MyMap from "./map";
-import Dropdown from "./dropdown";
+import DropdownMultiSelect from "./dropdown/dropdown-multiSelect";
 import SearchBar from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
+import Dropdown from "./dropdown/dropdown";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -22,11 +23,12 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-  const selectedRegions = useRef<string[]>([]);
-  const selectedTags = useRef<string[]>([]);
-  const { recordsError, isLoadingRecords, records } = useRecords(
-    selectedRegions.current
+  const [selectedView, setSelectedView] = useState<DropdownItem | undefined>(
+    undefined
   );
+  const selectedTags = useRef<string[]>([]);
+  console.log("RENDER HOME", selectedView);
+  const { recordsError, isLoadingRecords, records } = useRecords(selectedView);
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -47,23 +49,13 @@ export default function Home() {
     // match allThree selected regions, searchTerms and tags, if any one of them is empty then match with other two,
     // of if 2 are empty then match with the one that is not empty
     let newFilteredRecords = records.filter((record) => {
-      let regionMatch = false;
       let tagMatch = false;
       let searchMatch = false;
-
-      // check if any of the selected regions match with record region
-      if (selectedRegions.current.length > 0) {
-        regionMatch = selectedRegions.current.some((region) =>
-          record.fields.Region?.includes(region)
-        );
-      } else {
-        regionMatch = true;
-      }
 
       // check if any of the selected tags match with record tags
       if (selectedTags.current.length > 0) {
         tagMatch = selectedTags.current.some((tag) =>
-          record.fields.Tags?.includes(tag)
+          record.Tags?.includes(tag)
         );
       } else {
         tagMatch = true;
@@ -72,13 +64,13 @@ export default function Home() {
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
         searchMatch = searchTerms.current.every((term) =>
-          record.fields.SearchString?.includes(term.toLowerCase())
+          record.SearchString?.includes(term.toLowerCase())
         );
       } else {
         searchMatch = true;
       }
 
-      return regionMatch && tagMatch && searchMatch;
+      return tagMatch && searchMatch;
     });
 
     updateRecords(newFilteredRecords);
@@ -91,13 +83,11 @@ export default function Home() {
     },
     [filterHandler]
   );
-  const regionHandler = useCallback(
-    (newRegionHandler: string[]) => {
-      selectedRegions.current = newRegionHandler;
-      filterHandler();
-    },
-    [filterHandler]
-  );
+  const viewChangedHandler = useCallback((item: DropdownItem) => {
+    setSelectedView(item);
+    filterHandler();
+  }, []);
+
   const tagsHandler = useCallback(
     (newTagsHandler: string[]) => {
       selectedTags.current = newTagsHandler;
@@ -145,6 +135,7 @@ export default function Home() {
   const closeDetail = useCallback(() => {
     setIsModalOpen(false);
   }, []);
+  const labelAndValue = useMemo(() => ({ label: "name", value: "id" }), []);
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
@@ -156,17 +147,18 @@ export default function Home() {
           <SearchBar onValueChange={searchHandler} />
           <div className="flex justify-between align-middle">
             <Dropdown
-              label="Region"
-              placeholder="Region"
-              doneCallBack={regionHandler}
-              fetchUrl={REGIONS_FETCH_URL}
-              labelAndValue={{ label: "RegionName", value: "RegionKey" }}
+              label="Views"
+              placeholder="Views"
+              itemGotSelected={viewChangedHandler}
+              fetchUrl={VIEWS_FETCH_URL}
+              labelAndValue={labelAndValue}
             />
-            {/* <Dropdown
+            {/* <DropdownMultiSelect
               label="Tags"
               placeholder="Tags"
               doneCallBack={tagsHandler}
-              fetchUrl={TAGS_FETCH_URL}
+              fetchUrl={VIEWS_FETCH_URL}
+              labelAndValue={{ label: "Name", value: "id" }}
             /> */}
           </div>
           <MyList

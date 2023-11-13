@@ -1,5 +1,5 @@
 import {
-  AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
+  AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_MAP_TABLE_ID, AIRTABLE_TABLE_NAME, TAG_FIELD_ID
 } from "~/app/config"
 import { Record } from "~/app/components/types"
 // fetch from next
@@ -9,7 +9,7 @@ let baseId = AIRTABLE_BASE_ID
 let tableName = AIRTABLE_TABLE_NAME
 const CATEGORIES = ['Hiking', 'Restaurant', 'Pub', 'Lake', 'Airport']
 
-export async function fetchRecord( signal: AbortSignal, recordId?: string) {
+export async function fetchRecord(signal: AbortSignal, recordId?: string) {
 
   const finalUrl = `${baseUrl}/${baseId}/${tableName}/${recordId}`;
   const res = await fetch(finalUrl, {
@@ -22,6 +22,28 @@ export async function fetchRecord( signal: AbortSignal, recordId?: string) {
   });
 
   return res.json();
+}
+
+export async function fetchTagsAirtable() {
+
+  const url = `https://api.airtable.com/v0/meta/bases/${AIRTABLE_BASE_ID}/tables`;
+
+  return new Promise((resolve) => fetch(url, {
+    headers: {
+      Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`
+    }
+  }).then(response => response.json())
+    .then(response => {
+
+      const fields = response.tables.find((table: any) => table.id === AIRTABLE_MAP_TABLE_ID).fields;
+      const choices = fields.find((field: any) => field.id === TAG_FIELD_ID).options.choices;
+      const tags = choices.map((choice: any) => [choice.id, choice.name, choice.color]);
+
+      return resolve(tags);
+    })
+    .catch(error => {
+      console.log("Error", error)
+    }));
 }
 
 export async function fetchAirtableRecords() {
