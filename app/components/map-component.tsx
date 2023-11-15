@@ -27,7 +27,7 @@ export default function Home() {
     undefined
   );
   const selectedTags = useRef<string[]>([]);
-  console.log("RENDER HOME", selectedView);
+  console.log("RENDER MAP COMPONENT", selectedView);
   const { recordsError, isLoadingRecords, records } = useRecords(selectedView);
 
   const updateRecords = useCallback((newRecords: Record[]) => {
@@ -83,10 +83,14 @@ export default function Home() {
     },
     [filterHandler]
   );
-  const viewChangedHandler = useCallback((item: DropdownItem) => {
-    setSelectedView(item);
-    filterHandler();
-  }, []);
+
+  const viewChangedHandler = useCallback(
+    (item: DropdownItem) => {
+      setSelectedView(item);
+      filterHandler();
+    },
+    [filterHandler]
+  );
 
   const tagsHandler = useCallback(
     (newTagsHandler: string[]) => {

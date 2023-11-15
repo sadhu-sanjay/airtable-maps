@@ -31,10 +31,10 @@ function MyList({
                 <strong>{record.Title}</strong>
               </p>
               <p className=" truncate text-xs leading-5 text-gray-500 dark:text-gray-300">
-                {record.Tags ? record.Tags.join(", ") : ""}
+                {record.Tags}
               </p>
               <p className=" truncate text-xs leading-5 font-medium text-gray-500 dark:text-gray-300">
-                {record.Region ? record.Region.join(", ") : ""}
+                {record.Region}
               </p>{" "}
             </div>
           </div>

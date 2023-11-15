@@ -48,7 +48,7 @@ function DropdownMultiSelect({
       .catch((e) => {
         setIsLoading(false);
         if (e.name === "AbortError") {
-          return console.log("Fetch Items Aborted");
+          return console.log("Fetch Items Aborted DropDown MultiSelect ");
         }
         console.log("Error Fetching Regions==>", e);
       });

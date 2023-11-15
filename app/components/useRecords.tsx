@@ -16,7 +16,7 @@ export default function useRecords(selectedView?: DropdownItem) {
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
 
-  console.log("USE RECORDS RENDER");
+  console.log("USE RECORDS RENDER", selectedView);
 
   const updateState = useCallback((records: Array<Record>) => {
     setTimeout(() => {
@@ -31,27 +31,27 @@ export default function useRecords(selectedView?: DropdownItem) {
 
         // encode selected view to be sent in query params
         const viewKey = selectedView?.value;
-        if (!viewKey) throw new Error("No view key found");
+        if (!viewKey) {
+          throw new Error("NoKey");
+        }
 
         const encodedView = encodeURIComponent(viewKey);
         const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${encodedView}`;
 
-        console.log("FETCHING RECORDS URL", RECORDS_FETCH_URL_WITH_VIEW);
         const res = await fetch(RECORDS_FETCH_URL_WITH_VIEW, { signal });
-        const jsonbody = await res.json();
+        const result = await res.json();
+        console.info("RESUTL RECORDS", result);
 
-        console.log("FETCHED RECORDS", jsonbody);
-        updateState(jsonbody);
-
+        updateState(result);
         setIsLoadingRecords(false);
       } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Abort ERRor");
-        } else {
-          console.error("Error: ", error);
-          setIsLoadingRecords(false);
-          setRecordsError(error.message);
+        if (error.name === "AbortError" || error.message === "NoKey") {
+          console.info(error.message);
+          console.log(error.name);
         }
+        console.error("Error Fetching Records ==> ", error);
+        setRecordsError(error.message);
+        setIsLoadingRecords(false);
       }
     },
     [selectedView, updateState]
@@ -63,9 +63,9 @@ export default function useRecords(selectedView?: DropdownItem) {
    */
   function getQueryParameters(signal: AbortSignal) {
     const urlParams = new URLSearchParams(window.location.search);
-    const regions = urlParams.get("regions");
+    const viewKey = urlParams.get("viewKey");
 
-    if (regions) {
+    if (viewKey) {
       // come here you have any query parameter
       // const regionsArray = regions?.split(",");
       // const query = RECORDS_FETCH_URL + "?";
@@ -129,6 +129,7 @@ export default function useRecords(selectedView?: DropdownItem) {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
+    console.log("USE RECORDS EFFECT", selectedView);
     fetchRecords(signal);
     // getQueryParameters(signal);
 
@@ -138,7 +139,7 @@ export default function useRecords(selectedView?: DropdownItem) {
       setRecords([]);
       console.log("CLEANUP USE RECORDS ");
     };
-  }, [fetchRecords]);
+  }, [selectedView, fetchRecords]);
 
   /**
    * Handle RealTime Events
