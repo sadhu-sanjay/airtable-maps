@@ -23,12 +23,11 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-  const [selectedView, setSelectedView] = useState<DropdownItem | undefined>(
-    undefined
-  );
+
   const selectedTags = useRef<string[]>([]);
-  console.log("RENDER MAP COMPONENT", selectedView);
-  const { recordsError, isLoadingRecords, records } = useRecords(selectedView);
+  console.log("RENDER MAP COMPONENT");
+  const { recordsError, isLoadingRecords, records, fetchRecords } =
+    useRecords();
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -86,10 +85,11 @@ export default function Home() {
 
   const viewChangedHandler = useCallback(
     (item: DropdownItem) => {
-      setSelectedView(item);
-      filterHandler();
+      console.log("viewChangedHandler", item);
+      fetchRecords(item);
+      // filterHandler();
     },
-    [filterHandler]
+    [fetchRecords]
   );
 
   const tagsHandler = useCallback(

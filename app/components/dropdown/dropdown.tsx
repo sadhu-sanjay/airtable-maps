@@ -56,11 +56,9 @@ function Dropdown({
           };
         });
 
-        console.log("Is Mounted ", isMounted.current);
         if (isMounted.current) {
           setItems(mappedData);
           setIsLoading(false);
-          // doneButtonClicked(mappedData[0]);
         }
       })
       .catch((e) => {
