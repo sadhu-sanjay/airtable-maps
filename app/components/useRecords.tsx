@@ -15,9 +15,9 @@ export default function useRecords(selectedView?: DropdownItem) {
   const [records, setRecords] = useState<Record[]>([]);
   const [recordsError, setRecordsError] = useState<null>(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   console.log("USE RECORDS RENDER", selectedView);
-
   const updateState = useCallback((records: Array<Record>) => {
     setTimeout(() => {
       setRecords((prevRecords) => [...prevRecords, ...records]);
@@ -26,31 +26,48 @@ export default function useRecords(selectedView?: DropdownItem) {
 
   const fetchRecords = useCallback(
     async (signal: AbortSignal) => {
-      try {
-        setIsLoadingRecords(true);
+      console.info("FETCHRECORDS called");
+      setIsLoadingRecords(true);
+      // encode selected view to be sent in query params
 
-        // encode selected view to be sent in query params
+      try {
         const viewKey = selectedView?.value;
         if (!viewKey) {
-          throw new Error("NoKey");
+          throw new Error("noKey");
         }
+        const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${viewKey}`;
 
-        const encodedView = encodeURIComponent(viewKey);
-        const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${encodedView}`;
+        fetch(RECORDS_FETCH_URL_WITH_VIEW, { signal })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res.status === "Started") {
+              timeoutRef.current = setTimeout(() => {
+                console.log("Recursion");
+                fetchRecords(signal);
+              }, 5000);
+              return;
+            }
 
-        const res = await fetch(RECORDS_FETCH_URL_WITH_VIEW, { signal });
-        const result = await res.json();
-        console.info("RESUTL RECORDS", result);
-
-        updateState(result);
-        setIsLoadingRecords(false);
-      } catch (error: any) {
-        if (error.name === "AbortError" || error.message === "NoKey") {
-          console.info(error.message);
-          console.log(error.name);
-        }
-        console.error("Error Fetching Records ==> ", error);
-        setRecordsError(error.message);
+            console.info("FETCHED RECORDS", res);
+            updateState(res);
+            setIsLoadingRecords(false);
+          })
+          .catch((e) => {
+            if (e.name === "AbortError") {
+              console.log("Fetch Items Aborted");
+            } else {
+              console.error("Error Fetching Regions ==> ", e);
+            }
+            setRecordsError(e);
+            setIsLoadingRecords(false);
+          });
+      } catch (e: any) {
+        console.log("catch Error::", e);
         setIsLoadingRecords(false);
       }
     },
@@ -134,9 +151,14 @@ export default function useRecords(selectedView?: DropdownItem) {
     // getQueryParameters(signal);
 
     return () => {
+      console.info("Abort controller", abortController);
       abortController.abort();
       isFirstLoad.current = true;
       setRecords([]);
+      if (timeoutRef.current) {
+        console.log("CLEAR TIMEOUT");
+        clearTimeout(timeoutRef.current);
+      }
       console.log("CLEANUP USE RECORDS ");
     };
   }, [selectedView, fetchRecords]);

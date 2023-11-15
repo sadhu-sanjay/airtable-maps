@@ -30,7 +30,7 @@ const StatusButton: React.FC<{
             setIsLoading(true);
             setTimeout(() => {
               getStatus(signal);
-            }, 5000);
+            }, 15000);
           } else if (data.status === "Finished") {
             setIsLoading(false);
           }
