@@ -1,6 +1,6 @@
 // pass className to the component
 
-import { FronnyFace } from "../svg/fronyface";
+import { FronnyFace } from "../icons/fronyface";
 
 export const ImagePlaceHolder: React.FC<{
   className?: string;

@@ -20,6 +20,7 @@ export const RECORDS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/reco
 export const RECORD_GET = process.env.NEXT_PUBLIC_SERVER_URL + "/api/record"
 export const VIEWS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/views"
 export const REGIONS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/regions"
+export const TAGS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/tags"
 export const VIEW_DATA_RELOAD = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload"
 export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload-status"
 

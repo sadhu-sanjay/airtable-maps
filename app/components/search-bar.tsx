@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { myDebounce } from "./utility/utilityFunctions";
 
 const SearchBar = ({
@@ -8,13 +8,14 @@ const SearchBar = ({
 }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  // const debounedChange = myDebounce((value: string) => {
-  //   onValueChange(value);
-  // }, 1300);
-
   // useEffect(() => {
   //   debounedChange(searchValue);
   // }, [debounedChange, searchValue]);
+
+  const debounedChange = useMemo(
+    () => myDebounce(onValueChange, 700),
+    [onValueChange]
+  );
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,7 +24,7 @@ const SearchBar = ({
 
   return (
     <form onSubmit={onSubmit}>
-    {/* <form > */}
+      {/* <form > */}
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -60,9 +61,9 @@ const SearchBar = ({
           placeholder="Search anything ..."
           // required
           onChange={(e) => {
-            let vl = e.target.value;
-            setSearchValue(vl);
-            // debounedChange(vl)
+            let value = e.target.value;
+            setSearchValue(value);
+            debounedChange(value);
           }}
         />
         <button

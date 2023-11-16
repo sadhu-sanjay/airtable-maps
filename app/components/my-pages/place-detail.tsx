@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState, memo } from "react";
 import Image from "next/image";
 import { Record } from "~/app/components/types";
-import CloseButton from "../resources/svg/close-button";
+import CloseButton from "../resources/icons/close-button";
 import ImageSlider from "./image-slider";
-import { MapIcon } from "../resources/svg/map-icon";
+import { MapIcon } from "../resources/icons/map-icon";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import { fetchRecord } from "../airtable-helper";

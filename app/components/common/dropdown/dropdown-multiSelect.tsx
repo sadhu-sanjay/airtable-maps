@@ -1,4 +1,5 @@
 import React, { use, useEffect, useRef, useState } from "react";
+import { DropdownItem } from "../../types";
 
 function DropdownMultiSelect({
   label,
@@ -9,7 +10,7 @@ function DropdownMultiSelect({
 }: {
   label: string;
   placeholder: string;
-  doneCallBack: (selectedItems: string[]) => void;
+  doneCallBack: (selectedItems: DropdownItem[]) => void;
   fetchUrl: string;
   labelAndValue: { label: string; value: string };
 }) {
@@ -33,9 +34,11 @@ function DropdownMultiSelect({
     const abortController = new AbortController();
     const signal = abortController.signal;
 
+    console.log("fetchUrl", fetchUrl);
     fetch(fetchUrl, { signal })
       .then((res) => res.json())
       .then((data) => {
+        console.log("TAGS DATA", data);
         const mappedData = data.map((item: any) => {
           return {
             label: item[labelAndValue.label],
@@ -56,7 +59,7 @@ function DropdownMultiSelect({
     return () => {
       abortController.abort();
     };
-  }, [fetchUrl, label]);
+  }, [fetchUrl, label, labelAndValue.label, labelAndValue.value]);
 
   const handleSelected = (item: any) => {
     if (selectedItems.includes(item)) {

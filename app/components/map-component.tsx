@@ -5,16 +5,16 @@ import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/app/components/spinner";
 import { DropdownItem, Record } from "~/app/components/types";
 
-import { MAPS_API_KEY, REGIONS_FETCH_URL, VIEWS_FETCH_URL } from "~/app/config";
+import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/app/config";
 import MyList from "./List";
 import MyMap from "./map";
-import DropdownMultiSelect from "./dropdown/dropdown-multiSelect";
+import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
 import SearchBar from "./search-bar";
 import { myDebounce } from "./utility/utilityFunctions";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
-import Dropdown from "./dropdown/dropdown";
+import Dropdown from "./common/dropdown/dropdown";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -23,11 +23,9 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-
-  const selectedTags = useRef<string[]>([]);
+  const selectedTags = useRef<DropdownItem[]>([]);
   console.log("RENDER MAP COMPONENT");
-  const { recordsError, isLoadingRecords, records, fetchRecords } =
-    useRecords();
+  const { isLoadingRecords, records, fetchRecords } = useRecords();
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -53,9 +51,9 @@ export default function Home() {
 
       // check if any of the selected tags match with record tags
       if (selectedTags.current.length > 0) {
-        tagMatch = selectedTags.current.some((tag) =>
-          record.Tags?.includes(tag)
-        );
+        tagMatch = selectedTags.current.some((tag: DropdownItem) => {
+          return record.SearchString?.includes(tag.label.toLowerCase());
+        });
       } else {
         tagMatch = true;
       }
@@ -85,15 +83,13 @@ export default function Home() {
 
   const viewChangedHandler = useCallback(
     (item: DropdownItem) => {
-      console.log("viewChangedHandler", item);
       fetchRecords(item);
-      // filterHandler();
     },
     [fetchRecords]
   );
 
   const tagsHandler = useCallback(
-    (newTagsHandler: string[]) => {
+    (newTagsHandler: Array<DropdownItem>) => {
       selectedTags.current = newTagsHandler;
       filterHandler();
     },
@@ -139,7 +135,7 @@ export default function Home() {
   const closeDetail = useCallback(() => {
     setIsModalOpen(false);
   }, []);
-  const labelAndValue = useMemo(() => ({ label: "name", value: "id" }), []);
+  const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
@@ -155,15 +151,15 @@ export default function Home() {
               placeholder="Views"
               itemGotSelected={viewChangedHandler}
               fetchUrl={VIEWS_FETCH_URL}
-              labelAndValue={labelAndValue}
+              labelAndValue={labelAndValues}
             />
-            {/* <DropdownMultiSelect
+            <DropdownMultiSelect
               label="Tags"
               placeholder="Tags"
               doneCallBack={tagsHandler}
-              fetchUrl={VIEWS_FETCH_URL}
-              labelAndValue={{ label: "Name", value: "id" }}
-            /> */}
+              fetchUrl={TAGS_FETCH_URL}
+              labelAndValue={labelAndValues}
+            />
           </div>
           <MyList
             asideRef={asideRef}

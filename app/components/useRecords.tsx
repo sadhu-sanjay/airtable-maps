@@ -12,7 +12,6 @@ import {
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
-  const [recordsError, setRecordsError] = useState<string>("");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
 
   console.log("USE RECORDS RENDER");
@@ -24,7 +23,6 @@ export default function useRecords() {
 
   const fetchRecords = useCallback(
     (selectedView: DropdownItem) => {
-      console.info("FETCHRECORDS called");
       setIsLoadingRecords(true);
       setRecords([]);
 
@@ -43,22 +41,13 @@ export default function useRecords() {
             return res.json();
           })
           .then((res) => {
-            if (res.status === "Started") {
-              console.log("FETCH RECORDS STARTED");
-              setIsLoadingRecords(true);
-              setRecordsError("Please wait while we get the records");
-              return;
-            }
             updateState(res);
-            setIsLoadingRecords(false);
           })
           .catch((e) => {
-            if (e.name === "AbortError") {
-              console.log("Fetch Items Aborted");
-            } else {
-              console.error("Error Fetching Regions ==> ", e);
-            }
-            setRecordsError(e);
+            console.error("Error Fetching Regions ==> ", e);
+            setIsLoadingRecords(false);
+          })
+          .finally(() => {
             setIsLoadingRecords(false);
           });
       } catch (e: any) {
@@ -188,5 +177,5 @@ export default function useRecords() {
   //   };
   // }, []);
 
-  return { recordsError, isLoadingRecords, records, fetchRecords };
+  return { isLoadingRecords, records, fetchRecords };
 }
