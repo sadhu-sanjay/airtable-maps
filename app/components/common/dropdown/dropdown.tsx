@@ -58,6 +58,7 @@ function Dropdown({
 
         if (isMounted.current) {
           setItems(mappedData);
+          doneButtonClicked(mappedData[0]);
           setIsLoading(false);
         }
       })

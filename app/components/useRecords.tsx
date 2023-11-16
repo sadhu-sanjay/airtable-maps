@@ -58,64 +58,11 @@ export default function useRecords() {
     [updateState]
   );
 
-  /**
-   *
-   * @returns Array of regions from url query params else default regions
-   */
   function getQueryParameters(signal: AbortSignal) {
     const urlParams = new URLSearchParams(window.location.search);
     const viewKey = urlParams.get("viewKey");
 
-    if (viewKey) {
-      // come here you have any query parameter
-      // const regionsArray = regions?.split(",");
-      // const query = RECORDS_FETCH_URL + "?";
-      // const regionsQuery = regionsArray.map((region) => `regions=${region}`);
-      // const queryString = query + [...regionsQuery].join("&");
-      // fetchRecordsWithQueryParams(queryString);
-    } else {
-      // come here if you don't have any query parameter
-
-      const query = RECORDS_FETCH_URL + "?";
-
-      const regionsParams = defaultRegions.map((region) => `regions=${region}`);
-      const countriesParams = defaultCountries.map(
-        (country) => `countries=${country}`
-      );
-      const citiesParams = defaultCities.map((city) => `cities=${city}`);
-      const tagsParams = defaultTags.map((tag) => `tags=${tag}`);
-
-      const queryString =
-        query +
-        [
-          ...regionsParams,
-          ...tagsParams,
-          ...countriesParams,
-          ...citiesParams,
-        ].join("&");
-
-      fetchRecordsWithQueryParams(queryString);
-    }
-
-    function fetchRecordsWithQueryParams(url: string) {
-      fetch(url.toString(), { signal })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((res) => {
-          console.info("FETCHED RECORDS", res);
-          updateState(res);
-        })
-        .catch((e) => {
-          console.log("ERROR", e);
-        })
-        .finally(() => {
-          console.log("FINALLY");
-        });
-    }
+    return viewKey;
   }
 
   /**
