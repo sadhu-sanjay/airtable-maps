@@ -23,6 +23,7 @@ export const REGIONS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/regi
 export const TAGS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/tags"
 export const VIEW_DATA_RELOAD = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload"
 export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload-status"
+export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/${RecordKey}.jpeg`
 
 // DEFAULT FILTERS
 export const defaultRegions = ["selVupXcUQUluj5QH", "selFtahXJowxQc55V"]; // North America Vs South America 

@@ -21,6 +21,7 @@ export default function useRecords() {
     }, 0);
   }, []);
 
+
   const fetchRecords = useCallback(
     (selectedView: DropdownItem) => {
       setIsLoadingRecords(true);

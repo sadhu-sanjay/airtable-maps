@@ -23,9 +23,11 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-  const selectedTags = useRef<DropdownItem[]>([]);
-  console.log("RENDER MAP COMPONENT");
   const { isLoadingRecords, records, fetchRecords } = useRecords();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTags, setSelectedTags] = useState<any[]>([]);
+
+  console.log("RENDER MAP COMPONENT");
 
   const updateRecords = useCallback((newRecords: Record[]) => {
     setMapRecods(newRecords);
@@ -50,8 +52,8 @@ export default function Home() {
       let searchMatch = false;
 
       // check if any of the selected tags match with record tags
-      if (selectedTags.current.length > 0) {
-        tagMatch = selectedTags.current.some((tag: DropdownItem) => {
+      if (selectedTags.length > 0) {
+        tagMatch = selectedTags.some((tag: DropdownItem) => {
           return record.SearchString?.includes(tag.label.toLowerCase());
         });
       } else {
@@ -71,7 +73,7 @@ export default function Home() {
     });
 
     updateRecords(newFilteredRecords);
-  }, [records, updateRecords]);
+  }, [records, selectedTags, updateRecords]);
 
   const searchHandler = useCallback(
     (value: string) => {
@@ -83,6 +85,7 @@ export default function Home() {
 
   const viewChangedHandler = useCallback(
     (item: DropdownItem) => {
+      setSelectedTags([]);
       fetchRecords(item);
     },
     [fetchRecords]
@@ -90,7 +93,6 @@ export default function Home() {
 
   const tagsHandler = useCallback(
     (newTagsHandler: Array<DropdownItem>) => {
-      selectedTags.current = newTagsHandler;
       filterHandler();
     },
     [filterHandler]
@@ -144,7 +146,11 @@ export default function Home() {
         className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <SearchBar onValueChange={searchHandler} />
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onValueChange={searchHandler}
+          />
           <div className="flex justify-between align-middle">
             <Dropdown
               label="Views"
@@ -159,6 +165,8 @@ export default function Home() {
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
               labelAndValue={labelAndValues}
+              selectedItems={selectedTags}
+              setSelectedItems={setSelectedTags}
             />
           </div>
           <MyList
@@ -170,9 +178,9 @@ export default function Home() {
         </div>
       </aside>
 
-      {/* <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
+      <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
-      </main> */}
+      </main>
 
       <aside>
         <PlaceDetailModal

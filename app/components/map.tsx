@@ -6,9 +6,8 @@ import {
 import { memo, use, useEffect, useRef, useState } from "react";
 import { Record } from "~/app/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
-import { SERVER_URL } from "../config";
+import Marker from "./Marker";
 const zoom_out_img = "/zoom-out-area.png";
-const marker_icon = "/marker.png";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -48,16 +47,16 @@ function MyMap({
         const newMarkers: AdvancedMarker[] = [];
         for (const record of records) {
           if (!record.lat || !record.lng) continue;
-          const marker = markerMap.current.get(record.id);
+          const marker = markerMap.current.get(record.RecordKey);
           if (marker) {
             newMarkers.push(marker);
           } else {
             const marker = Marker(record);
             marker.addListener("click", () => {
-              onRecordSelected(record.id);
+              onRecordSelected(record.RecordKey);
             });
 
-            markerMap.current.set(record.id, marker);
+            markerMap.current.set(record.RecordKey, marker);
             newMarkers.push(marker);
           }
         }
@@ -106,6 +105,36 @@ function MyMap({
     });
   }, []);
 
+  /**
+   * Initilize the listener for the cluster
+   **/
+  useEffect(() => {
+    let initialIdle = true;
+    if (mapRef.current) {
+      const listener = mapRef.current.addListener("idle", () => {
+        if (initialIdle) {
+          initialIdle = false;
+          return;
+        }
+        // Get Records which are in the current viewport
+        const bounds = mapRef.current?.getBounds();
+        const recordsInViewport = records?.filter((record) => {
+          if (!record.lat || !record.lng) return false;
+          const latLng = new google.maps.LatLng(
+            record.lat,
+            record.lng
+          );
+          return bounds?.contains(latLng);
+        });
+        handleZoom(recordsInViewport || []);
+      });
+      return () => {
+        google.maps.event.removeListener(listener);
+      };
+    }
+  }, [handleZoom, records]);
+  // SET UP LISTENER FOR ZOOM CHANGED
+
   return (
     <div className="relative h-full w-full">
       {isLoading && <SpinnerWithoutBackground className="z-50" />}
@@ -115,77 +144,3 @@ function MyMap({
 }
 
 export default memo(MyMap);
-
-function Marker(record: Record) {
-  const title = record.Title ?? "";
-  const markerDiv = document.createElement("div");
-  markerDiv.classList.add("marker");
-
-  const imgDiv = document.createElement("img");
-  imgDiv.classList.add("marker-img");
-  imgDiv.src = marker_icon;
-
-  const actualImg = new Image();
-  actualImg.onload = function () {
-    imgDiv.src = markerImage(record.RecordKey);
-    imgDiv.style.border = " 2px solid #fff";
-  };
-  actualImg.src = markerImage(record.RecordKey);
-
-  // Create a new div for the title
-  const titleDiv = document.createElement("div");
-  titleDiv.classList.add("marker-title");
-  titleDiv.innerText = title + " " + markerCategory(record.Tags);
-
-  markerDiv.appendChild(imgDiv);
-  markerDiv.appendChild(titleDiv); // Append the title div to the marker div
-
-  const marker = new window.google.maps.marker.AdvancedMarkerElement({
-    position: { lat: record.lat, lng: record.lng },
-    content: markerDiv,
-  });
-
-  return marker;
-}
-
-function markerImage(recordId: string): string {
-  return SERVER_URL + "/images" + "/" + recordId + ".jpeg";
-}
-
-function markerCategory(tags: string[]): string {
-  if (!tags) return "";
-
-  // turn array of tags into a string and remove whitespace and commas
-  const tagsString = tags.join(",");
-  if (tagsString.includes("Motorcycle")) return "🏍️";
-  if (tagsString.includes("Camping")) return "🏕️";
-  if (tagsString.includes("UNESCO")) return "🏛️";
-  if (tagsString.includes("Amusement Park")) return "🎡";
-  if (tagsString.includes("Restaurant")) return "🍽️";
-  if (tagsString.includes("Hotel")) return "🏨";
-  if (tagsString.includes("Swimming")) return "🏊";
-  if (tagsString.includes("ToTry")) return "🎯";
-  if (tagsString.includes("Art")) return "🎨";
-  if (tagsString.includes("Food")) return "🍔";
-  if (tagsString.includes("Hiking") || tagsString.includes("Rock Climbing"))
-    return "🥾";
-  if (tagsString.includes("Nature")) return "🌳";
-  if (tagsString.includes("Shopping")) return "🛍️";
-  if (tagsString.includes("Sightseeing")) return "🏛️";
-  if (tagsString.includes("Sports")) return "🏀";
-  if (tagsString.includes("Drive")) return "🚗";
-  if (tagsString.includes("Culture")) return "🎭";
-  if (tagsString.includes("History")) return "📜";
-  if (tagsString.includes("Relax")) return "🧘";
-  if (tagsString.includes("Beach")) return "🏖️";
-  if (tagsString.includes("Nightlife")) return "🍻";
-  if (tagsString.includes("Music")) return "🎵";
-  if (tagsString.includes("Architecture") || tagsString.includes("Museum"))
-    return "🏛️";
-  if (tagsString.includes("Park")) return "🌳";
-  if (tagsString.includes("Zoo")) return "🐘";
-  if (tagsString.includes("Aquarium")) return "🐠";
-  if (tagsString.includes("Bar")) return "🍻";
-  if (tagsString.includes("Activities")) return "🏄";
-  return "";
-}

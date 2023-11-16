@@ -7,17 +7,20 @@ function DropdownMultiSelect({
   doneCallBack,
   fetchUrl,
   labelAndValue,
+  selectedItems,
+  setSelectedItems,
 }: {
   label: string;
   placeholder: string;
   doneCallBack: (selectedItems: DropdownItem[]) => void;
   fetchUrl: string;
   labelAndValue: { label: string; value: string };
+  selectedItems: DropdownItem[];
+  setSelectedItems: (selectedItems: DropdownItem[]) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<Array<any>>([]);
   const clearAllSelected = () => setSelectedItems([]);

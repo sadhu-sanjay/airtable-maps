@@ -134,7 +134,6 @@
 //             }),
 //           });
       
-//           return () => {
 //             // this happens when the component unmounts so clear and clean up
 //             mapRef.current = null;
 //             clusterRef.current = null;

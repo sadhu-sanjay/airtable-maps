@@ -7,10 +7,10 @@ export type Record = {
   lat: number;
   lng: number;
   Title: string;
-  Region: string[];
+  Region: string;
   City: string;
   "Coordinates (lat, lng)": string;
-  Tags: string[];
+  Tags: string;
   "State / AAL1": string;
   Country: string;
   Description: string;

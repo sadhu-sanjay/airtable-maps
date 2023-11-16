@@ -19,7 +19,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [record, setRecord] = useState<Record>();
+  const [record, setRecord] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -43,7 +43,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     });
   }
 
-  const cleanRecord = useCallback((record: Record) => {
+  const cleanRecord = useCallback((record: any) => {
     delete record.fields.Geocache;
     if (record.fields.date || record.fields.updated) {
       record.fields.date = getDate(record.fields.date);

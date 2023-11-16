@@ -3,11 +3,13 @@ import { myDebounce } from "./utility/utilityFunctions";
 
 const SearchBar = ({
   onValueChange,
+  searchTerm,
+  setSearchTerm,
 }: {
   onValueChange: (value: string) => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
 }) => {
-  const [searchValue, setSearchValue] = useState("");
-
   // useEffect(() => {
   //   debounedChange(searchValue);
   // }, [debounedChange, searchValue]);
@@ -19,7 +21,7 @@ const SearchBar = ({
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onValueChange(searchValue);
+    onValueChange(searchTerm);
   };
 
   return (
@@ -52,17 +54,17 @@ const SearchBar = ({
         <input
           type="search"
           id="default-search"
-          value={searchValue}
+          value={searchTerm}
           className="block w-full p-4 pl-10 text-sm 
           text-gray-900 border border-gray-300 rounded-full 
           bg-gray-50 focus:ring-blue-500 focus:border-blue-500 
           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search anything ..."
+          placeholder="Search by anything ..."
           // required
           onChange={(e) => {
             let value = e.target.value;
-            setSearchValue(value);
+            setSearchTerm(value);
             debounedChange(value);
           }}
         />
