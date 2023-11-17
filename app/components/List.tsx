@@ -3,6 +3,7 @@ import { FixedSizeList as List } from "react-window";
 import { Record } from "~/app/components/types";
 import EmptyList from "./common/empty-states/empty-list";
 import { PageStatus } from "./Paginator";
+import { ShareIcon } from "./resources/icons/share";
 
 function MyList({
   asideRef,

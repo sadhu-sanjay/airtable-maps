@@ -15,6 +15,7 @@ import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
+import { ShareIcon } from "./resources/icons/share";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);

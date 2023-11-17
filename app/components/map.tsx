@@ -1,14 +1,14 @@
 import {
   MarkerClusterer,
-  SuperClusterAlgorithm,
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
-import { memo, use, useEffect, useRef, useState } from "react";
-import { DropdownItem, Record } from "~/app/components/types";
+import { memo, useEffect, useRef, useState } from "react";
+import { Record } from "~/app/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
 import { RECORDS_THRESHHOLD } from "../config";
-const zoom_out_img = "/zoom-out-area.png";
+import { ZoomOutButton } from "./atoms/zoom-out-button";
+import { ShareButton } from "./atoms/share-button";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -100,6 +100,25 @@ function MyMap({
         viewportPadding: -20,
       }),
     });
+
+    const zoomOutbutton = ZoomOutButton(() => mapRef.current?.setZoom(2));
+    const shareButton = ShareButton(() => {
+      const shareableLink = window.location.href;
+      navigator.clipboard
+        .writeText(shareableLink)
+        .then(() => {
+          console.log("Link copied to clipboard!");
+        })
+        .catch((error) => {
+          console.error("Failed to copy link to clipboard:", error);
+        });
+    });
+    mapRef.current.controls[
+      window.google.maps.ControlPosition.LEFT_CENTER
+    ].push(zoomOutbutton);
+    mapRef.current.controls[window.google.maps.ControlPosition.TOP_LEFT].push(
+      shareButton
+    );
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {
       setFlag(true);

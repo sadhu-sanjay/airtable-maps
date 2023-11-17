@@ -59,7 +59,7 @@ const SearchBar = ({
           bg-gray-50 focus:ring-blue-500 focus:border-blue-500 
           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search by anything ..."
+          placeholder="Search by cities, tags, regions etc.."
           // required
           onChange={(e) => {
             let value = e.target.value;
@@ -67,7 +67,7 @@ const SearchBar = ({
             debounedChange(value);
           }}
         />
-        <button
+        {/* <button
           type="submit"
           className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full px-3 py-2 text-center
           text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
@@ -76,7 +76,7 @@ const SearchBar = ({
           dark:shadow-blue-800/80 font-medium text-sm "
         >
           search
-        </button>
+        </button> */}
         {/* {searchValue && (
           <button
             type="button"
