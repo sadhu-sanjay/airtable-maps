@@ -4,9 +4,10 @@ import {
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { memo, use, useEffect, useRef, useState } from "react";
-import { Record } from "~/app/components/types";
+import { DropdownItem, Record } from "~/app/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
+import { RECORDS_THRESHHOLD } from "../config";
 const zoom_out_img = "/zoom-out-area.png";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
@@ -51,7 +52,7 @@ function MyMap({
           if (marker) {
             newMarkers.push(marker);
           } else {
-            const marker = Marker(record);
+            const marker = Marker(record, records.length < RECORDS_THRESHHOLD);
             marker.addListener("click", () => {
               onRecordSelected(record.RecordKey);
             });
@@ -120,10 +121,7 @@ function MyMap({
         const bounds = mapRef.current?.getBounds();
         const recordsInViewport = records?.filter((record) => {
           if (!record.lat || !record.lng) return false;
-          const latLng = new google.maps.LatLng(
-            record.lat,
-            record.lng
-          );
+          const latLng = new google.maps.LatLng(record.lat, record.lng);
           return bounds?.contains(latLng);
         });
         handleZoom(recordsInViewport || []);

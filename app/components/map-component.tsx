@@ -86,6 +86,7 @@ export default function Home() {
   const viewChangedHandler = useCallback(
     (item: DropdownItem) => {
       setSelectedTags([]);
+      setSearchTerm("");
       fetchRecords(item);
     },
     [fetchRecords]

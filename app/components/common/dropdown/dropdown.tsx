@@ -24,7 +24,6 @@ function Dropdown({
   const [selectedItem, setSelectedItem] = useState<DropdownItem | undefined>(
     undefined
   );
-  const isMounted = useRef(true);
   const filteredItems =
     items.length > 0
       ? items.filter((item) => {
@@ -33,13 +32,6 @@ function Dropdown({
         })
       : [];
   console.log("RENDER DROPDOWN", items);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -56,11 +48,9 @@ function Dropdown({
           };
         });
 
-        if (isMounted.current) {
-          setItems(mappedData);
-          doneButtonClicked(mappedData[0]);
-          setIsLoading(false);
-        }
+        setItems(mappedData);
+        doneButtonClicked(mappedData[0]);
+        setIsLoading(false);
       })
       .catch((e) => {
         if (e.name === "AbortError") {
@@ -68,10 +58,8 @@ function Dropdown({
         } else {
           console.error("Error Fetching Regions ==> ", e);
         }
-        if (isMounted.current) {
-          setIsLoading(false);
-          setError(e.message);
-        }
+        setIsLoading(false);
+        setError(e.message);
       });
 
     return () => {

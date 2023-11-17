@@ -2,7 +2,7 @@ import { Record } from "./types";
 const marker_icon = "/marker.png";
 import { RECORD_IMAGE_URL, SERVER_URL } from "../config";
 
-export default function Marker(record: Record) {
+export default function Marker(record: Record, showImg: boolean) {
   const title = record.Title ?? "";
   const markerDiv = document.createElement("div");
   markerDiv.classList.add("marker");
@@ -11,12 +11,14 @@ export default function Marker(record: Record) {
   imgDiv.classList.add("marker-img");
   imgDiv.src = marker_icon;
 
-  const actualImg = new Image();
-  actualImg.onload = function () {
-    imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
-    imgDiv.style.border = " 2px solid #fff";
-  };
-  actualImg.src = RECORD_IMAGE_URL(record.RecordKey);
+//   if (showImg) {
+//     const actualImg = new Image();
+//     actualImg.onload = function () {
+//       imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
+//       imgDiv.style.border = " 2px solid #fff";
+//     };
+//     actualImg.src = RECORD_IMAGE_URL(record.RecordKey);
+//   }
 
   // Create a new div for the title
   const titleDiv = document.createElement("div");
