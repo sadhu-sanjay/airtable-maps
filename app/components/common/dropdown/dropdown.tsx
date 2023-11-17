@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DropdownItem } from "../../types";
 import StatusButton from "../../atoms/status-button";
+import { useSearchParams } from "next/navigation";
 
 function Dropdown({
   label,
@@ -15,6 +16,7 @@ function Dropdown({
   fetchUrl: string;
   labelAndValue: { label: string; value: string };
 }) {
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -47,9 +49,16 @@ function Dropdown({
             value: item[labelAndValue.value],
           };
         });
-
         setItems(mappedData);
-        doneButtonClicked(mappedData[0]);
+
+        // get data for a queryView otherwise just use the first item
+        const queryKey = searchParams.get("viewKey");
+        doneButtonClicked(
+          queryKey
+            ? mappedData.find((item: DropdownItem) => item.value === queryKey)
+            : mappedData[0]
+        );
+
         setIsLoading(false);
       })
       .catch((e) => {
