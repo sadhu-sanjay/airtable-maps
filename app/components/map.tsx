@@ -52,7 +52,7 @@ function MyMap({
           if (marker) {
             newMarkers.push(marker);
           } else {
-            const marker = Marker(record, records.length < RECORDS_THRESHHOLD);
+            const marker = Marker(record, true);
             marker.addListener("click", () => {
               onRecordSelected(record.RecordKey);
             });
@@ -96,7 +96,7 @@ function MyMap({
       map: mapRef.current,
       markers: [],
       algorithm: new SuperClusterViewportAlgorithm({
-        maxZoom: 8,
+        maxZoom: 13,
         viewportPadding: -20,
       }),
     });

@@ -104,7 +104,6 @@ function Dropdown({
     setSelectedItem(item);
     itemGotSelected(item);
     setIsOpen(false);
-    setSearchTerm(""); // Clear search term when an item is selected
   };
 
   return (

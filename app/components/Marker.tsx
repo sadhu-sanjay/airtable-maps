@@ -10,15 +10,11 @@ export default function Marker(record: Record, showImg: boolean) {
   const imgDiv = document.createElement("img");
   imgDiv.classList.add("marker-img");
   imgDiv.src = marker_icon;
-
-//   if (showImg) {
-//     const actualImg = new Image();
-//     actualImg.onload = function () {
-//       imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
-//       imgDiv.style.border = " 2px solid #fff";
-//     };
-//     actualImg.src = RECORD_IMAGE_URL(record.RecordKey);
-//   }
+  imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
+  imgDiv.onerror = () => {
+    imgDiv.src = marker_icon;
+    imgDiv.style.border = "none"
+  };
 
   // Create a new div for the title
   const titleDiv = document.createElement("div");
