@@ -96,7 +96,7 @@ function MyMap({
       map: mapRef.current,
       markers: [],
       algorithm: new SuperClusterViewportAlgorithm({
-        maxZoom: 13,
+        maxZoom: 14,
         viewportPadding: -20,
       }),
     });

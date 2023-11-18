@@ -11,9 +11,14 @@ export default function Marker(record: Record, showImg: boolean) {
   imgDiv.classList.add("marker-img");
   imgDiv.src = marker_icon;
   imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
-  imgDiv.onerror = () => {
+  imgDiv.onload = (ev: any) => {
+    if (!ev.target?.src.includes("marker")) {
+      imgDiv.style.border = "2px solid rgb(255, 255, 255)";
+    }
+  };
+  imgDiv.onerror = (e: any) => {
+    if (e.target?.src.includes("marker")) return;
     imgDiv.src = marker_icon;
-    imgDiv.style.border = "none"
   };
 
   // Create a new div for the title
