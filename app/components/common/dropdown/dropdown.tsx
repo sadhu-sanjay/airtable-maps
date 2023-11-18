@@ -65,7 +65,7 @@ function Dropdown({
         if (e.name === "AbortError") {
           console.log("Fetch Items Aborted Dropdown");
         } else {
-          console.error("Error Fetching Regions ==> ", e);
+          console.error(`Error fetchUrl ==> `, e);
         }
         setIsLoading(false);
         setError(e.message);

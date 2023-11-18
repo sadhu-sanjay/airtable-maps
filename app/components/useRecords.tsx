@@ -30,7 +30,7 @@ export default function useRecords() {
           setRecords((prevRecords) => [...prevRecords, ...res]);
         })
         .catch((e) => {
-          console.error("Error Fetching Regions ==> ", e);
+          console.error("Error fetchRecords ==> ", e);
           setIsLoadingRecords(false);
         })
         .finally(() => {

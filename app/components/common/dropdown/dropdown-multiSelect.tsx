@@ -37,7 +37,6 @@ function DropdownMultiSelect({
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    console.log("fetchUrl", fetchUrl);
     fetch(fetchUrl, { signal })
       .then((res) => res.json())
       .then((data) => {
@@ -56,7 +55,7 @@ function DropdownMultiSelect({
         if (e.name === "AbortError") {
           return console.log("Fetch Items Aborted DropDown MultiSelect ");
         }
-        console.log("Error Fetching Regions==>", e);
+        console.error(`Error Fetching ==> ${fetchUrl}`, e);
       });
 
     return () => {

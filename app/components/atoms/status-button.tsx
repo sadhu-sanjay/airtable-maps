@@ -39,7 +39,7 @@ const StatusButton: React.FC<{
           if (e.name === "AbortError") {
             console.log("Fetch Items Aborted StatusButton");
           } else {
-            console.error("Error Fetching Regions ==> ", e);
+            console.error("View Reload status ==> ", e);
           }
           setIsLoading(false);
         });
@@ -63,7 +63,7 @@ const StatusButton: React.FC<{
           if (e.name === "AbortError") {
             console.log("Fetch Items Aborted StatusButton");
           } else {
-            console.error("Error Fetching Regions ==> ", e);
+            console.error("Error VIEW_DATA_RELOAD ==> ", e);
           }
           setIsLoading(false);
         });
