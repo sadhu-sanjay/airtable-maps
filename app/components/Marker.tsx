@@ -9,16 +9,14 @@ export default function Marker(record: Record, showImg: boolean) {
 
   const imgDiv = document.createElement("img");
   imgDiv.classList.add("marker-img");
-  imgDiv.src = marker_icon;
   imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
   imgDiv.onload = (ev: any) => {
     if (!ev.target?.src.includes("marker")) {
       imgDiv.style.border = "2px solid rgb(255, 255, 255)";
     }
   };
-  imgDiv.onerror = (e: any) => {
-    if (e.target?.src.includes("marker")) return;
-    imgDiv.src = marker_icon;
+  imgDiv.onerror = (ev: any) => {
+    ev.target.src = marker_icon;
   };
 
   // Create a new div for the title

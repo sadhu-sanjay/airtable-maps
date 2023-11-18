@@ -71,7 +71,10 @@ body {
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, .1); */
+  background-image: url('/marker.png');
+  background-size: contain;
+  background-position: center;
   /* border: 2px solid rgb(255, 255, 255); */
   /* font-size: 24px; */
 }
