@@ -28,7 +28,7 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
     <>
       <div
         id="default-carousel"
-        className={` w-full h-full `}
+        className={` w-full h-full relative`}
         data-carousel="slide"
       >
         <div className="relative h-full overflow-hidden cursor-pointer">
@@ -56,7 +56,7 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
             ))}
         </div>
 
-        <div className={`${images?.length > 1 ? "block" : "hidden"}`}>
+        <div className={`${images?.length > 1 ? "block" : "block"}`}>
           <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
             {images?.map((_, index) => (
               <button
@@ -68,7 +68,10 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
                 aria-current={index === currentImageIndex}
                 aria-label={`Slide ${index + 1}`}
                 data-carousel-slide-to={index}
-                onClick={() => setCurrentImageIndex(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex(index);
+                }}
               ></button>
             ))}
           </div>
@@ -76,7 +79,10 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
             type="button"
             className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             data-carousel-prev
-            onClick={handlePrevClick}
+            onClick={(e: any) => {
+              e.stopPropagation();
+              handlePrevClick();
+            }}
           >
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg
@@ -101,7 +107,10 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
             type="button"
             className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             data-carousel-next
-            onClick={handleNextClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNextClick();
+            }}
           >
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg
