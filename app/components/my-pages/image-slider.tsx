@@ -56,7 +56,7 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
             ))}
         </div>
 
-        <div className={`${images?.length > 1 ? "block" : "block"}`}>
+        <div className={`${images?.length > 1 ? "block" : "hidden"}`}>
           <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
             {images?.map((_, index) => (
               <button
