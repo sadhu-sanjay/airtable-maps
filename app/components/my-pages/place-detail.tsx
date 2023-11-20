@@ -44,7 +44,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   }
 
   const cleanRecord = useCallback((record: any) => {
-    delete record.fields.Geocache;
+    if (record.fields.Geocache) {
+      delete record.fields.Geocache;
+    }
     if (record.fields.date || record.fields.updated) {
       record.fields.date = getDate(record.fields.date);
       record.fields.updated = getDate(record.fields.updated);
@@ -53,7 +55,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   }, []);
 
   const getRecord = useCallback(
-    async (signal: AbortSignal, recordId?: string) => {
+    async (signal: AbortSignal, recordId: string) => {
       try {
         const respJson = await fetchRecord(signal, recordId);
         const record = cleanRecord(respJson);

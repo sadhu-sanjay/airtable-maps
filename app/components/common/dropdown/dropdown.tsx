@@ -94,6 +94,7 @@ function Dropdown({
 
   const doneButtonClicked = (item: DropdownItem) => {
     const params = new URLSearchParams(searchParams);
+    
     params.set("viewKey", item.value);
     window.history.replaceState(
       {},
@@ -161,7 +162,6 @@ function Dropdown({
                   <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <label
                       onClick={() => {
-                        console.log("Done Button clicked");
                         doneButtonClicked(item);
                       }}
                       className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
