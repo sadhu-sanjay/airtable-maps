@@ -79,7 +79,7 @@ const StatusButton: React.FC<{
         const signal = abortController.signal;
         startUpdate(signal);
       }}
-      className="py-1 px-2 text-sm font-medium text-gray-900 bg-white rounded-4pixel border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+      className="py-1 px-2 mr-2 text-sm font-medium text-gray-900 bg-white rounded-4pixel border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
     >
       {isLoading ? <RefreshCircle /> : <IconRefresh />}
     </button>
