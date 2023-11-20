@@ -59,6 +59,9 @@ body {
 .marker-title {
   /* hide if there is not space for this entire view to fit */
   display: none;
+  /* keep this marker on top of everything */
+  color: rgb(0, 0, 0);
+  font-weight: 500;
 }
 
 .marker:hover .marker-title {
