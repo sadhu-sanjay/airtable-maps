@@ -12,7 +12,6 @@ export default function Marker(record: Record, showImg: boolean) {
   imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
   imgDiv.onload = (ev: any) => {
     if (ev.target.src.includes("/images")) {
-      console.log("Image not found", ev.target.src);
       ev.target.style.boxShadow =
         "0 0 0 2px white, 0.2em 0.2em 0.5em rgba(128, 128, 128, 0.6)"; // Change the color to gray
     }
