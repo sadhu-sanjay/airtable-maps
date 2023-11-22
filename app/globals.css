@@ -36,7 +36,6 @@ body {
 
 .marker {
   /* keep this marker on top of everything */
-  z-index: 999;
   border-radius: 18px;
   max-height: 44px;
   position: relative;
