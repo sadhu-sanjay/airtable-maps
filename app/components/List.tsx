@@ -87,7 +87,7 @@ function MyList({
       ) : (
         <EmptyList
           title="No Recods found"
-          subtitle="Please change up the search term or try some other filter."
+          subtitle="Please reload the view data or try other views."
         />
       )}
     </>

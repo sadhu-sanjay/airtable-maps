@@ -1,4 +1,4 @@
-const share_img = "/share.svg";
+const link_img = "/link.svg";
 
 export function ShareButton(onClickHandler: () => void) {
   const controlDiv = document.createElement("button");
@@ -30,7 +30,7 @@ export function ShareButton(onClickHandler: () => void) {
   controlUI.style.justifyContent = "center";
   controlUI.style.alignItems = "center";
 
-  controlImg.src = share_img;
+  controlImg.src = link_img;
   controlImg.style.width = "28px";
   controlImg.style.height = "28px";
 

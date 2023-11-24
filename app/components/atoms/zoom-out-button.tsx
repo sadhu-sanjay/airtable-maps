@@ -1,4 +1,4 @@
-const zoom_out_img = "/zoom-out-area.png";
+const zoom_out_img = "/zoom-out.png";
 
 export function ZoomOutButton(onClickHandler: () => void) {
   const controlDiv = document.createElement("button");
