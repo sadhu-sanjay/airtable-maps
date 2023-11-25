@@ -36,12 +36,14 @@ export async function fetchTagsAirtable() {
     }
   }).then(response => response.json())
     .then(response => {
-
-      const fields = response.tables.find((table: any) => table.id === AIRTABLE_MAP_TABLE_ID).fields;
-      const choices = fields.find((field: any) => field.id === TAG_FIELD_ID).options.choices;
-      const tags = choices.map((choice: any) => [choice.id, choice.name, choice.color]);
-
-      return resolve(tags);
+      try {
+        const fields = response.tables.find((table: any) => table.id === AIRTABLE_MAP_TABLE_ID).fields;
+        const choices = fields.find((field: any) => field.id === TAG_FIELD_ID).options.choices;
+        return resolve(choices);
+      }
+      catch (error) {
+        throw new Error(`Error parsing tags: ${error}`);
+      }
     })
     .catch(error => {
       console.log("Error", error)
