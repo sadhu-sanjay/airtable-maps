@@ -1,26 +1,27 @@
-# Default Server Configuration
-#
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
 
+export async function fetchTagsAirtable() {
+    const BASE_ID = "appDTml8uX6Zzi6jI"
+    const ACCESS_TOKEN = "patOsaEy7P0hj5J1w.6fd4a2e6969f18669e456930619e764b6cc39957d07d3866e17f5f8d79f652f0"
+    const MAP_TABLE_ID = "tbl4nt8lufXdPdTbp"
+    const url = `https://api.airtable.com/v0/meta/bases/${BASE_ID}/tables`;
+    const TAG_FIELD_ID = "fld3RVnGr2Ff3bhpc"
 
-    server_name 5.161.52.123;
-
-    location / {
-                proxy_pass http://localhost:8080;
-                        proxy_http_version 1.1;
-                proxy_set_header Upgrade $http_upgrade;
-                proxy_set_header Connection 'upgrade';
-                proxy_set_header Host $host;
-                proxy_cache_bypass $http_upgrade;
+    return new Promise((resolve) => fetch(url, {
+        headers: {
+            Authorization: `Bearer ${ACCESS_TOKEN}`
         }
-
-    # server images from /images directory; images are store in this manner /airtable-maps-server/images/23423290kzsldif.jpeg
-    location /images {
-        root /var/www/html/airtable-maps-server;
-        expires 30d;
-        add_header Cache-Control "public, max-age=2592000";
-        try_files $uri $uri/ =404;
-    }
+    }).then(response => response.json())
+        .then(response => {
+            try {
+                const fields = response.tables.find((table: any) => table.id === MAP_TABLE_ID).fields;
+                const choices = fields.find((field: any) => field.id === TAG_FIELD_ID).options.choices;
+                return resolve(choices);
+            }
+            catch (error) {
+                throw new Error(`Error parsing tags: ${error}`);
+            }
+        })
+        .catch(error => {
+            console.log("Error", error)
+        }));
 }

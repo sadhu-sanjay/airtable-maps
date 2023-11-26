@@ -38,10 +38,11 @@ function DropdownMultiSelect({
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    fetchTagsAirtable()
-      .then((data: any) => {
+    fetch(fetchUrl, { signal })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("TAGS DATA", data);
         const mappedData = data.map((item: any) => {
-          console.log("TAGS DATA", item);
           return {
             label: item[labelAndValue.label],
             value: item[labelAndValue.value],
@@ -57,27 +58,6 @@ function DropdownMultiSelect({
         }
         console.error(`Error Fetching ==> ${fetchUrl}`, e);
       });
-
-    // fetch(fetchUrl, { signal })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log("TAGS DATA", data);
-    //     const mappedData = data.map((item: any) => {
-    //       return {
-    //         label: item[labelAndValue.label],
-    //         value: item[labelAndValue.value],
-    //       };
-    //     });
-    //     setItems(mappedData);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((e) => {
-    //     setIsLoading(false);
-    //     if (e.name === "AbortError") {
-    //       return console.log("Fetch Items Aborted DropDown MultiSelect ");
-    //     }
-    //     console.error(`Error Fetching ==> ${fetchUrl}`, e);
-    //   });
 
     return () => {
       abortController.abort();
