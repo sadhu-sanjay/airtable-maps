@@ -4,7 +4,7 @@ import { RECORDS_FETCH_URL } from "~/app/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
-  const [status, setStatus] = useState<string>("Default Status");
+  const [status, setStatus] = useState<string>("Plese try again in a moment.");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
 
   console.log("USE RECORDS RENDER");
@@ -29,16 +29,13 @@ export default function useRecords() {
           return res.json();
         })
         .then((res) => {
-          if (res.count === 0) {
-            setStatus(res.message);
-            return setRecords([]);
+          if (res.status != "Started") { // Else keep showing loader
+            setRecords((prevRecords) => [...prevRecords, ...res]);
+            setIsLoadingRecords(false);
           }
-          setRecords((prevRecords) => [...prevRecords, ...res]);
         })
         .catch((e) => {
           setStatus(e.message);
-        })
-        .finally(() => {
           setIsLoadingRecords(false);
         });
     } catch (e: any) {

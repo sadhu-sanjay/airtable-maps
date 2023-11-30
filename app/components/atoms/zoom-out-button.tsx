@@ -20,6 +20,7 @@ export function ZoomOutButton(onClickHandler: () => void) {
   controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
   controlUI.style.cursor = "pointer";
   controlUI.style.marginLeft = "10px";
+  controlUI.style.marginBottom = "10px";
   controlUI.style.textAlign = "center";
   controlUI.title = "Zoom out completely";
   controlImg.src = zoom_out_img;

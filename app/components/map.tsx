@@ -114,7 +114,7 @@ function MyMap({
         });
     });
     mapRef.current.controls[
-      window.google.maps.ControlPosition.LEFT_CENTER
+      window.google.maps.ControlPosition.LEFT_BOTTOM
     ].push(zoomOutbutton);
     mapRef.current.controls[window.google.maps.ControlPosition.TOP_LEFT].push(
       shareButton
