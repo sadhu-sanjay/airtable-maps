@@ -24,7 +24,7 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-  const { isLoadingRecords, records, fetchRecords } = useRecords();
+  const { isLoadingRecords, records, fetchRecords, status } = useRecords();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<any[]>([]);
 
@@ -176,6 +176,7 @@ export default function Home() {
             records={listRecords}
             isLoadingRecords={isLoadingRecords}
             onRecordSelect={onRecordSelected}
+            status={status}
           />
         </div>
       </aside>

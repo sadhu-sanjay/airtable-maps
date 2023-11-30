@@ -10,11 +10,13 @@ function MyList({
   isLoadingRecords,
   records,
   onRecordSelect,
+  status,
 }: {
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
   onRecordSelect: (recordId: string) => void;
+  status: string;
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
@@ -87,7 +89,7 @@ function MyList({
       ) : (
         <EmptyList
           title="No Recods found"
-          subtitle="Please reload the view data or try other views."
+          subtitle={status}
         />
       )}
     </>

@@ -4,6 +4,7 @@ import { RECORDS_FETCH_URL } from "~/app/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
+  const [status, setStatus] = useState<string>("Default Status");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
 
   console.log("USE RECORDS RENDER");
@@ -22,27 +23,30 @@ export default function useRecords() {
       fetch(RECORDS_FETCH_URL_WITH_VIEW)
         .then((res) => {
           if (!res.ok) {
+            setStatus(res.statusText);
             throw new Error(`HTTP error! status: ${res.status}`);
           }
           return res.json();
         })
         .then((res) => {
+          if (res.count === 0) {
+            setStatus(res.message);
+            return setRecords([]);
+          }
           setRecords((prevRecords) => [...prevRecords, ...res]);
         })
         .catch((e) => {
-          console.error("Error fetchRecords ==> ", e);
-          setIsLoadingRecords(false);
+          setStatus(e.message);
         })
         .finally(() => {
           setIsLoadingRecords(false);
         });
     } catch (e: any) {
       console.log("catch Error::", e);
+      setStatus(e.message);
       setIsLoadingRecords(false);
     }
   }, []);
-
-  
 
   /**
    * Handle RealTime Events
@@ -103,5 +107,5 @@ export default function useRecords() {
   //   };
   // }, []);
 
-  return { isLoadingRecords, records, fetchRecords };
+  return { isLoadingRecords, records, fetchRecords, status };
 }
