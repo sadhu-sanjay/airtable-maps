@@ -39,7 +39,12 @@ function DropdownMultiSelect({
     const signal = abortController.signal;
 
     fetch(fetchUrl, { signal })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Response not ok");
+        }
+        return res.json();
+      })
       .then((data) => {
         console.log("TAGS DATA", data);
         const mappedData = data.map((item: any) => {

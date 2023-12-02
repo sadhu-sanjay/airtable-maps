@@ -1,4 +1,3 @@
-import face from "~/app/components/resources/svg/fronyface.svg";
 import { FronnyFace } from "../../resources/icons/fronyface";
 
 export default function EmptyList({

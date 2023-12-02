@@ -1,7 +1,7 @@
 export default function RefreshCircle() {
   return (
     <>
-      Synching
+      updating  
       <svg
         aria-hidden="true"
         role="status"

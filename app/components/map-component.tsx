@@ -6,7 +6,7 @@ import { Spinner } from "~/app/components/spinner";
 import { DropdownItem, Record } from "~/app/components/types";
 
 import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/app/config";
-import MyList from "./List";
+import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
 import SearchBar from "./search-bar";
@@ -117,7 +117,7 @@ export default function Home() {
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
-        return <Spinner />;
+        return <Spinner message={"Loading.."} />;
       case Status.FAILURE:
         return (
           <EmptyList

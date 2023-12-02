@@ -4,18 +4,20 @@ import { RECORDS_FETCH_URL } from "~/app/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
-  const [status, setStatus] = useState<string>("Plese try again in a moment.");
+  const [status, setStatus] = useState<string>("");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
 
   console.log("USE RECORDS RENDER");
 
   const fetchRecords = useCallback((selectedView: DropdownItem) => {
     setIsLoadingRecords(true);
+    setStatus("Getting Records");
     setRecords([]);
 
     try {
       const viewKey = selectedView?.value;
       if (!viewKey) {
+        setStatus("No view selected... please select a view.");
         throw new Error("noKey");
       }
       const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${viewKey}`;
@@ -23,24 +25,34 @@ export default function useRecords() {
       fetch(RECORDS_FETCH_URL_WITH_VIEW)
         .then((res) => {
           if (!res.ok) {
-            setStatus(res.statusText);
+            setStatus("Server response not ok");
             throw new Error(`HTTP error! status: ${res.status}`);
           }
           return res.json();
         })
         .then((res) => {
-          if (res.status != "Started") { // Else keep showing loader
+          if (res.status === "Started") {
+            setStatus(
+              "No records found.. will try updating server. Please try again in a moment"
+            );
+            setIsLoadingRecords(true);
+
+            setTimeout(() => {
+              fetchRecords(selectedView);
+            }, 5000);
+          } else {
             setRecords((prevRecords) => [...prevRecords, ...res]);
             setIsLoadingRecords(false);
           }
         })
         .catch((e) => {
-          setStatus(e.message);
+          setStatus("unknown error..please try refresh button");
+          console.error("Error", e);
           setIsLoadingRecords(false);
         });
     } catch (e: any) {
       console.log("catch Error::", e);
-      setStatus(e.message);
+      setStatus("unknown error..please try refresh button");
       setIsLoadingRecords(false);
     }
   }, []);

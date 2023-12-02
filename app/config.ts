@@ -28,3 +28,4 @@ export const RECORDS_THRESHHOLD = 12000
 
 // DEFAULT switch
 export let isFirstLoad = true;
+export const noRecordsTryAgain = "No records found. Please try again in a moment"

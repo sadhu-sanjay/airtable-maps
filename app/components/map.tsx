@@ -154,7 +154,7 @@ function MyMap({
 
   return (
     <div className="relative h-full w-full">
-      {isLoading && <SpinnerWithoutBackground className="z-50" />}
+      {isLoading && <SpinnerWithoutBackground />}
       <div ref={divRef} className="h-full w-full" />
     </div>
   );

@@ -1,11 +1,15 @@
 import React from "react";
 
-export function Spinner() {
+export function Spinner(props: { message: string }) {
   return (
     <>
       <div className=" w-full min-h-[86dvh] flex justify-center place-items-center ">
         <h3 className=" font-semibold text-gray-800 dark:text-gray-200 text-lg self-center absolute translate-y-full pt-2">
-          Loading...
+          {props.message ? (
+            <span className="text-gray-900 pl-2">{props.message}</span>
+          ) : (
+            "Loading..."
+          )}
         </h3>
         <div role="status">
           <svg
@@ -39,7 +43,7 @@ export const SpinnerWithoutBackground = ({
   return (
     <>
       <div
-        className={`${className} py-2 px-4 font-medium text-sm rounded-sm  lex justify-center place-items-center `}
+        className={`${className} z-50 bg-gray-200 dark:bg-gray-900 py-2 px-4 font-medium text-sm rounded-sm  justify-center place-items-center `}
         style={{
           position: "absolute",
           top: "50%",
