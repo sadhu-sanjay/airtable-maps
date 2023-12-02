@@ -7,7 +7,7 @@ export default function useRecords() {
   const [status, setStatus] = useState<string>("");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
   const timeoutID = useRef<NodeJS.Timeout | null>(null);
-  const retryCount = useRef(1);
+  const retryCount = useRef(0);
 
   console.log("USE RECORDS RENDER");
 
