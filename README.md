@@ -11,7 +11,7 @@
 
 ## DEMO
 
-![Live Demo](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW)
+https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW
 
 
 I will improve this over time. 
