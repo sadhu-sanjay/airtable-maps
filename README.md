@@ -1,4 +1,4 @@
-# A production grade application used for search and explore airtable records on Google maps.
+# A production grade application used for search and explore airtable records with Google maps.
 
 ## Visualize upto 50k airtable records in google maps. with smooth and robust and beautiful ux.
 
