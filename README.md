@@ -16,7 +16,7 @@
 https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW
 
 
-[GitHub Pages](https://sanjaygoswami.online).
+[Live Demo](https://sanjaygoswami.online).
 
 
 I will improve this over time. 
