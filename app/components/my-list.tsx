@@ -51,10 +51,14 @@ function MyList({
 
   return (
     <>
-      {records && records.length > 0 ? (
+      {isLoadingRecords && <Spinner message={status} />}
+      {records.length < 1 && !isLoadingRecords && (
+        <EmptyList title="No Recods found" subtitle={noRecordsTryAgain} />
+      )}
+      {!isLoadingRecords && records && records.length > 0 && (
         <>
           <List
-            height={screen.height - 200}
+            height={screen.height}
             width={asideRef.current?.style.width ?? 80 * 4}
             itemCount={records.length}
             itemSize={75} // adjust this according to your needs
@@ -69,8 +73,6 @@ function MyList({
             total={records.length}
           />
         </>
-      ) : (
-        <EmptyList title="No Recods found" subtitle={noRecordsTryAgain} />
       )}
     </>
   );

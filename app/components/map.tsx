@@ -34,6 +34,7 @@ function MyMap({
       // @ts-ignore
       bounds.extend(marker.position);
     }
+    if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
   };
 

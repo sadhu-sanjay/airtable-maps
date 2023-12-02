@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { DropdownItem, Record } from "~/app/components/types";
 import { RECORDS_FETCH_URL } from "~/app/config";
 
@@ -6,10 +6,13 @@ export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
   const [status, setStatus] = useState<string>("");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
+  const timeoutID = useRef<NodeJS.Timeout | null>(null);
+  const retryCount = useRef(1);
 
   console.log("USE RECORDS RENDER");
 
   const fetchRecords = useCallback((selectedView: DropdownItem) => {
+    if (timeoutID.current) clearTimeout(timeoutID.current);
     setIsLoadingRecords(true);
     setStatus("Getting Records");
     setRecords([]);
@@ -25,19 +28,21 @@ export default function useRecords() {
       fetch(RECORDS_FETCH_URL_WITH_VIEW)
         .then((res) => {
           if (!res.ok) {
-            setStatus("Server response not ok");
             throw new Error(`HTTP error! status: ${res.status}`);
           }
           return res.json();
         })
         .then((res) => {
+          console.info("RESPONSE", res);
           if (res.status === "Started") {
-            setStatus(
-              "No records found.. will try updating server. Please try again in a moment"
-            );
-            setIsLoadingRecords(true);
+            retryCount.current += 1;
+            if (retryCount.current > 5) { // stop trying if after 5 tries still no records
+              setIsLoadingRecords(false);
+              if (timeoutID.current) clearTimeout(timeoutID.current);
+            }
 
-            setTimeout(() => {
+            setStatus("No Records found, Checking again..");
+            timeoutID.current = setTimeout(() => {
               fetchRecords(selectedView);
             }, 5000);
           } else {

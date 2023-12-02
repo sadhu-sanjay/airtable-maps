@@ -3,13 +3,9 @@ import React from "react";
 export function Spinner(props: { message: string }) {
   return (
     <>
-      <div className=" w-full min-h-[86dvh] flex justify-center place-items-center ">
+      <div className=" w-full min-h-[86dvh] flex justify-center place-items-center  text-center">
         <h3 className=" font-semibold text-gray-800 dark:text-gray-200 text-lg self-center absolute translate-y-full pt-2">
-          {props.message ? (
-            <span className="text-gray-900 pl-2">{props.message}</span>
-          ) : (
-            "Loading..."
-          )}
+          {props.message ? props.message : "Loading..."}
         </h3>
         <div role="status">
           <svg
