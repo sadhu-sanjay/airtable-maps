@@ -12,8 +12,8 @@
 
 
 I will improve this over time. 
-make a pull request if you have suggestions.
+make a pull request if you haved added or fixed something.
 
-or message me your suggestions https://twitter.com/Sanjaygoswami60
+or message me your suggestions at https://twitter.com/Sanjaygoswami60
 
-Thanks You
+Thanks
