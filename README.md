@@ -16,7 +16,7 @@
 https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW
 
 
-[GitHub Pages](https://pages.github.com/).
+[GitHub Pages](https://sanjaygoswami.online).
 
 
 I will improve this over time. 
