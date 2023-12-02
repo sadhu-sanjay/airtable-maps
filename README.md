@@ -9,4 +9,9 @@ Visualize upto 50k airtable records in google maps. with smooth and robust and b
 ![Home](https://github.com/sadhu-sanjay/airtable-maps/assets/10679621/15a8ffc9-3879-4318-8e07-b9b4f9c0fdc2)
 
 
-https://twitter.com/Sanjaygoswami60
+I will improve this over time. 
+make a pull request if you have suggestions.
+
+or message me your suggestions https://twitter.com/Sanjaygoswami60
+
+Thanks You
