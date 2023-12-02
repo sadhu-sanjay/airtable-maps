@@ -1,4 +1,4 @@
-work in progress...
+Visualize upto 50k your airtable records in google maps. 
 
 A production application used search and explore airtable records on Google maps.
 
