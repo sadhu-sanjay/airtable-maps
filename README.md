@@ -1,6 +1,6 @@
-# A production grade application used for search and explore airtable records with Google maps.
+# A production grade react nextjs application used for search and exploring airtable records with Google maps.
 
-## Visualize upto 50k airtable records in google maps. with smooth and robust UX and beautiful UI.
+## Visualize upto 50k airtable records with smooth and robust UX, and beautiful UI.
 
 ### ![Live Demo]([url](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW))
 
