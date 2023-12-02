@@ -2,7 +2,7 @@
 
 ## Visualize upto 50k airtable records in google maps. with smooth and robust and beautiful ux.
 
-[DEMO]([url](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW))
+### ![Live Demo]([url](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW))
 
 ![Place Detail](https://github.com/sadhu-sanjay/airtable-maps/assets/10679621/135fc8c8-a02a-40c4-aca3-45a70113638d)
 
