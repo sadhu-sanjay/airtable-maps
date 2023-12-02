@@ -8,7 +8,7 @@
 
 ![Home](https://github.com/sadhu-sanjay/airtable-maps/assets/10679621/15a8ffc9-3879-4318-8e07-b9b4f9c0fdc2)
 
-#### ![Live Demo]([url](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW))
+![Live Demo](https://sanjaygoswami.online/?viewKey=viwWRnexxjkeIg4PW)
 
 
 I will improve this over time. 
