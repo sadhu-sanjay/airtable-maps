@@ -14,7 +14,7 @@ export default function useRecords() {
   const fetchRecords = useCallback((selectedView: DropdownItem) => {
     if (timeoutID.current) clearTimeout(timeoutID.current);
     setIsLoadingRecords(true);
-    setStatus("Getting Records");
+    setStatus("Gettng Records");
     setRecords([]);
 
     try {
@@ -36,15 +36,17 @@ export default function useRecords() {
           console.info("RESPONSE", res);
           if (res.status === "Started") {
             retryCount.current += 1;
-            if (retryCount.current > 5) { // stop trying if after 5 tries still no records
+            if (retryCount.current > 5) {
+              // stop trying if after 5 tries still no records
+              setStatus("No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present.");
               setIsLoadingRecords(false);
-              if (timeoutID.current) clearTimeout(timeoutID.current);
+              retryCount.current = 0;
+            } else {
+              setStatus("No Records found, checking again..");
+              timeoutID.current = setTimeout(() => {
+                fetchRecords(selectedView);
+              }, 5000);
             }
-
-            setStatus("No Records found, Checking again..");
-            timeoutID.current = setTimeout(() => {
-              fetchRecords(selectedView);
-            }, 5000);
           } else {
             setRecords((prevRecords) => [...prevRecords, ...res]);
             setIsLoadingRecords(false);

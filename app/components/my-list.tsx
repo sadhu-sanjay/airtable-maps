@@ -53,7 +53,7 @@ function MyList({
     <>
       {isLoadingRecords && <Spinner message={status} />}
       {records.length < 1 && !isLoadingRecords && (
-        <EmptyList title="No Recods found" subtitle={noRecordsTryAgain} />
+        <EmptyList title="No Recods found" subtitle={status} />
       )}
       {!isLoadingRecords && records && records.length > 0 && (
         <>
