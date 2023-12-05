@@ -9,7 +9,18 @@ export default function Marker(record: Record, showImg: boolean) {
 
   const imgDiv = document.createElement("img");
   imgDiv.classList.add("marker-img");
-  imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
+
+  // Only show start downloading image if it's on the screen.
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        imgDiv.src = RECORD_IMAGE_URL(record.RecordKey);
+        observer.unobserve(imgDiv);
+      }
+    });
+  });
+
+  observer.observe(imgDiv);
   imgDiv.onload = (ev: any) => {
     if (ev.target.src.includes("/images")) {
       ev.target.style.boxShadow =
