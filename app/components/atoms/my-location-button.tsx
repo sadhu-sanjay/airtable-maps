@@ -50,7 +50,7 @@ export const MyLocationButton = (
 
           zoomToCenter(pos);
 
-          if (!dirtyFlag) {
+          if (!dirtyFlag) { // don't add my location marker twice
             addMarker(pos);
             dirtyFlag = true;
           }
