@@ -110,14 +110,7 @@ function MyMap({
     const myLocationButton = MyLocationButton(mapRef);
     const shareButton = ShareButton(() => {
       const shareableLink = window.location.href;
-      navigator.clipboard
-        .writeText(shareableLink)
-        .then(() => {
-          console.log("Link copied to clipboard!");
-        })
-        .catch((error) => {
-          console.error("Failed to copy link to clipboard:", error);
-        });
+      navigator.clipboard.writeText(shareableLink);
     });
 
     mapRef.current.controls[

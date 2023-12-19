@@ -48,9 +48,12 @@ export const MyLocationButton = (
             lng: position.coords.longitude,
           };
 
-          if (dirtyFlag) return;
-          onAdd(pos);
-          dirtyFlag = true;
+          zoomToCenter(pos);
+
+          if (!dirtyFlag) {
+            addMarker(pos);
+            dirtyFlag = true;
+          }
         },
         () => {
           console.log("Error: The Geolocation service failed.");
@@ -61,10 +64,12 @@ export const MyLocationButton = (
     }
   });
 
-  const onAdd = (pos: any) => {
+  const zoomToCenter = (pos: any) => {
     mapRef.current?.setCenter(pos);
     mapRef.current?.setZoom(18);
+  };
 
+  const addMarker = (pos: any) => {
     const markerElement = document.createElement("img");
     markerElement.src = ICON_MY_LOCATION;
 
