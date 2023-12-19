@@ -9,6 +9,7 @@ import Marker from "./Marker";
 import { RECORDS_THRESHHOLD } from "../config";
 import { ZoomOutButton } from "./atoms/zoom-out-button";
 import { ShareButton } from "./atoms/share-button";
+import { MyLocationButton } from "./atoms/my-location-button";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -82,6 +83,9 @@ function MyMap({
     };
   }, [records, flag, onRecordSelected]);
 
+  /**
+   * Initialize the map and the cluster
+   **/
   useEffect(() => {
     if (!divRef.current || mapRef.current) return; // return if container is not there or map is already initialized
     mapRef.current = new window.google.maps.Map(divRef.current, {
@@ -103,6 +107,7 @@ function MyMap({
     });
 
     const zoomOutbutton = ZoomOutButton(() => mapRef.current?.setZoom(2));
+    const myLocationButton = MyLocationButton(mapRef);
     const shareButton = ShareButton(() => {
       const shareableLink = window.location.href;
       navigator.clipboard
@@ -114,12 +119,16 @@ function MyMap({
           console.error("Failed to copy link to clipboard:", error);
         });
     });
+
     mapRef.current.controls[
       window.google.maps.ControlPosition.LEFT_BOTTOM
     ].push(zoomOutbutton);
     mapRef.current.controls[window.google.maps.ControlPosition.TOP_LEFT].push(
       shareButton
     );
+    mapRef.current.controls[
+      window.google.maps.ControlPosition.LEFT_BOTTOM
+    ].push(myLocationButton);
 
     google.maps.event.addListenerOnce(mapRef.current!, "tilesloaded", () => {
       setFlag(true);
