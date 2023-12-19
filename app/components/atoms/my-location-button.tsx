@@ -37,6 +37,8 @@ export const MyLocationButton = (
   controlImg.style.width = "28px";
   controlImg.style.height = "28px";
 
+  let dirtyFlag = false; // a flag to prevent multiple my location markers
+
   controlDiv.addEventListener("click", () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -46,7 +48,9 @@ export const MyLocationButton = (
             lng: position.coords.longitude,
           };
 
+          if (dirtyFlag) return;
           onAdd(pos);
+          dirtyFlag = true;
         },
         () => {
           console.log("Error: The Geolocation service failed.");
@@ -68,14 +72,8 @@ export const MyLocationButton = (
       position: pos,
       content: markerElement,
       title: "My Location",
+      map: mapRef.current,
     });
-
-    // // only add marker if it is not already there
-    // const markerAlreadyExists = markerMap.current.get("my-location");
-    // if (!markerAlreadyExists) {
-    //   markerMap.current.set("my-location", marker);
-    marker.map = mapRef.current;
-    // }
   };
 
   return controlDiv;
