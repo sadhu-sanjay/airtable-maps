@@ -162,6 +162,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                 </h1>
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
+                    <li>Sanjay</li>;
                     if (
                       typeof value === "string" ||
                       (Array.isArray(value) &&

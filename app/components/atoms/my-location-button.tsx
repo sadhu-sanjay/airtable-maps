@@ -27,7 +27,7 @@ export const MyLocationButton = (
   controlUI.style.marginLeft = "10px";
   controlUI.style.marginBottom = "10px";
   controlUI.style.textAlign = "center";
-  controlUI.title = "Zoom out completely";
+  controlUI.title = "Zoom to your location";
   controlImg.src = ICON_FIND_LOCATION;
   controlUI.style.width = "40px";
   controlUI.style.height = "40px";
@@ -122,12 +122,4 @@ function usePosition(): {
     isGeolocationEnabled,
     coords,
   };
-}
-
-// Test implementation
-
-function TestMap() {
-  const mapRef = useRef<google.maps.Map | null>(null);
-
-  return <div></div>;
 }
