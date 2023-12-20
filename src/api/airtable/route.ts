@@ -1,7 +1,7 @@
 // import {
 //     AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
 // } from "~/app/config"
-import { Record } from "~/app/components/types"
+import { Record } from "~/components/types"
 import { NextResponse } from "next/server"
 // const baseUrl = "https://api.airtable.com/v0"
 let globalRecords: Record[] = []

@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { DropdownItem, Record } from "~/app/components/types";
-import { RECORDS_FETCH_URL } from "~/app/config";
+import { DropdownItem, Record } from "~/src/components/types";
+import { RECORDS_FETCH_URL } from "~/src/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);

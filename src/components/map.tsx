@@ -3,7 +3,7 @@ import {
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { memo, useEffect, useRef, useState } from "react";
-import { Record } from "~/app/components/types";
+import { Record } from "~/src/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
 import { RECORDS_THRESHHOLD } from "../config";
@@ -123,9 +123,11 @@ function MyMap({
     mapRef.current.controls[
       window.google.maps.ControlPosition.LEFT_BOTTOM
     ].push(zoomOutbutton);
+
     mapRef.current.controls[window.google.maps.ControlPosition.TOP_LEFT].push(
       shareButton
     );
+
     mapRef.current.controls[
       window.google.maps.ControlPosition.LEFT_BOTTOM
     ].push(myLocationButton);

@@ -1,6 +1,6 @@
 import { CSSProperties, memo } from "react";
 import { FixedSizeList as List } from "react-window";
-import { Record } from "~/app/components/types";
+import { Record } from "~/src/components/types";
 import EmptyList from "./common/empty-states/empty-list";
 import { PageStatus } from "./Paginator";
 import { ShareIcon } from "./resources/icons/share";

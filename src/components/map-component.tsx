@@ -2,10 +2,10 @@
 
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useRef, useEffect, useMemo, useState } from "react";
-import { Spinner } from "~/app/components/spinner";
-import { DropdownItem, Record } from "~/app/components/types";
+import { Spinner } from "~/src/components/spinner";
+import { DropdownItem, Record } from "~/src/components/types";
 
-import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/app/config";
+import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/src/config";
 import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ICON_FIND_LOCATION, ICON_MY_LOCATION } from "~/app/CONST";
+import { ICON_FIND_LOCATION, ICON_MY_LOCATION } from "~/src/CONST";
 
 export const MyLocationButton = (
   mapRef: React.MutableRefObject<google.maps.Map | null>
@@ -50,17 +50,18 @@ export const MyLocationButton = (
 
           zoomToCenter(pos);
 
-          if (!dirtyFlag) { // don't add my location marker twice
+          if (!dirtyFlag) {
+            // don't add my location marker twice
             addMarker(pos);
             dirtyFlag = true;
           }
         },
         () => {
-          console.log("Error: The Geolocation service failed.");
+          alert("Error: The Geolocation service failed.");
         }
       );
     } else {
-      console.log("Error: Your browser doesn't support geolocation.");
+      alert("Error: Your browser doesn't support geolocation.");
     }
   });
 

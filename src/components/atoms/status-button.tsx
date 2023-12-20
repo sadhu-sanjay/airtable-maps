@@ -1,7 +1,7 @@
-import RefreshCircle from "~/app/components/resources/icons/refresh-spinner";
-import IconRefresh from "~/app/components/resources/icons/refresh-icon";
+import RefreshCircle from "~/src/components/resources/icons/refresh-spinner";
+import IconRefresh from "~/src/components/resources/icons/refresh-icon";
 import React, { useCallback, useEffect, useState } from "react";
-import { VIEW_DATA_RELOAD, VIEW_RELOAD_STATUS } from "~/app/config";
+import { VIEW_DATA_RELOAD, VIEW_RELOAD_STATUS } from "~/src/config";
 
 const StatusButton: React.FC<{
   viewKey: string;
