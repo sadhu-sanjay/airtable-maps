@@ -26,9 +26,9 @@ function MyMap({
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const clusterRef = useRef<MarkerClusterer | null>(null);
+  const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
-  const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
