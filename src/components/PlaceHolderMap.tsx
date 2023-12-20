@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useEffect } from "react";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import { MAPS_API_KEY, RECORDS_FETCH_URL } from "~/src/config";
+import { MAPS_API_KEY, RECORDS_FETCH_URL } from "~/config";
 
 // a placeholder googlemaps which covers the entire screen
 export default function PlaceHolderMap() {

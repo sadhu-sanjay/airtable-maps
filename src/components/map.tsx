@@ -10,6 +10,7 @@ import { RECORDS_THRESHHOLD } from "../config";
 import { ZoomOutButton } from "./atoms/zoom-out-button";
 import { ShareButton } from "./atoms/share-button";
 import { MyLocationButton } from "./atoms/my-location-button";
+import { toast } from "sonner";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -114,10 +115,10 @@ function MyMap({
       navigator.clipboard
         .writeText(shareableLink)
         .then(() => {
-          alert("Link copied to clipboard!");
+          toast.success("Link copied to clipboard!");
         })
         .catch((err) => {
-          alert("Failed to copy link to clipboard!");
+          toast.error("Failed to copy link to clipboard!");
         });
     });
 

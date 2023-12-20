@@ -2,10 +2,10 @@
 
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useRef, useEffect, useMemo, useState } from "react";
-import { Spinner } from "~/src/components/spinner";
-import { DropdownItem, Record } from "~/src/components/types";
+import { Spinner } from "~/components/spinner";
+import { DropdownItem, Record } from "~/components/types";
 
-import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/src/config";
+import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/config";
 import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
@@ -16,6 +16,7 @@ import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { ShareIcon } from "./resources/icons/share";
+import { toast } from "sonner";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);

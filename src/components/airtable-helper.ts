@@ -1,6 +1,6 @@
 import {
   AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_MAP_TABLE_ID, RECORD_GET, TAG_FIELD_ID
-} from "~/src/config"
+} from "~/config"
 
 export async function fetchRecord(signal: AbortSignal, recordId: string) {
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { ICON_FIND_LOCATION, ICON_MY_LOCATION } from "~/CONST";
 
 export const MyLocationButton = (
@@ -57,11 +58,11 @@ export const MyLocationButton = (
           }
         },
         () => {
-          alert("Error: The Geolocation service failed.");
+          toast.error("Error: The Geolocation service failed.");
         }
       );
     } else {
-      alert("Error: Your browser doesn't support geolocation.");
+      toast.error("Error: Your browser doesn't support geolocation.");
     }
   });
 
