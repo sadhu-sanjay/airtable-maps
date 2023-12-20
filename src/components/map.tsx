@@ -3,7 +3,7 @@ import {
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { memo, useEffect, useRef, useState } from "react";
-import { Record } from "~/src/components/types";
+import { Record } from "~/components/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
 import { RECORDS_THRESHHOLD } from "../config";
@@ -51,6 +51,7 @@ function MyMap({
         for (const record of records) {
           if (!record.lat || !record.lng) continue;
           const marker = markerMap.current.get(record.RecordKey);
+
           if (marker) {
             newMarkers.push(marker);
           } else {

@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { DropdownItem, Record } from "~/src/components/types";
-import { RECORDS_FETCH_URL } from "~/src/config";
+import { DropdownItem, Record } from "~/components/types";
+import { RECORDS_FETCH_URL } from "~/config";
 
 export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
@@ -38,7 +38,9 @@ export default function useRecords() {
             retryCount.current += 1;
             if (retryCount.current > 5) {
               // stop trying if after 5 tries still no records
-              setStatus("No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present.");
+              setStatus(
+                "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
+              );
               setIsLoadingRecords(false);
               retryCount.current = 0;
             } else {

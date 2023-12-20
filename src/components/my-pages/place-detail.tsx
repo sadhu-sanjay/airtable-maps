@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, memo } from "react";
 import Image from "next/image";
-import { Record } from "~/src/components/types";
+import { Record } from "~/components/types";
 import CloseButton from "../resources/icons/close-button";
 import ImageSlider from "./image-slider";
 import { MapIcon } from "../resources/icons/map-icon";

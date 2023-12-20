@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ICON_FIND_LOCATION, ICON_MY_LOCATION } from "~/src/CONST";
+import { ICON_FIND_LOCATION, ICON_MY_LOCATION } from "~/CONST";
 
 export const MyLocationButton = (
   mapRef: React.MutableRefObject<google.maps.Map | null>
