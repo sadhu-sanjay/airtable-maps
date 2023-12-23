@@ -11,6 +11,7 @@ import { ZoomOutButton } from "./atoms/zoom-out-button";
 import { ShareButton } from "./atoms/share-button";
 import { MyLocationButton } from "./atoms/my-location-button";
 import { toast } from "sonner";
+import cluster from "cluster";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -27,14 +28,14 @@ function MyMap({
   const mapRef = useRef<google.maps.Map | null>(null);
   const clusterRef = useRef<MarkerClusterer | null>(null);
   const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
+  const clusterMap = useRef<Map<string, boolean>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
     for (const marker of clusterRef.current!["markers"]) {
-      // @ts-ignore
-      bounds.extend(marker.position);
+      bounds.extend((marker as AdvancedMarker).position!);
     }
     if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
@@ -48,25 +49,30 @@ function MyMap({
 
     const createMarker = async () => {
       await new Promise((resolve) => {
-        const newMarkers: AdvancedMarker[] = [];
-        for (const record of records) {
-          if (!record.lat || !record.lng) continue;
-          const marker = markerMap.current.get(record.RecordKey);
+        const markersToAdd: AdvancedMarker[] = [];
+        const markersToRemove: AdvancedMarker[] = [];
 
-          if (marker) {
-            newMarkers.push(marker);
-          } else {
-            const marker = Marker(record, true);
+        for (let i = 0; i < records.length; i++) {
+          const record = records[i];
+          if (!record.lat || !record.lng) continue;
+
+          let marker = markerMap.current.get(record.RecordKey);
+          if (!marker) {
+            marker = Marker(record, true);
             marker.addListener("click", () => {
               onRecordSelected(record.RecordKey);
             });
-
             markerMap.current.set(record.RecordKey, marker);
-            newMarkers.push(marker);
           }
+
+          if (clusterMap.current.get(record.RecordKey)) continue; // skip it if in cluster
+
+          markersToAdd.push(marker);
+          clusterMap.current.set(record.RecordKey, true);
         }
 
-        clusterRef.current!.addMarkers(newMarkers);
+        clusterRef.current?.addMarkers(markersToAdd); // add new markers to cluster
+
         return resolve(null);
       });
     };
@@ -81,6 +87,7 @@ function MyMap({
     }, 100);
 
     return () => {
+      clusterMap.current.clear();
       clusterRef.current!.clearMarkers();
     };
   }, [records, flag, onRecordSelected]);

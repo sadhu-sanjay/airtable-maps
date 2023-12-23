@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { toast } from "sonner";
 import { DropdownItem, Record } from "~/components/types";
 import { RECORDS_FETCH_URL } from "~/config";
 
@@ -34,25 +35,29 @@ export default function useRecords() {
         })
         .then(async (body) => {
           const reader = body?.getReader();
+          const decoder = new TextDecoder("utf-8");
+          let unprocessed = "";
+          const tempRecords: Record[] = [];
 
-          reader
-            ?.read()
-            .then(function processText({ done, value }): Promise<void> {
-              if (done) {
-                console.log("Stream complete");
-                return Promise.resolve();
-              }
+          while (true) {
+            const { done, value } = await reader!.read();
 
-              const decoder = new TextDecoder("utf-8");
-              const text = decoder.decode(value);
-              const records = JSON.parse(text);
-              console.log("Chunk received", records);
-
-              setRecords((prevRecords) => [...prevRecords, ...records]);
+            if (done) {
+              console.log("Stream finished");
               setIsLoadingRecords(false);
+              break;
+            }
 
-              return reader?.read().then(processText);
-            });
+            let chunk = unprocessed + decoder.decode(value);
+            const lines = chunk.split("\n");
+            unprocessed = lines.pop() || "";
+
+            const parsedObjects = lines.map((line) => JSON.parse(line));
+
+            setTimeout(() => {
+              setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
+            }, 0);
+          }
 
           // if (res.status === "Started") {
           //   retryCount.current += 1;
