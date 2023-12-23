@@ -94,7 +94,7 @@ function Dropdown({
 
   const doneButtonClicked = (item: DropdownItem) => {
     const params = new URLSearchParams(searchParams);
-    
+
     params.set("viewKey", item.value);
     window.history.replaceState(
       {},

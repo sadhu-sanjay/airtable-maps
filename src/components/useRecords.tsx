@@ -154,11 +154,5 @@ export default function useRecords() {
   //   };
   // }, []);
 
-  return {
-    isStreamingRecords,
-    isLoadingRecords,
-    records,
-    fetchRecords,
-    status,
-  };
+  return { isStreamingRecords, isLoadingRecords, records, fetchRecords, status };
 }

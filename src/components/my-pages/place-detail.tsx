@@ -6,6 +6,7 @@ import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import ImageSlider from "./image-slider";
 import EditButton from "../atoms/edit-button";
+import { ListValue } from "../atoms/labels/list-value";
 
 interface ModalProps {
   recordId: string;
@@ -156,9 +157,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           ) : (
             <div>
               <ul className="space-y-2">
-                <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
-                  {record?.fields?.Title ?? "Not Available"}
-                </h1>
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
                     if (
@@ -166,20 +164,24 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       (Array.isArray(value) &&
                         value.every((v) => typeof v === "string"))
                     ) {
-                      if (key === "Title") return null;
-                      if (key === "Description") {
+                      if (key === "Title") {
+                        return (
+                          <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
+                            {record?.fields?.Title ?? "Not Available"}
+                          </h1>
+                        );
+                      } else if (key === "Description") {
                         return (
                           <li>
                             <EditButton
                               className="float-right"
                               onClick={onClose}
                             />
-                            <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                              {value}
-                            </span>
+                            <ListValue value={value as string} />
                           </li>
                         );
                       }
+                      
                       return (
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
