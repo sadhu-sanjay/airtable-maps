@@ -5,6 +5,7 @@ import { MapIcon } from "../resources/icons/map-icon";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import ImageSlider from "./image-slider";
+import EditButton from "../atoms/edit-button";
 
 interface ModalProps {
   recordId: string;
@@ -160,17 +161,29 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                 </h1>
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
-                    <li>Sanjay</li>;
                     if (
                       typeof value === "string" ||
                       (Array.isArray(value) &&
                         value.every((v) => typeof v === "string"))
                     ) {
                       if (key === "Title") return null;
+                      if (key === "Description") {
+                        return (
+                          <li>
+                            <EditButton
+                              className="float-right"
+                              onClick={onClose}
+                            />
+                            <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
+                              {value}
+                            </span>
+                          </li>
+                        );
+                      }
                       return (
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                            {key === "Description" ? "" : `${key} : `}
+                            {key}
                           </span>
                           <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                             {key === "Coordinates (lat, lng)" && (
