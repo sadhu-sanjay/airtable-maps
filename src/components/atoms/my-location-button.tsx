@@ -68,7 +68,7 @@ export const MyLocationButton = (
 
   const zoomToCenter = (pos: any) => {
     mapRef.current?.setCenter(pos);
-    mapRef.current?.setZoom(18);
+    mapRef.current?.setZoom(13);
   };
 
   const addMarker = (pos: any) => {

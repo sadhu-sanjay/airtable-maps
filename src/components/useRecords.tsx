@@ -7,6 +7,7 @@ export default function useRecords() {
   const [records, setRecords] = useState<Record[]>([]);
   const [status, setStatus] = useState<string>("");
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
+  const [isStreamingRecords, setIsStreamingRecords] = useState(false);
   const timeoutID = useRef<NodeJS.Timeout | null>(null);
   const retryCount = useRef(0);
 
@@ -40,11 +41,13 @@ export default function useRecords() {
           const tempRecords: Record[] = [];
 
           while (true) {
+            setIsStreamingRecords(true);
             const { done, value } = await reader!.read();
 
             if (done) {
               console.log("Stream finished");
               setIsLoadingRecords(false);
+              setIsStreamingRecords(false);
               break;
             }
 
@@ -151,5 +154,11 @@ export default function useRecords() {
   //   };
   // }, []);
 
-  return { isLoadingRecords, records, fetchRecords, status };
+  return {
+    isStreamingRecords,
+    isLoadingRecords,
+    records,
+    fetchRecords,
+    status,
+  };
 }

@@ -176,6 +176,7 @@ export default function Home() {
             asideRef={asideRef}
             records={listRecords}
             isLoadingRecords={isLoadingRecords}
+            isStreamingRecords={false}
             onRecordSelect={onRecordSelected}
             status={status}
           />

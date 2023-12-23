@@ -9,12 +9,14 @@ import { Spinner } from "./spinner";
 import { noRecordsTryAgain } from "../config";
 
 function MyList({
+  isStreamingRecords,
   asideRef,
   isLoadingRecords,
   records,
   onRecordSelect,
   status,
 }: {
+  isStreamingRecords: boolean;
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
   isLoadingRecords: boolean;
   records: Record[];
@@ -51,7 +53,7 @@ function MyList({
 
   return (
     <>
-      {isLoadingRecords && <Spinner message={status} />}
+      {isStreamingRecords && <Spinner message={status} />}
       {records.length < 1 && !isLoadingRecords && (
         <EmptyList title="No Recods found" subtitle={status} />
       )}
