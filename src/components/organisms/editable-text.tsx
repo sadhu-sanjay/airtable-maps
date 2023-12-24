@@ -4,13 +4,14 @@ import { SubTitle } from "../atoms/labels/sub-title";
 import SaveButton from "../atoms/save-button";
 import CloseButton from "../resources/icons/close-button";
 import { toast } from "sonner";
+import { PATCH } from "~/api/airtable/route";
 
 type EditableTextProps = {
   value: string;
-  onClose: () => void;
+  onSave: (text: string) => void;
 };
 
-const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
+const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
   const [text, setText] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const [showSaveButton, setShowSaveButton] = useState(false);
@@ -24,12 +25,12 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
   const onCloseClicked = () => {
     setIsEditing(false);
     setText(value);
-    onClose();
   };
   const onSaveClicked = () => {
     setIsEditing(false);
-    toast.success("Changes Saved");
+    onSave(text);
   };
+
 
   return (
     <div className="relative">
@@ -44,13 +45,13 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
       )}
       {isEditing && (
         <div
-          className="flex gap-1 absolute right-4 bottom-4 float-right
+          className="flex gap-1 absolute right-4 bottom-2 float-right
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
         p-1 shadow-lg "
         >
           <SaveButton
             onClick={onSaveClicked}
-            className={`${hasTextChanged ? "block" : "hidden"} `}
+            // className={`${hasTextChanged ? "block" : "hidden"} `}
           />
           <CloseButton onClick={onCloseClicked} />
         </div>

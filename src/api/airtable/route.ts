@@ -1,5 +1,5 @@
 import {
-    AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
+    AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_MAP_TABLE_ID
 } from "~/config"
 import { Record } from "~/components/types"
 import { NextResponse } from "next/server"
@@ -12,16 +12,21 @@ export async function GET() {
     // })
 }
 
-// update a airtable record
-export async function PUT(req: { body: { id: string; fields: any } }) {
+// update a airtable record 
+export async function PATCH(req: { body: { id: string; fields: any } }) {
     const { id, fields } = req.body
-    const record = globalRecords.find((record) => record.id === id)
-    if (!record) {
-        return new NextResponse("Record not found", { status: 404 })
-    }
-    Object.assign(record.fields, fields)
-    return new NextResponse(JSON.stringify(record), { status: 200 })
+
+    const res = await fetch(`${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_MAP_TABLE_ID}/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({ fields }),
+    })
+    return res.json()
 }
+
 
 // export async function POST() {
 //     return new NextResponse(JSON.stringify(globalRecords), {

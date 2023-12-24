@@ -7,6 +7,8 @@ import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import ImageSlider from "./image-slider";
 import EditButton from "../atoms/edit-button";
 import EditableText from "../organisms/editable-text";
+import { PATCH } from "~/api/airtable/route";
+import { toast } from "sonner";
 
 interface ModalProps {
   recordId: string;
@@ -34,6 +36,23 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   //     window.speechSynthesis.cancel();
   //   };
   // }, [record]);
+
+  async function updateRecord(fields: any) {
+    const id = toast.loading("Updating Record");
+
+    const req = {
+      body: {
+        id: recordId, // replace with your record id
+        fields: fields,
+      },
+    };
+
+    const response = await PATCH(req);
+
+    toast.dismiss(id);
+    toast.success("Record Updated");
+    console.log(response);
+  }
 
   function getDate(date: string) {
     return new Date(date).toLocaleDateString("en-US", {
@@ -173,8 +192,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       } else if (key === "Description") {
                         return (
                           <EditableText
+                            key={key}
                             value={value as string}
-                            onClose={() => {}}
+                            onSave={(text) => {
+                              updateRecord({ Description: text });
+                            }}
                           />
                         );
                       }
