@@ -34,10 +34,13 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
   return (
     <div className="relative">
       {!isEditing && (
-        <EditButton
-          className="absolute right-1 top-1 clear-both "
-          onClick={onEditClicked}
-        />
+        <div>
+          <SubTitle className="" value={text} />
+          <EditButton
+            className="absolute right-1 top-1 clear-right "
+            onClick={onEditClicked}
+          />
+        </div>
       )}
       {isEditing && (
         <div
@@ -52,7 +55,6 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
           <CloseButton onClick={onCloseClicked} />
         </div>
       )}
-      {!isEditing && <SubTitle value={text} />}
       {isEditing && (
         <textarea
           id="message"
