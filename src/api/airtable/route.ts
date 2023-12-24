@@ -1,19 +1,26 @@
-// import {
-//     AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
-// } from "~/app/config"
+import {
+    AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME
+} from "~/config"
 import { Record } from "~/components/types"
 import { NextResponse } from "next/server"
-// const baseUrl = "https://api.airtable.com/v0"
-let globalRecords: Record[] = []
-// let recordCount = 0
-
-// fetchAirtableRecords().then(() => console.log("Ok Iam done Fetching "))
+const baseUrl = "https://api.airtable.com/v0"
 
 export async function GET() {
     // fetchAirtableRecords()
-    return new NextResponse(JSON.stringify(globalRecords.length), {
-        status: 200,
-    })
+    // return new NextResponse(JSON.stringify(globalRecords.length), {
+    //     status: 200,
+    // })
+}
+
+// update a airtable record
+export async function PUT(req: { body: { id: string; fields: any } }) {
+    const { id, fields } = req.body
+    const record = globalRecords.find((record) => record.id === id)
+    if (!record) {
+        return new NextResponse("Record not found", { status: 404 })
+    }
+    Object.assign(record.fields, fields)
+    return new NextResponse(JSON.stringify(record), { status: 200 })
 }
 
 // export async function POST() {

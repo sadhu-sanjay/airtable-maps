@@ -50,7 +50,7 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onClose }) => {
         >
           <SaveButton
             onClick={onSaveClicked}
-            className={`${hasTextChanged ? "block" : "hidden"}  text-green-700`}
+            className={`${hasTextChanged ? "block" : "hidden"} `}
           />
           <CloseButton onClick={onCloseClicked} />
         </div>
