@@ -6,7 +6,7 @@ import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import ImageSlider from "./image-slider";
 import EditButton from "../atoms/edit-button";
-import { ListValue } from "../atoms/labels/list-value";
+import EditableText from "../organisms/editable-text";
 
 interface ModalProps {
   recordId: string;
@@ -113,7 +113,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          classNames={`absolute w-10 h-10 z-40 top-6  
+          className={`absolute w-10 h-10 z-40 top-6  
           ${isFullScreen ? "left-6 w-10 h-10" : "left-6 w-8 h-8"}
           transition-all
           `}
@@ -162,7 +162,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     if (
                       typeof value === "string" ||
                       (Array.isArray(value) &&
-                        value.every((v) => typeof v === "string"))
+                        value.every((value) => typeof value === "string"))
                     ) {
                       if (key === "Title") {
                         return (
@@ -172,16 +172,13 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                         );
                       } else if (key === "Description") {
                         return (
-                          <li>
-                            <EditButton
-                              className="float-right"
-                              onClick={onClose}
-                            />
-                            <ListValue value={value as string} />
-                          </li>
+                          <EditableText
+                            value={value as string}
+                            onClose={() => {}}
+                          />
                         );
                       }
-                      
+
                       return (
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
