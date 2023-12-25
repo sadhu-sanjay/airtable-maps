@@ -6,7 +6,8 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="w-6 h-6"
+      width={props.width || 24}
+      height={props.height || 24}
       {...props}
     >
       <path

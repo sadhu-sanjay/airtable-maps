@@ -31,7 +31,6 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
     onSave(text);
   };
 
-
   return (
     <div className="relative">
       {!isEditing && (
@@ -51,6 +50,7 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
         >
           <SaveButton
             onClick={onSaveClicked}
+            className="w-6 h-6 text-red-700"
             // className={`${hasTextChanged ? "block" : "hidden"} `}
           />
           <CloseButton onClick={onCloseClicked} />
