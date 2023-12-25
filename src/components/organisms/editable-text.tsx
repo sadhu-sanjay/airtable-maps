@@ -44,13 +44,12 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
       )}
       {isEditing && (
         <div
-          className="flex gap-1 absolute right-4 bottom-2 float-right
+          className="flex items-center gap-1 absolute right-4 bottom-2 float-right
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
         p-1 shadow-lg "
         >
           <SaveButton
             onClick={onSaveClicked}
-            className="w-6 h-6 text-red-700"
             // className={`${hasTextChanged ? "block" : "hidden"} `}
           />
           <CloseButton onClick={onCloseClicked} />
