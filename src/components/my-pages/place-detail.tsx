@@ -9,6 +9,7 @@ import EditButton from "../atoms/edit-button";
 import EditableText from "../organisms/editable-text";
 import { PATCH } from "~/api/airtable/route";
 import { toast } from "sonner";
+import DeleteButton from "../resources/icons/delete-button";
 
 interface ModalProps {
   recordId: string;
@@ -234,6 +235,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     return null;
                   })}
               </ul>
+              <DeleteButton onClick={() => {}} />
             </div>
           )}
         </div>
