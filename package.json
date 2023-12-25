@@ -8,7 +8,7 @@
     "start": "next start",
     "serve": "npx serve@latest out",
     "lint": "next lint",
-    "deploy": "node_modules/.bin/firebase deploy --only hosting:airtable-maps"
+    "deploy": "NODE_ENV=production next build && cp -r out/ ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh "
   },
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.4.0",

@@ -1,9 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
-import CloseButton from "../resources/icons/close-button";
-import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
 
 const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
   images,

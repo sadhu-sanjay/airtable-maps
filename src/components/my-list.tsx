@@ -53,7 +53,7 @@ function MyList({
 
   return (
     <>
-      {isStreamingRecords && <Spinner message={status} />}
+      {isLoadingRecords && <Spinner message={status} />}
       {records.length < 1 && !isLoadingRecords && (
         <EmptyList title="No Recods found" subtitle={status} />
       )}
@@ -70,7 +70,7 @@ function MyList({
             {Row}
           </List>
           <PageStatus
-            isLoading={isLoadingRecords}
+            isLoading={isStreamingRecords}
             filtered={records.length}
             total={records.length}
           />
