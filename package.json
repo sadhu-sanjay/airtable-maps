@@ -8,8 +8,8 @@
     "start": "next start",
     "serve": "npx serve@latest out",
     "lint": "next lint",
-    "deploy": "NODE_ENV=production next build && cp -r out/ ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh ",
-    "deploy:test": "NODE_ENV=test next build && cp -r out/ ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh test"
+    "deploy": "NODE_ENV=production next build && cp -rf ./out ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh ",
+    "deploy:test": "NODE_ENV=test next build && cp -rf ./out ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh test"
   },
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.4.0",

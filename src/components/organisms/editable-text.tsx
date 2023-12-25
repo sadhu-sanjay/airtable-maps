@@ -41,9 +41,9 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
       )}
       {isEditing && (
         <div
-          className="flex items-center gap-1 absolute right-4 bottom-2 float-right
+          className="border flex items-center gap-1 float-right absolute bottom-0 right-0
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
-        p-1 shadow-lg "
+        p-1 m-2 shadow-lg "
         >
           <SaveButton
             onClick={onSaveClicked}
