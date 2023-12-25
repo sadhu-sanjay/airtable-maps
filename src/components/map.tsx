@@ -28,15 +28,16 @@ function MyMap({
   const mapRef = useRef<google.maps.Map | null>(null);
   const clusterRef = useRef<MarkerClusterer | null>(null);
   const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
-  const clusterMap = useRef<Map<string, boolean>>(new Map());
+  const clusterMap = useRef<Map<string, google.maps.LatLng>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
-    for (const marker of clusterRef.current!["markers"]) {
-      bounds.extend((marker as AdvancedMarker).position!);
-    }
+    clusterMap.current.forEach((latLng) => {
+      bounds.extend(latLng);
+    });
+
     if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
   };
@@ -68,7 +69,10 @@ function MyMap({
           if (clusterMap.current.get(record.RecordKey)) continue; // skip it if in cluster
 
           markersToAdd.push(marker);
-          clusterMap.current.set(record.RecordKey, true);
+          clusterMap.current.set(
+            record.RecordKey,
+            new google.maps.LatLng(marker.position!)
+          );
         }
 
         clusterRef.current?.addMarkers(markersToAdd); // add new markers to cluster

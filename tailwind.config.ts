@@ -17,7 +17,7 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       borderRadius: {
-        '4pixel': '4px',
+        '4px': '4px',
       }
     },
   },

@@ -34,20 +34,23 @@ function Dropdown({
         })
       : [];
 
-  const doneButtonClicked = (item: DropdownItem) => {
-    const params = new URLSearchParams(searchParams);
+  const doneButtonClicked = useCallback(
+    (item: DropdownItem) => {
+      const params = new URLSearchParams(searchParams);
 
-    params.set("viewKey", item.value);
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params.toString()}`
-    );
+      params.set("viewKey", item.value);
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${params.toString()}`
+      );
 
-    setSelectedItem(item);
-    itemGotSelected(item);
-    setIsOpen(false);
-  };
+      setSelectedItem(item);
+      itemGotSelected(item);
+      setIsOpen(false);
+    },
+    [itemGotSelected, searchParams]
+  ); // add other dependencies if they exist
 
   useEffect(() => {
     setIsLoading(true);
@@ -88,7 +91,7 @@ function Dropdown({
     return () => {
       abortController.abort();
     };
-  }, [fetchUrl, labelAndValue, searchParams]);
+  }, [fetchUrl, labelAndValue, searchParams, doneButtonClicked]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
