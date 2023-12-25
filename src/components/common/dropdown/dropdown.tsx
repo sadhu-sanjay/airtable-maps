@@ -33,7 +33,21 @@ function Dropdown({
           return item.label?.toLowerCase().includes(searchTerm.toLowerCase());
         })
       : [];
-  console.log("RENDER DROPDOWN", items);
+
+  const doneButtonClicked = (item: DropdownItem) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("viewKey", item.value);
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}?${params.toString()}`
+    );
+
+    setSelectedItem(item);
+    itemGotSelected(item);
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -74,7 +88,7 @@ function Dropdown({
     return () => {
       abortController.abort();
     };
-  }, [fetchUrl, labelAndValue]);
+  }, [fetchUrl, labelAndValue, searchParams]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,21 +105,6 @@ function Dropdown({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const doneButtonClicked = (item: DropdownItem) => {
-    const params = new URLSearchParams(searchParams);
-
-    params.set("viewKey", item.value);
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params.toString()}`
-    );
-
-    setSelectedItem(item);
-    itemGotSelected(item);
-    setIsOpen(false);
-  };
 
   return (
     <>

@@ -185,7 +185,10 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     ) {
                       if (key === "Title") {
                         return (
-                          <h1 className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800">
+                          <h1
+                            key={key}
+                            className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800"
+                          >
                             {record?.fields?.Title ?? "Not Available"}
                           </h1>
                         );
