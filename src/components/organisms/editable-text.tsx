@@ -35,10 +35,7 @@ const EditableText: React.FC<EditableTextProps> = ({ value, onSave }) => {
     <div className="relative">
       {!isEditing && (
         <div>
-          <EditButton
-            className="float-right"
-            onClick={onEditClicked}
-          />
+          <EditButton className="float-right" onClick={onEditClicked} />
           <SubTitle className="" value={text} />
         </div>
       )}

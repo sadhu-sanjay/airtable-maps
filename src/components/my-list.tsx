@@ -57,7 +57,7 @@ function MyList({
       {records.length < 1 && !isLoadingRecords && (
         <EmptyList title="No Recods found" subtitle={status} />
       )}
-      {!isLoadingRecords && records && records.length > 0 && (
+      {records && records.length > 0 && (
         <>
           <List
             height={screen.height}

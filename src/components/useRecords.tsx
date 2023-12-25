@@ -42,11 +42,11 @@ export default function useRecords() {
 
           while (true) {
             setIsStreamingRecords(true);
+            setIsLoadingRecords(false);
             const { done, value } = await reader!.read();
 
             if (done) {
               console.log("Stream finished");
-              setIsLoadingRecords(false);
               setIsStreamingRecords(false);
               break;
             }
@@ -154,5 +154,11 @@ export default function useRecords() {
   //   };
   // }, []);
 
-  return { isStreamingRecords, isLoadingRecords, records, fetchRecords, status };
+  return {
+    isStreamingRecords,
+    isLoadingRecords,
+    records,
+    fetchRecords,
+    status,
+  };
 }
