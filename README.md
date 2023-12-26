@@ -15,5 +15,3 @@ I will improve this over time.
 make a pull request if you have added or fixed something.
 
 or message me your suggestions at https://twitter.com/Sanjaygoswami60
-
-Thanks
