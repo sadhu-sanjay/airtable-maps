@@ -235,7 +235,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     return null;
                   })}
               </ul>
-              <DeleteButton onClick={() => {}} />
+              <DeleteButton className="inline-block m-auto" onClick={() => {}} /
             </div>
           )}
         </div>
