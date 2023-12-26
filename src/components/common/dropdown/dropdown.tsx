@@ -156,7 +156,7 @@ function Dropdown({
               </div>
             </div>
             <ul
-              className="h-auto px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="h-[30rem] px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item) => (
