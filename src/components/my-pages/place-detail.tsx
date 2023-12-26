@@ -10,6 +10,8 @@ import EditableText from "../organisms/editable-text";
 import { PATCH } from "~/api/airtable/route";
 import { toast } from "sonner";
 import DeleteButton from "../resources/icons/delete-button";
+import { DELETE_RECORD_URL } from "~/config";
+import DeleteConfirmDialog from "../molecules/confirm-dialog";
 
 interface ModalProps {
   recordId: string;
@@ -25,6 +27,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [record, setRecord] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   // useEffect(() => {
   //   const description = "This is a map showing the location of various places.";
@@ -235,7 +238,20 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     return null;
                   })}
               </ul>
-              <DeleteButton className="inline-block m-auto" onClick={() => {}} /
+              <DeleteButton
+                className="rounded-md m-2 "
+                onClick={() => setDeleteConfirm(true)}
+              />
+              {deleteConfirm && (
+                <DeleteConfirmDialog
+                  onConfirm={async () => {
+                    setDeleteConfirm(false);
+                    await deleteRecord(recordId);
+                    onClose();
+                  }}
+                  onCancel={() => setDeleteConfirm(false)}
+                />
+              )}
             </div>
           )}
         </div>
@@ -245,3 +261,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 };
 
 export default memo(PlaceDetailModal);
+
+// delete record using fetch
+const deleteRecord = async (_recordId: string) => {
+  toast.loading("Deleting Record");
+
+  const response = await fetch(DELETE_RECORD_URL(_recordId), {
+    method: "DELETE",
+  });
+
+  const respJson = await response.json();
+
+  toast.dismiss();
+  toast.success("Record Deleted");
+  console.log(respJson);
+};

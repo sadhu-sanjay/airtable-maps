@@ -25,6 +25,7 @@ export const VIEW_DATA_RELOAD = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-
 export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload-status"
 export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/${RecordKey}.jpeg`
 export const RECORDS_THRESHHOLD = 12000
+export const DELETE_RECORD_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/api/records/${RecordKey}`
 
 // DEFAULT switch
 export let isFirstLoad = true;

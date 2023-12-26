@@ -9,11 +9,15 @@ const DeleteButton = ({
 }) => (
   <button
     onClick={onClick}
-    className={`my-2 py-1.5 px-3 text-sm font-medium text-gray-200 bg-red-700 rounded-4px border-gray-200 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-red-900 dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center 
-         ${className}`}
+    type="submit"
+    className="rounded-4px px-4 py-2 mx-2 my-4 ml-auto text-center 
+          text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 
+          hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 
+          dark:focus:ring-red-800 shadow-sm shadow-red-500/50 dark:shadow-sm 
+          dark:shadow-red-800/80 font-medium text-sm "
   >
-    DELETE
-    <DeleteIcon width={24} height={24} className="ml-2" />
+    <DeleteIcon width={20} height={20} className="mr-2 inline" />
+    Delete
   </button>
 );
 
