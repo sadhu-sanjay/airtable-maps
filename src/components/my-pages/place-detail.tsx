@@ -136,7 +136,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          className={`z-40 absolute top-4 left-4 rounded-full p-0
+          className={`z-50 absolute top-4 left-4 rounded-full p-0
           ${isFullScreen ? "w-9 h-9" : " w-8 h-8"}
           transition-all `}
           onClick={onClose}
@@ -239,8 +239,10 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                   })}
               </ul>
               <DeleteButton
+                title="Delete"
                 className="rounded-md m-2 "
                 onClick={() => setDeleteConfirm(true)}
+                showIcon
               />
               {deleteConfirm && (
                 <DeleteConfirmDialog
@@ -269,6 +271,12 @@ const deleteRecord = async (_recordId: string) => {
   const response = await fetch(DELETE_RECORD_URL(_recordId), {
     method: "DELETE",
   });
+
+  if (!response.ok) {
+    toast.dismiss();
+    toast.error("Error Deleting Record");
+    return;
+  }
 
   const respJson = await response.json();
 
