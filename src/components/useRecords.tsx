@@ -56,6 +56,7 @@ export default function useRecords() {
             unprocessed = lines.pop() || "";
 
             const parsedObjects = lines.map((line) => JSON.parse(line));
+            tempRecords.push(...parsedObjects);
 
             setTimeout(() => {
               setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
