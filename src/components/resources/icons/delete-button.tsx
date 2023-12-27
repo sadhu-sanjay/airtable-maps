@@ -11,7 +11,6 @@ const DeleteButton = ({
   className?: string;
   showIcon?: boolean;
 }) => (
-
   <button
     onClick={onClick}
     type="submit"
