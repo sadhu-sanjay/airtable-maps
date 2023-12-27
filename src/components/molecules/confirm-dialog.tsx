@@ -45,7 +45,7 @@ const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
             </svg>
             <span className="sr-only">Close modal</span>
           </button>
-          <div className="p-4 md:p-5 text-center">
+          <div className="p-2 md:p-5 text-center">
             <svg
               className="mx-auto m-4 text-gray-400 w-8 h-8 dark:text-gray-200"
               aria-hidden="true"
@@ -64,7 +64,7 @@ const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
             <h3 className="m-2 text-lg font-normal text-gray-500 dark:text-gray-400">
               Are you sure ?
             </h3>
-            <div className="flex gap-2 justify-around ">
+            <div className="flex justify-around ">
               <DeleteButton title="Yes" onClick={onConfirm} />
               <CancelButton title=" No" onClick={onCancel} />
             </div>
