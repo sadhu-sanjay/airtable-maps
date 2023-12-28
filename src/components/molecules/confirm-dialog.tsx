@@ -2,6 +2,7 @@ import React from "react";
 import DeleteButton from "../resources/icons/delete-button";
 import CloseButton from "../resources/icons/close-button";
 import CancelButton from "../resources/icons/cancel-button";
+import DeleteIcon from "../resources/icons/delete-icon";
 
 interface DeleteConfirmDialogProps {
   onCancel: () => void;
@@ -89,21 +90,11 @@ export const DeleteConfirmDialogWithMessage: React.FC<
       >
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
           <div className="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            
-            <CloseButton className="absolute right-2.5 top-2.5 border-0" onClick={onCancel} />
-            <svg
-              className="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
+            <CloseButton
+              className="absolute right-2.5 top-2.5 border-0"
+              onClick={onCancel}
+            />
+            <DeleteIcon className="mb-3.5 mx-auto w-10 h-10" />
             <p className="mb-4 text-gray-500 dark:text-gray-300">
               Are you sure you want to delete this item?
             </p>
