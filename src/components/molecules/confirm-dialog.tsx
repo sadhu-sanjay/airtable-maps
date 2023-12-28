@@ -94,7 +94,7 @@ export const DeleteConfirmDialogWithMessage: React.FC<
               className="absolute right-2.5 top-2.5 border-0"
               onClick={onCancel}
             />
-            <DeleteIcon className="mb-3.5 mx-auto w-10 h-10" />
+            <DeleteIcon className="mb-3.5 mx-auto w-11 h-11" />
             <p className="mb-4 text-gray-500 dark:text-gray-300">
               Are you sure you want to delete this item?
             </p>
