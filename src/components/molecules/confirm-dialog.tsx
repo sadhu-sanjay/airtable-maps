@@ -8,71 +8,114 @@ interface DeleteConfirmDialogProps {
   onConfirm: () => void;
 }
 
-const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
-  onCancel,
-  onConfirm,
-}) => {
+// const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
+//   onCancel,
+//   onConfirm,
+// }) => {
+//   return (
+//     <div
+//       id="popup-modal"
+//       tabIndex={-1}
+//       className=" overflow-y-auto overflow-x-hidden fixed inset-0
+//       md:inset-0 h-[calc(100%-1rem)] max-h-full
+//       z-50 flex items-center justify-center overflow-auto "
+//     >
+//       <div className="relative w-full max-w-xs max-h-full">
+//         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+//           <button
+//             type="button"
+//             className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+//             data-modal-hide="popup-modal"
+//             onClick={onCancel}
+//           >
+//             <svg
+//               className="w-3 h-3"
+//               aria-hidden="true"
+//               xmlns="http://www.w3.org/2000/svg"
+//               fill="none"
+//               viewBox="0 0 14 14"
+//             >
+//               <path
+//                 stroke="currentColor"
+//                 strokeLinecap="round"
+//                 strokeLinejoin="round"
+//                 strokeWidth="2"
+//                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+//               />
+//             </svg>
+//             <span className="sr-only">Close modal</span>
+//           </button>
+//           <div className="p-2 md:p-5 text-center">
+//             <svg
+//               className="mx-auto m-4 text-gray-400 w-8 h-8 dark:text-gray-200"
+//               aria-hidden="true"
+//               xmlns="http://www.w3.org/2000/svg"
+//               fill="none"
+//               viewBox="0 0 20 20"
+//             >
+//               <path
+//                 stroke="currentColor"
+//                 strokeLinecap="round"
+//                 strokeLinejoin="round"
+//                 strokeWidth="2"
+//                 d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+//               />
+//             </svg>
+//             <h3 className="m-2 text-lg font-normal text-gray-500 dark:text-gray-400">
+//               Are you sure ?
+//             </h3>
+//             <div className="flex justify-around ">
+//               <DeleteButton title="Yes" onClick={onConfirm} />
+//               <CancelButton title=" No" onClick={onCancel} />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+export const DeleteConfirmDialogWithMessage: React.FC<
+  DeleteConfirmDialogProps & { message: string }
+> = ({ onCancel, onConfirm, message }) => {
   return (
-    <div
-      id="popup-modal"
-      tabIndex={-1}
-      className=" overflow-y-auto overflow-x-hidden fixed inset-0 
+    <>
+      <div
+        id="popup-modal"
+        tabIndex={-1}
+        className=" overflow-y-auto overflow-x-hidden fixed inset-0 
       md:inset-0 h-[calc(100%-1rem)] max-h-full 
       z-50 flex items-center justify-center overflow-auto "
-    >
-      <div className="relative w-full max-w-xs max-h-full">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <button
-            type="button"
-            className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="popup-modal"
-            onClick={onCancel}
-          >
+      >
+        <div className="relative p-4 w-full max-w-md h-full md:h-auto">
+          <div className="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            
+            <CloseButton className="absolute right-2.5 top-2.5 border-0" onClick={onCancel} />
             <svg
-              className="w-3 h-3"
+              className="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
               aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span className="sr-only">Close modal</span>
-          </button>
-          <div className="p-2 md:p-5 text-center">
-            <svg
-              className="mx-auto m-4 text-gray-400 w-8 h-8 dark:text-gray-200"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              fill="currentColor"
               viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
+                fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              ></path>
             </svg>
-            <h3 className="m-2 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure ?
-            </h3>
-            <div className="flex justify-around ">
-              <DeleteButton title="Yes" onClick={onConfirm} />
-              <CancelButton title=" No" onClick={onCancel} />
+            <p className="mb-4 text-gray-500 dark:text-gray-300">
+              Are you sure you want to delete this item?
+            </p>
+            <div className="flex justify-center items-center space-x-4">
+              <DeleteButton title="Yes, I'm sure" onClick={onConfirm} />
+              <CancelButton title="No, cancel" onClick={onCancel} />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default DeleteConfirmDialog;
+export default DeleteConfirmDialogWithMessage;
