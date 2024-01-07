@@ -12,14 +12,14 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
   return (
     <>
       <span
-        id="badge-dismiss-slate"
-        className={`inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-slate-800 bg-slate-200 rounded dark:bg-slate-900 dark:text-slate-300`}
+        id="badge-dismiss-gray"
+        className={`inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-900 dark:text-gray-300`}
       >
         {item.label}
         <button
           type="button"
-          className="inline-flex items-center p-1 ms-2 text-sm text-slate-400 bg-transparent rounded-sm hover:bg-slate-200 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-          data-dismiss-target="#badge-dismiss-slate"
+          className="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+          data-dismiss-target="#badge-dismiss-gray"
           aria-label="Remove"
         >
           <svg
