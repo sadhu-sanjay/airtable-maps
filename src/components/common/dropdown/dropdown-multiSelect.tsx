@@ -33,42 +33,6 @@ function DropdownMultiSelect({
         })
       : [];
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const abortController = new AbortController();
-  //   const signal = abortController.signal;
-
-  //   fetch(fetchUrl, { signal })
-  //     .then((res) => {
-  //       if (!res.ok) {
-  //         throw new Error("Response not ok");
-  //       }
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       console.log("TAGS DATA", data);
-  //       const mappedData = data.map((item: any) => {
-  //         return {
-  //           label: item[labelAndValue.label],
-  //           value: item[labelAndValue.value],
-  //         };
-  //       });
-  //       setItems(mappedData);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((e) => {
-  //       setIsLoading(false);
-  //       if (e.name === "AbortError") {
-  //         return console.log("Fetch Items Aborted DropDown MultiSelect ");
-  //       }
-  //       console.error(`Error Fetching ==> ${fetchUrl}`, e);
-  //     });
-
-  //   return () => {
-  //     abortController.abort();
-  //   };
-  // }, [fetchUrl, label, labelAndValue.label, labelAndValue.value]);
-
   const handleSelected = (item: any) => {
     if (
       selectedItems.some((selectedItems) => selectedItems.value === item.value)

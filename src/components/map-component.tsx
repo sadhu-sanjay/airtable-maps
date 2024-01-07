@@ -190,6 +190,7 @@ export default function Home() {
               items={tagsQuery.data?.map((tag: any) => ({
                 label: tag.name,
                 value: tag.id,
+                color: tag.color,
               }))}
             />
           </div>
