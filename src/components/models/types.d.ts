@@ -35,4 +35,5 @@ export type Record = {
 type DropdownItem = {
   label: string;
   value: string;
+  color?: string;
 };

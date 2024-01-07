@@ -13,10 +13,9 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
     <>
       <span
         id="badge-dismiss-pink"
-        className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300"
+        className={`{inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300`}
       >
-        {/* {item.label} */}
-        sample
+        {item.label}
         <button
           type="button"
           className="inline-flex items-center p-1 ms-2 text-sm text-pink-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-pink-900 dark:hover:bg-pink-800 dark:hover:text-pink-300"

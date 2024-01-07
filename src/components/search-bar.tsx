@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from "react";
-import { myDebounce } from "./utility/utilityFunctions";
+import { myDebounce } from "./lib/utils";
 
 const SearchBar = ({
   onValueChange,

@@ -15,6 +15,7 @@ import DeleteConfirmDialog from "../molecules/confirm-dialog";
 import DropdownMultiSelect from "../common/dropdown/dropdown-multiSelect";
 import MultiSelect from "../common/dropdown/multi-dropdown";
 import { EditableChips } from "../organisms/editable-chips";
+import { randomColor } from "../lib/utils";
 
 interface ModalProps {
   recordId: string;
@@ -72,6 +73,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     async (signal: AbortSignal, recordId: string) => {
       try {
         const respJson = await fetchRecord(signal, recordId);
+        console.log("Sanjay Goswami", respJson);
         const record = cleanRecord(respJson);
         return record;
       } catch (e: any) {
@@ -200,7 +202,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                         // return <Scratchpad key={key} />;
                         return (
                           <EditableChips
-                            chips={value as any}
+                            chips={Array.from(value).map((tag) => ({
+                              label: tag,
+                              value: tag,
+                              color: randomColor(),
+                            }))}
                             onAdd={(chip: any) => {
                               // updateRecord({ Tags: [...value, chip] });
                             }}

@@ -10,7 +10,7 @@ import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
 import SearchBar from "./search-bar";
-import { myDebounce } from "./utility/utilityFunctions";
+import { myDebounce } from "./lib/utils";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";

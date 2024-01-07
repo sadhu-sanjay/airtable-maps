@@ -29,7 +29,7 @@ export const EditableChips = ({ chips, onAdd, onDelete }: Props) => {
   };
 
   return (
-    <div className="chips">
+    <div className="flex flex-wrap gap-2 ">
       {chips.map((item) => (
         <Chip
           key={item.value}
