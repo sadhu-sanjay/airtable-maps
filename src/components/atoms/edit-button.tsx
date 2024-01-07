@@ -3,9 +3,13 @@ import EditIcon from "../resources/icons/edit-icon";
 const EditButton = ({
   onClick,
   className,
+  btnWidth = 24,
+  btnHeight = 24,
 }: {
   onClick: () => void;
   className: string;
+  btnWidth?: number;
+  btnHeight?: number;
 }) => (
   <button
     onClick={onClick}
@@ -16,7 +20,7 @@ const EditButton = ({
        inline-flex items-center
     ${className}`}
   >
-    <EditIcon  />
+    <EditIcon width={btnWidth} height={btnHeight} />
   </button>
 );
 

@@ -37,7 +37,11 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap gap-2 ">
+    <>
+      <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+        {label}
+        {": "}
+      </span>
       {chips.map((item) => (
         <Chip
           key={item.value}
@@ -49,7 +53,10 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
       <EditButton
         className="float-right "
         onClick={() => console.log("Edit Tags")}
+        btnHeight={20}
+        btnWidth={20}
       />
+
       {/* <input
         type="search"
         id="default-search"
@@ -67,6 +74,6 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         }}
         onKeyDown={handleKeyDown}
       /> */}
-    </div>
+    </>
   );
 };

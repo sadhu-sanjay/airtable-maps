@@ -197,29 +197,26 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                           />
                         );
                       } else if (key === "Tags") {
-                        // return <Scratchpad key={key} />;
                         return (
-                          <>
-                            <EditableChips
-                              label="Tags"
-                              chips={Array.from(value).map(
-                                (tag) =>
-                                  ({
-                                    label: tag,
-                                    value: tag,
-                                  } as DropdownItem)
-                              )}
-                              onAdd={(chip: any) => {
-                                // updateRecord({ Tags: [...value, chip] });
-                              }}
-                              onDelete={(chip: any) => {
-                                updateRecord({
-                                  // Tags: value.filter((c) => c !== chip),
-                                });
-                              }}
-                              key={key}
-                            />
-                          </>
+                          <EditableChips
+                            key={key}
+                            label="Tags"
+                            chips={Array.from(value).map(
+                              (tag) =>
+                                ({
+                                  label: tag,
+                                  value: tag,
+                                } as DropdownItem)
+                            )}
+                            onAdd={(chip: any) => {
+                              // updateRecord({ Tags: [...value, chip] });
+                            }}
+                            onDelete={(chip: any) => {
+                              updateRecord({
+                                // Tags: value.filter((c) => c !== chip),
+                              });
+                            }}
+                          />
                         );
                       }
 
@@ -227,6 +224,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                         <li key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
                             {key}
+                            {": "}
                           </span>
                           <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
                             {key === "Coordinates (lat, lng)" && (
