@@ -7,74 +7,77 @@ function DropdownMultiSelect({
   placeholder,
   doneCallBack,
   fetchUrl,
-  labelAndValue,
+  isLoading,
   selectedItems,
   setSelectedItems,
+  items,
 }: {
   label: string;
   placeholder: string;
   doneCallBack: (selectedItems: DropdownItem[]) => void;
   fetchUrl: string;
-  labelAndValue: { label: string; value: string };
   selectedItems: DropdownItem[];
   setSelectedItems: (selectedItems: DropdownItem[]) => void;
+  items: any;
+  isLoading: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [items, setItems] = useState<Array<any>>([]);
   const clearAllSelected = () => setSelectedItems([]);
   const filteredItems =
-    items.length > 0
-      ? items.filter((item) => {
+    items && items.length > 0
+      ? items.filter((item: any) => {
           if (!item) return;
           return item.label?.toLowerCase().includes(searchTerm.toLowerCase());
         })
       : [];
 
-  useEffect(() => {
-    setIsLoading(true);
-    const abortController = new AbortController();
-    const signal = abortController.signal;
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const abortController = new AbortController();
+  //   const signal = abortController.signal;
 
-    fetch(fetchUrl, { signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Response not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("TAGS DATA", data);
-        const mappedData = data.map((item: any) => {
-          return {
-            label: item[labelAndValue.label],
-            value: item[labelAndValue.value],
-          };
-        });
-        setItems(mappedData);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (e.name === "AbortError") {
-          return console.log("Fetch Items Aborted DropDown MultiSelect ");
-        }
-        console.error(`Error Fetching ==> ${fetchUrl}`, e);
-      });
+  //   fetch(fetchUrl, { signal })
+  //     .then((res) => {
+  //       if (!res.ok) {
+  //         throw new Error("Response not ok");
+  //       }
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("TAGS DATA", data);
+  //       const mappedData = data.map((item: any) => {
+  //         return {
+  //           label: item[labelAndValue.label],
+  //           value: item[labelAndValue.value],
+  //         };
+  //       });
+  //       setItems(mappedData);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((e) => {
+  //       setIsLoading(false);
+  //       if (e.name === "AbortError") {
+  //         return console.log("Fetch Items Aborted DropDown MultiSelect ");
+  //       }
+  //       console.error(`Error Fetching ==> ${fetchUrl}`, e);
+  //     });
 
-    return () => {
-      abortController.abort();
-    };
-  }, [fetchUrl, label, labelAndValue.label, labelAndValue.value]);
+  //   return () => {
+  //     abortController.abort();
+  //   };
+  // }, [fetchUrl, label, labelAndValue.label, labelAndValue.value]);
 
   const handleSelected = (item: any) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((i) => i !== item));
+    if (
+      selectedItems.some((selectedItems) => selectedItems.value === item.value)
+    ) {
+      setSelectedItems(selectedItems.filter((i) => i.value !== item.value));
     } else {
       setSelectedItems([...selectedItems, item]);
     }
+
   };
 
   function doneButtonClicked() {
@@ -117,6 +120,7 @@ function DropdownMultiSelect({
             </span>
           )}
           {isLoading ? `Loading...` : label}
+          {/* {data} */}
           <svg
             className={`${isLoading ? "hidden" : "inline"} w-2.5 h-2.5 ml-2.5`}
             aria-hidden="true"
@@ -194,13 +198,20 @@ function DropdownMultiSelect({
               className="h-[30rem] px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
-              {filteredItems.map((item) => (
+              {selectedItems.length > 0 && (
+                <li className="flex items-center justify-between py-2 pl-2 pr-4 mb-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
+                  <span>Selected</span>
+                </li>
+              )}
+              {filteredItems.map((item: DropdownItem) => (
                 <li key={item.value}>
                   <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <input
-                      id={`checkbox-item-${item.value}`}
                       type="checkbox"
-                      checked={selectedItems.includes(item)}
+                      id={`checkbox-item-${item.value}`}
+                      checked={selectedItems.some(
+                        (selectedItem) => selectedItem.value === item.value
+                      )}
                       onChange={() => handleSelected(item)}
                       className="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 rounded focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
@@ -219,7 +230,7 @@ function DropdownMultiSelect({
                 <p className="flex items-center p-3 text-sm font-medium text-slate-600  dark:text-slate-200 ">
                   {/* show how many selected */}
                   {selectedItems.length === 0
-                    ? `Total: ${items.length}`
+                    ? `Total: ${items && items.length}`
                     : `${selectedItems.length} of ${items.length}`}
                 </p>
                 <p

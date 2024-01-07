@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import ReactQueryProvider from "~/components/providers/tanstack-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Toaster richColors position="top-right" />
-        {children}
+        <ReactQueryProvider>
+          <Toaster richColors position="top-right" />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -5,7 +5,12 @@ import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/components/spinner";
 import { DropdownItem, Record } from "~/components/models/types";
 
-import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/config";
+import {
+  MAPS_API_KEY,
+  RECORDS_FETCH_URL,
+  TAGS_FETCH_URL,
+  VIEWS_FETCH_URL,
+} from "~/config";
 import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
@@ -16,7 +21,7 @@ import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { ShareIcon } from "./resources/icons/share";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -34,6 +39,12 @@ export default function Home() {
   } = useRecords();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<any[]>([]);
+
+  const tagsQuery = useQuery({
+    queryKey: ["tags"],
+    queryFn: () => fetch(TAGS_FETCH_URL).then((res) => res.json()),
+    refetchOnWindowFocus: false,
+  });
 
   console.log("RENDER MAP COMPONENT");
 
@@ -173,9 +184,13 @@ export default function Home() {
               placeholder="Tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
-              labelAndValue={labelAndValues}
               selectedItems={selectedTags}
               setSelectedItems={setSelectedTags}
+              isLoading={tagsQuery.isLoading}
+              items={tagsQuery.data?.map((tag: any) => ({
+                label: tag.name,
+                value: tag.id,
+              }))}
             />
           </div>
           <MyList
@@ -202,4 +217,7 @@ export default function Home() {
       </aside>
     </div>
   );
+}
+function axios(RECORDS_FETCH_URL: any) {
+  throw new Error("Function not implemented.");
 }

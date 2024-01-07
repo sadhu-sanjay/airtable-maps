@@ -40,6 +40,7 @@ export const EditableChips = ({ chips, onAdd, onDelete }: Props) => {
       ))}
       <input
         id="standard-basic"
+        className="w-20 inline"
         placeholder="Add new"
         value={inputValue}
         onChange={(e: any) => setInputValue(e.target.value)}
