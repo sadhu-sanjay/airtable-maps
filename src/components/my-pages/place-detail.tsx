@@ -12,10 +12,8 @@ import { toast } from "sonner";
 import DeleteButton from "../resources/icons/delete-button";
 import { DELETE_RECORD_URL, TAGS_FETCH_URL } from "~/config";
 import DeleteConfirmDialog from "../molecules/confirm-dialog";
-import DropdownMultiSelect from "../common/dropdown/dropdown-multiSelect";
-import MultiSelect from "../common/dropdown/multi-dropdown";
 import { EditableChips } from "../organisms/editable-chips";
-import { randomColor } from "../lib/utils";
+import { DropdownItem } from "../models/types";
 
 interface ModalProps {
   recordId: string;
@@ -201,23 +199,27 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       } else if (key === "Tags") {
                         // return <Scratchpad key={key} />;
                         return (
-                          <EditableChips
-                            chips={Array.from(value).map((tag) => ({
-                              label: tag,
-                              value: tag,
-                              // color: randomColor(),
-                              color: "green",
-                            }))}
-                            onAdd={(chip: any) => {
-                              // updateRecord({ Tags: [...value, chip] });
-                            }}
-                            onDelete={(chip: any) => {
-                              updateRecord({
-                                // Tags: value.filter((c) => c !== chip),
-                              });
-                            }}
-                            key={key}
-                          />
+                          <>
+                            <EditableChips
+                              label="Tags"
+                              chips={Array.from(value).map(
+                                (tag) =>
+                                  ({
+                                    label: tag,
+                                    value: tag,
+                                  } as DropdownItem)
+                              )}
+                              onAdd={(chip: any) => {
+                                // updateRecord({ Tags: [...value, chip] });
+                              }}
+                              onDelete={(chip: any) => {
+                                updateRecord({
+                                  // Tags: value.filter((c) => c !== chip),
+                                });
+                              }}
+                              key={key}
+                            />
+                          </>
                         );
                       }
 

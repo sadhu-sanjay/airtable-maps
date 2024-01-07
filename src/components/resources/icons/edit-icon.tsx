@@ -7,6 +7,7 @@ function EditIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeWidth="1.5"
       stroke="currentColor"
       className="w-6 h-6"
+      {...props}
     >
       <path
         strokeLinecap="round"

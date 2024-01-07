@@ -1,3 +1,4 @@
+import EditButton from "../atoms/edit-button";
 import { randomColor } from "../lib/utils";
 
 import { DropdownItem } from "~/components/models/types";
@@ -16,7 +17,8 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
         className={`inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-900 dark:text-gray-300`}
       >
         {item.label}
-        <button
+        
+        {/* <button
           type="button"
           className="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300"
           data-dismiss-target="#badge-dismiss-gray"
@@ -38,7 +40,7 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
             />
           </svg>
           <span className="sr-only">Remove badge</span>
-        </button>
+        </button> */}
       </span>
     </>
   );

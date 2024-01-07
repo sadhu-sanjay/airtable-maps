@@ -5,10 +5,12 @@ const SearchBar = ({
   onValueChange,
   searchTerm,
   setSearchTerm,
+  className,
 }: {
   onValueChange: (value: string) => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
+  className?: string;
 }) => {
   // useEffect(() => {
   //   debounedChange(searchValue);
@@ -25,7 +27,7 @@ const SearchBar = ({
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className={`${className}`}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
