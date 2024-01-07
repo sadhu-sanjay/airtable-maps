@@ -37,7 +37,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   };
 
   return (
-    <>
+    <div className="flex-row  "
       {chips.map((item) => (
         <Chip
           key={item.value}
@@ -47,7 +47,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         />
       ))}
       <EditButton
-        className="float-right "
+        className=""
         onClick={() => console.log("Edit Tags")}
         btnHeight={20}
         btnWidth={20}
@@ -69,6 +69,6 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         }}
         onKeyDown={handleKeyDown}
       /> */}
-    </>
+    </div>
   );
 };
