@@ -205,7 +205,8 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             chips={Array.from(value).map((tag) => ({
                               label: tag,
                               value: tag,
-                              color: randomColor(),
+                              // color: randomColor(),
+                              color: "green",
                             }))}
                             onAdd={(chip: any) => {
                               // updateRecord({ Tags: [...value, chip] });

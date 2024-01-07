@@ -1,4 +1,4 @@
-import CloseIcon from "../resources/icons/close-icon";
+import { randomColor } from "../lib/utils";
 
 import { DropdownItem } from "~/components/models/types";
 
@@ -13,7 +13,7 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
     <>
       <span
         id="badge-dismiss-pink"
-        className={`{inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300`}
+        className={`inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300`}
       >
         {item.label}
         <button
@@ -31,9 +31,9 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
             />
           </svg>
