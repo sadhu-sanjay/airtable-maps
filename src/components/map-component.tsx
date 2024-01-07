@@ -3,7 +3,7 @@
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { useCallback, useRef, useEffect, useMemo, useState } from "react";
 import { Spinner } from "~/components/spinner";
-import { DropdownItem, Record } from "~/components/types";
+import { DropdownItem, Record } from "~/components/models/types";
 
 import { MAPS_API_KEY, TAGS_FETCH_URL, VIEWS_FETCH_URL } from "~/config";
 import MyList from "./my-list";

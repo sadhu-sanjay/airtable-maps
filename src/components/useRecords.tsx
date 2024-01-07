@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-import { DropdownItem, Record } from "~/components/types";
+import { DropdownItem, Record } from "~/components/models/types";
 import { RECORDS_FETCH_URL } from "~/config";
 
 export default function useRecords() {

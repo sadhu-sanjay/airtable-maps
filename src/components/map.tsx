@@ -3,7 +3,7 @@ import {
   SuperClusterViewportAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { memo, useEffect, useRef, useState } from "react";
-import { Record } from "~/components/types";
+import { Record } from "~/components/models/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
 import { RECORDS_THRESHHOLD } from "../config";

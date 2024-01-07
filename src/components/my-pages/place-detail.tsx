@@ -10,8 +10,11 @@ import EditableText from "../organisms/editable-text";
 import { PATCH } from "~/api/airtable/route";
 import { toast } from "sonner";
 import DeleteButton from "../resources/icons/delete-button";
-import { DELETE_RECORD_URL } from "~/config";
+import { DELETE_RECORD_URL, TAGS_FETCH_URL } from "~/config";
 import DeleteConfirmDialog from "../molecules/confirm-dialog";
+import DropdownMultiSelect from "../common/dropdown/dropdown-multiSelect";
+import MultiSelect from "../common/dropdown/multi-dropdown";
+import { EditableChips } from "../organisms/editable-chips";
 
 interface ModalProps {
   recordId: string;
@@ -28,18 +31,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-
-  // useEffect(() => {
-  //   const description = "This is a map showing the location of various places.";
-  //   if (!record?.fields?.Description) return;
-  //   const speech = new SpeechSynthesisUtterance(record?.fields.Description);
-  //   window.speechSynthesis.speak(speech);
-
-  //   return () => {
-  //     console.log("Cancelling speech");
-  //     window.speechSynthesis.cancel();
-  //   };
-  // }, [record]);
 
   async function updateRecord(fields: any) {
     const id = toast.loading("Updating Record");
@@ -203,6 +194,22 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             onSave={(text) => {
                               updateRecord({ Description: text });
                             }}
+                          />
+                        );
+                      } else if (key === "Tags") {
+                        // return <Scratchpad key={key} />;
+                        return (
+                          <EditableChips
+                            chips={value as any}
+                            onAdd={(chip: any) => {
+                              // updateRecord({ Tags: [...value, chip] });
+                            }}
+                            onDelete={(chip: any) => {
+                              updateRecord({
+                                // Tags: value.filter((c) => c !== chip),
+                              });
+                            }}
+                            key={key}
                           />
                         );
                       }

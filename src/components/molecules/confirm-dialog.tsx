@@ -7,6 +7,7 @@ import DeleteIcon from "../resources/icons/delete-icon";
 interface DeleteConfirmDialogProps {
   onCancel: () => void;
   onConfirm: () => void;
+  message?: string;
 }
 
 // const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
@@ -77,7 +78,7 @@ interface DeleteConfirmDialogProps {
 // };
 
 export const DeleteConfirmDialogWithMessage: React.FC<
-  DeleteConfirmDialogProps & { message: string }
+  DeleteConfirmDialogProps
 > = ({ onCancel, onConfirm, message }) => {
   return (
     <>
@@ -96,7 +97,7 @@ export const DeleteConfirmDialogWithMessage: React.FC<
             />
             <DeleteIcon className="mb-3.5 mx-auto w-11 h-11" />
             <p className="mb-4 text-gray-500 dark:text-gray-300">
-              Are you sure you want to delete this item?
+              {message ? message : "Are you sure you want to delete this item?"}
             </p>
             <div className="flex justify-center items-center space-x-4">
               <DeleteButton title="Yes, I'm sure" onClick={onConfirm} />

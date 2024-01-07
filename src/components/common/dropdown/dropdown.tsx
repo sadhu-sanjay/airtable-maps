@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { DropdownItem } from "../../types";
+import { DropdownItem } from "../../models/types";
 import StatusButton from "../../atoms/status-button";
 import { useSearchParams } from "next/navigation";
 

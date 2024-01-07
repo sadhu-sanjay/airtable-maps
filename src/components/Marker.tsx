@@ -1,4 +1,4 @@
-import { Record } from "./types";
+import { Record } from "./models/types";
 const marker_icon = "/marker.png";
 import { RECORD_IMAGE_URL, SERVER_URL } from "../config";
 

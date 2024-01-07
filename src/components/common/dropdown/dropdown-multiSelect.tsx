@@ -1,5 +1,5 @@
 import React, { use, useEffect, useRef, useState } from "react";
-import { DropdownItem } from "../../types";
+import { DropdownItem } from "../../models/types";
 import { fetchTagsAirtable } from "../../airtable-helper";
 
 function DropdownMultiSelect({
