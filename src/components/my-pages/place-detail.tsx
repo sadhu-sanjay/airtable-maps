@@ -198,25 +198,31 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                         );
                       } else if (key === "Tags") {
                         return (
-                          <EditableChips
-                            key={key}
-                            label="Tags"
-                            chips={Array.from(value).map(
-                              (tag) =>
-                                ({
-                                  label: tag,
-                                  value: tag,
-                                } as DropdownItem)
-                            )}
-                            onAdd={(chip: any) => {
-                              // updateRecord({ Tags: [...value, chip] });
-                            }}
-                            onDelete={(chip: any) => {
-                              updateRecord({
-                                // Tags: value.filter((c) => c !== chip),
-                              });
-                            }}
-                          />
+                          <div key={key}>
+                            <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                              {key}
+                              {": "}
+                            </span>
+                            <EditableChips
+                              key={key}
+                              label="Tags"
+                              chips={Array.from(value).map(
+                                (tag) =>
+                                  ({
+                                    label: tag,
+                                    value: tag,
+                                  } as DropdownItem)
+                              )}
+                              onAdd={(chip: any) => {
+                                // updateRecord({ Tags: [...value, chip] });
+                              }}
+                              onDelete={(chip: any) => {
+                                updateRecord({
+                                  // Tags: value.filter((c) => c !== chip),
+                                });
+                              }}
+                            />
+                          </div>
                         );
                       }
 
