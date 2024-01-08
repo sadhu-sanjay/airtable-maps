@@ -213,7 +213,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             <EditableChips
                               key={key}
                               label="Tags"
-                              selectedData={Array.from(value).map(
+                              tags={Array.from(value).map(
                                 (tag: any) => ({
                                   label: tag,
                                   value: tag,

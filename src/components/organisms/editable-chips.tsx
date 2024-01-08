@@ -8,13 +8,14 @@ import DropdownMultiSelect from "../common/dropdown/dropdown-multiSelect";
 import DropdownCopy from "../common/dropdown/dropdown copy";
 import { toast } from "sonner";
 import { PlusIcon } from "../resources/icons/plus-icon";
+import { PlusCircleIcon } from "../resources/icons/plus-circle-icon";
 
 type EditableChipsProps = {
   label: string;
   data: DropdownItem[];
   onAdd: (chip: string) => void;
   onDelete: (chip: string) => void;
-  selectedData?: DropdownItem[];
+  tags: DropdownItem[];
 };
 
 export const EditableChips: React.FC<EditableChipsProps> = ({
@@ -22,11 +23,12 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   data,
   onAdd,
   onDelete,
-  selectedData,
+  tags,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
+  const [selectedData, setSelectedData] = useState<DropdownItem[]>(tags);
 
   const handleAdd = () => {
     if (inputValue) {
@@ -63,7 +65,10 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   }, [divRef]);
 
   return (
-    <div className="flex flex-wrap bg-blue-200 gap-2 p-2" ref={divRef}>
+    <div
+      className="relative flex flex-wrap bg-blue-200 dark:bg-blue-700 gap-2 p-2"
+      ref={divRef}
+    >
       {selectedData?.map((item) => (
         <Chip
           key={item.value}
@@ -73,15 +78,17 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
           isEditing={isEditing}
         />
       ))}
-      <PlusIcon onClick={() => setIsEditing(true)} className="w-6 h-6" />
+      <PlusCircleIcon onClick={() => setIsEditing(true)} className="w-6 h-6" />
       {isEditing && (
         <DropdownCopy
-          className=""
+          className="absolute top-full left-0 "
           label={label}
           placeholder={label}
           isLoading={false}
           data={data}
-          itemGotSelected={(item) => console.log("Here")}
+          itemGotSelected={(item) => {
+            setSelectedData([...selectedData, item]);
+          }}
           setIsEditing={setIsEditing}
         />
       )}

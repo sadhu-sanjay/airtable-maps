@@ -64,14 +64,14 @@ function DropdownCopy({
   return (
     <>
       <div
-        className={`relative inline-block text-left ${className}`}
+        className={`inline-block text-left ${className}`}
         ref={dropdownRef}
       >
         <div
-          className=" z-10 bg-white rounded shadow w-40 dark:bg-gray-700"
+          className=" z-10 bg-white rounded shadow w-40 md:w-60 dark:bg-gray-700"
           id="dropdownSearch"
         >
-          <div className="p-1.5">
+          <div className="p-3">
             <label htmlFor="input-group-search" className="sr-only">
               Search
             </label>
@@ -107,7 +107,7 @@ function DropdownCopy({
           </div>
           {isOpen && (
             <ul
-              className="h-auto w-auto max-h-32 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="h-auto w-auto max-h-60 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item: DropdownItem) => (
