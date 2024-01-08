@@ -14,6 +14,7 @@ import { DELETE_RECORD_URL, TAGS_FETCH_URL } from "~/config";
 import DeleteConfirmDialog from "../molecules/confirm-dialog";
 import { EditableChips } from "../organisms/editable-chips";
 import { DropdownItem } from "../models/types";
+import { useQuery } from "@tanstack/react-query";
 
 interface ModalProps {
   recordId: string;
@@ -30,6 +31,12 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  const tagsQuery = useQuery({
+    queryKey: ["tags"],
+    queryFn: () => fetch(TAGS_FETCH_URL).then((res) => res.json()),
+    refetchOnWindowFocus: false,
+  });
 
   async function updateRecord(fields: any) {
     const id = toast.loading("Updating Record");
@@ -206,13 +213,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             <EditableChips
                               key={key}
                               label="Tags"
-                              chips={Array.from(value).map(
-                                (tag) =>
-                                  ({
-                                    label: tag,
-                                    value: tag,
-                                  } as DropdownItem)
+                              selectedData={Array.from(value).map(
+                                (tag: any) => ({
+                                  label: tag,
+                                  value: tag,
+                                  color: "red",
+                                })
                               )}
+                              data={tagsQuery.data.map((tag: any) => ({
+                                label: tag.name,
+                                value: tag.id,
+                                color: tag.color,
+                              }))}
                               onAdd={(chip: any) => {
                                 // updateRecord({ Tags: [...value, chip] });
                               }}

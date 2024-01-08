@@ -1,23 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Chip from "~/components/molecules/chip";
 import { DropdownItem } from "~/components/models/types";
 import SearchBar from "../search-bar";
 import EditButton from "../atoms/edit-button";
+import Dropdown from "../common/dropdown/dropdown";
+import DropdownMultiSelect from "../common/dropdown/dropdown-multiSelect";
+import DropdownCopy from "../common/dropdown/dropdown copy";
+import { toast } from "sonner";
+import { PlusIcon } from "../resources/icons/plus-icon";
 
 type EditableChipsProps = {
   label: string;
-  chips: DropdownItem[];
+  data: DropdownItem[];
   onAdd: (chip: string) => void;
   onDelete: (chip: string) => void;
+  selectedData?: DropdownItem[];
 };
 
 export const EditableChips: React.FC<EditableChipsProps> = ({
   label,
-  chips,
+  data,
   onAdd,
   onDelete,
+  selectedData,
 }) => {
   const [inputValue, setInputValue] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const handleAdd = () => {
     if (inputValue) {
@@ -36,39 +45,46 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
     }
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setIsEditing(false);
+        toast.success("Saved");
+        // Save your editing state here
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [divRef]);
+
   return (
-    <div className="flex-row  "
-      {chips.map((item) => (
+    <div className="flex flex-wrap bg-blue-200 gap-2 p-2" ref={divRef}>
+      {selectedData?.map((item) => (
         <Chip
           key={item.value}
           item={item}
           onAdd={handleAdd}
           onDelete={handleDelete}
+          isEditing={isEditing}
         />
       ))}
-      <EditButton
-        className=""
-        onClick={() => console.log("Edit Tags")}
-        btnHeight={20}
-        btnWidth={20}
-      />
-      {/* <input
-        type="search"
-        id="default-search"
-        value={inputValue}
-        className="inline w-full px-2 py-1 text-sm 
-          text-gray-900 border border-gray-300 rounded
-          bg-gray-50 focus:ring-blue-500 focus:border-blue-500 
-          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder={`Search ${label}`}
-        // required
-        onChange={(e) => {
-          let value = e.target.value;
-          setInputValue(e.target.value);
-        }}
-        onKeyDown={handleKeyDown}
-      /> */}
+      <PlusIcon onClick={() => setIsEditing(true)} className="w-6 h-6" />
+      {isEditing && (
+        <DropdownCopy
+          className=""
+          label={label}
+          placeholder={label}
+          isLoading={false}
+          data={data}
+          itemGotSelected={(item) => console.log("Here")}
+          setIsEditing={setIsEditing}
+        />
+      )}
     </div>
   );
 };

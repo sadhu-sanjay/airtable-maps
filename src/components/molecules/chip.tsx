@@ -7,18 +7,18 @@ type ChipProps = {
   item: DropdownItem;
   onAdd: (chip: string) => void;
   onDelete: (chip: string) => void;
+  isEditing: boolean;
 };
 
-const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
+const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete, isEditing }) => {
   return (
     <>
       <span
         id="badge-dismiss-gray"
-        className={`inline-flex items-center px-2 py-1 mb-1.5 me-2 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-900 dark:text-gray-300`}
+        className={`inline-flex items-center px-2 py-1 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-900 dark:text-gray-300`}
       >
         {item.label}
-        
-        {/* <button
+        {isEditing && <button
           type="button"
           className="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300"
           data-dismiss-target="#badge-dismiss-gray"
@@ -40,7 +40,7 @@ const Chip: React.FC<ChipProps> = ({ item, onAdd, onDelete }) => {
             />
           </svg>
           <span className="sr-only">Remove badge</span>
-        </button> */}
+        </button>}
       </span>
     </>
   );
