@@ -66,12 +66,13 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
       ))}
       {isEditing ? (
         <div
-          className="border flex items-center gap-1 
+          className="relative border flex items-center gap-0.5
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
-        p-1 m-2 shadow-lg "
+        p-0.5 shadow-lg "
         >
-          <CloseButton onClick={() => setIsEditing(false)} />
+          <CloseButton className="w-4 h-4" onClick={() => setIsEditing(false)} />
           <SaveButton
+            className="w-4 h-4"
             onClick={() => {
               setIsEditing(false);
               onSubmit(selectedData);
