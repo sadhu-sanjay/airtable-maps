@@ -1,7 +1,5 @@
 import defaultColors from 'tailwindcss/colors';
 
-
-
 export const randomColor = () => {
   const colors = Object.keys(defaultColors);
   const color = colors[Math.floor(Math.random() * colors.length)];

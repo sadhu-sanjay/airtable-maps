@@ -16,6 +16,7 @@ import { EditableChips } from "../organisms/editable-chips";
 import { DropdownItem, Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 import Label from "../atoms/labels/label";
+import useMediaQuery from "../lib/hooks/use-media-query";
 
 interface ModalProps {
   recordId: string;
@@ -32,6 +33,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const { isMobile } = useMediaQuery();
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -151,7 +153,10 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
         {/* Image Container */}
         <div
-          onClick={() => setIsFullScreen(!isFullScreen)}
+          onClick={() => {
+            if (isMobile) return;
+            setIsFullScreen(!isFullScreen);
+          }}
           className={` img-container
           ${
             isFullScreen

@@ -34,6 +34,7 @@ function EditableChipsDropdown({
 
   const doneButtonClicked = useCallback(
     (item: Tag) => {
+      console.log("doneButtonClicked", item);
       setSelectedItem(item);
       itemGotSelected(item);
     },

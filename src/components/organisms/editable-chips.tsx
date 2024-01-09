@@ -5,6 +5,7 @@ import EditButton from "../atoms/edit-button";
 import EditableChipsDropdown from "../common/dropdown/editable-chips-dropdown";
 import { toast } from "sonner";
 import SaveButton from "../atoms/save-button";
+import CloseButton from "../resources/icons/close-button";
 
 type EditableChipsProps = {
   label: string;
@@ -19,7 +20,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   initialTags,
   onSubmit,
 }) => {
-  console.log("RENDEr EditableChips");
+  console.log("Render EditableChips");
 
   const [isEditing, setIsEditing] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
@@ -51,7 +52,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
   return (
     <div
       className={`
-      relative flex flex-wrap rounded dark:bg-blue-700 gap-2 p-2`}
+      relative flex items-center flex-wrap rounded gap-2 p-2`}
       ref={divRef}
       tabIndex={-1}
     >
@@ -64,12 +65,19 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         />
       ))}
       {isEditing ? (
-        <SaveButton
-          onClick={() => {
-            setIsEditing(false);
-            onSubmit(selectedData);
-          }}
-        />
+        <div
+          className="border flex items-center gap-1 
+        bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
+        p-1 m-2 shadow-lg "
+        >
+          <CloseButton onClick={() => setIsEditing(false)} />
+          <SaveButton
+            onClick={() => {
+              setIsEditing(false);
+              onSubmit(selectedData);
+            }}
+          />
+        </div>
       ) : (
         <EditButton
           onClick={() => {
@@ -84,7 +92,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
           label={label}
           placeholder={label}
           isLoading={false}
-          data={data.filter((item) => !selectedData.includes(item))}
+          data={data.filter((item) => !selectedData?.includes(item))}
           itemGotSelected={(item: Tag) => {
             data.splice(data.indexOf(item), 1);
             setSelectedData([...selectedData, item]);
