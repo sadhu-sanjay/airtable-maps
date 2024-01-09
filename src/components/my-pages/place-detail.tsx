@@ -15,6 +15,7 @@ import DeleteConfirmDialog from "../molecules/confirm-dialog";
 import { EditableChips } from "../organisms/editable-chips";
 import { DropdownItem, Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
+import Label from "../atoms/labels/label";
 
 interface ModalProps {
   recordId: string;
@@ -179,7 +180,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
                     if (
-                      // Early exit
+                      // Don't show These fields
                       key === "Image" ||
                       key === "date" ||
                       key === "updated" ||
@@ -209,10 +210,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     } else if (key === "Tags") {
                       return (
                         <div key={key}>
-                          <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                            {key}
-                            {": "}
-                          </span>
+                          <Label>{key}</Label>
                           <EditableChips
                             key={key}
                             label="Tags"
@@ -229,20 +227,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     } else if (key === "Coordinates (lat, lng)") {
                       return (
                         <>
-                          <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                            {key}
-                            {": "}
-                          </span>
+                          <Label>{key}</Label>
                           <MapIcon cords={value as string} />;
                         </>
                       );
                     } else if (key === "URL") {
                       return (
                         <>
-                          <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                            {key}
-                            {": "}
-                          </span>
+                          <Label>{key}</Label>
                           <a
                             className="text-blue-500"
                             href={value as string}
@@ -256,13 +248,12 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
                     return (
                       <li key={key}>
-                        <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                          {key}
-                          {": "}
+                        <Label>{key}</Label>
+                        <span className="pr-2 text-base leading-6 text-zinc-500 dark:text-zinc-100">
+                          {Array.isArray(value)
+                            ? value.join(",")
+                            : (value as string)}
                         </span>
-                        {Array.isArray(value)
-                          ? value.join(",")
-                          : (value as string)}
                       </li>
                     );
                   })}
