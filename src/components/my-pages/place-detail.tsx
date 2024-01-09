@@ -13,7 +13,7 @@ import DeleteButton from "../resources/icons/delete-button";
 import { DELETE_RECORD_URL, TAGS_FETCH_URL } from "~/config";
 import DeleteConfirmDialog from "../molecules/confirm-dialog";
 import { EditableChips } from "../organisms/editable-chips";
-import { DropdownItem } from "../models/types";
+import { DropdownItem, Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 
 interface ModalProps {
@@ -212,15 +212,11 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             <EditableChips
                               key={key}
                               label="Tags"
-                              tags={Array.from(value).map((tag: any) => ({
-                                label: tag,
-                                value: tag,
-                                color: "red",
-                              }))}
+                              initialTags={value as [string]}
                               data={tagsQuery.data}
-                              onSubmit={(tags: DropdownItem[]) => {
+                              onSubmit={(tags: Tag[]) => {
                                 updateRecord({
-                                  Tags: tags.map((tag) => tag.value),
+                                  Tags: tags.map((tag) => tag.id),
                                 });
                               }}
                             />

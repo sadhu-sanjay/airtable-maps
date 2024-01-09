@@ -5,7 +5,7 @@ import { Tag } from "~/components/models/types";
 
 type ChipProps = {
   item: Tag;
-  onDelete: (chip: string) => void;
+  onDelete: (chip: Tag) => void;
   isEditing: boolean;
 };
 
@@ -23,7 +23,7 @@ const Chip: React.FC<ChipProps> = ({ item, onDelete, isEditing }) => {
             className="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300"
             data-dismiss-target="#badge-dismiss-gray"
             aria-label="Remove"
-            onClick={() => onDelete(item.id)}
+            onClick={() => onDelete(item)}
           >
             <svg
               className="w-2 h-2"
