@@ -78,7 +78,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     async (signal: AbortSignal, recordId: string) => {
       try {
         const respJson = await fetchRecord(signal, recordId);
-        console.log("Sanjay Goswami", respJson);
         const record = cleanRecord(respJson);
         return record;
       } catch (e: any) {
@@ -213,24 +212,15 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                             <EditableChips
                               key={key}
                               label="Tags"
-                              tags={Array.from(value).map(
-                                (tag: any) => ({
-                                  label: tag,
-                                  value: tag,
-                                  color: "red",
-                                })
-                              )}
-                              data={tagsQuery.data.map((tag: any) => ({
-                                label: tag.name,
-                                value: tag.id,
-                                color: tag.color,
+                              tags={Array.from(value).map((tag: any) => ({
+                                label: tag,
+                                value: tag,
+                                color: "red",
                               }))}
-                              onAdd={(chip: any) => {
-                                // updateRecord({ Tags: [...value, chip] });
-                              }}
-                              onDelete={(chip: any) => {
+                              data={tagsQuery.data}
+                              onSubmit={(tags: DropdownItem[]) => {
                                 updateRecord({
-                                  // Tags: value.filter((c) => c !== chip),
+                                  Tags: tags.map((tag) => tag.value),
                                 });
                               }}
                             />

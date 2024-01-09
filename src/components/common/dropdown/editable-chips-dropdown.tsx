@@ -2,14 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DropdownItem } from "../../models/types";
 import { useSearchParams } from "next/navigation";
 
-function DropdownCopy({
+function EditableChipsDropdown({
   label,
   isLoading,
   placeholder,
   itemGotSelected,
   data,
   error,
-  setIsEditing,
   className,
 }: {
   label: string;
@@ -18,7 +17,6 @@ function DropdownCopy({
   itemGotSelected: (item: DropdownItem) => void;
   data: DropdownItem[];
   error?: any;
-  setIsEditing?: (isEditing: boolean) => void;
   className?: string;
 }) {
   const searchParams = useSearchParams();
@@ -40,33 +38,13 @@ function DropdownCopy({
     (item: DropdownItem) => {
       setSelectedItem(item);
       itemGotSelected(item);
-      setIsOpen(false);
     },
     [itemGotSelected]
   ); // add other dependencies if they exist
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <>
-      <div
-        className={`inline-block text-left ${className}`}
-        ref={dropdownRef}
-      >
+      <div className={`inline-block text-left ${className}`} ref={dropdownRef}>
         <div
           className=" z-10 bg-white rounded shadow w-40 md:w-60 dark:bg-gray-700"
           id="dropdownSearch"
@@ -97,7 +75,9 @@ function DropdownCopy({
                 type="text"
                 id="input-group-search"
                 className="block w-full p-1 pl-10 text-sm text-gray-900 border border-gray-300 
-                rounded-full bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                rounded-full bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-600
+                 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500
+                  dark:focus:border-gray-500"
                 placeholder={placeholder}
                 value={searchTerm}
                 autoFocus
@@ -107,7 +87,7 @@ function DropdownCopy({
           </div>
           {isOpen && (
             <ul
-              className="h-auto w-auto max-h-60 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="h-auto w-auto max-h-40 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item: DropdownItem) => (
@@ -132,4 +112,4 @@ function DropdownCopy({
   );
 }
 
-export default React.memo(DropdownCopy);
+export default React.memo(EditableChipsDropdown);
