@@ -263,7 +263,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     return (
                       <li key={key}>
                         <Label>{key}</Label>
-                        <span className="pr-2 text-base leading-6 text-zinc-500 dark:text-zinc-100">
+                        <span className="pr-2 text-base leading-6 text-zinc-500 dark:text-zinc-400">
                           {Array.isArray(value)
                             ? value.join(",")
                             : (value as string)}
