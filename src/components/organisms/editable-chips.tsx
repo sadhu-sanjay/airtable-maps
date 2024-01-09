@@ -84,7 +84,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
           label={label}
           placeholder={label}
           isLoading={false}
-          data={data}
+          data={data.filter((item) => !selectedData.includes(item))}
           itemGotSelected={(item: Tag) => {
             data.splice(data.indexOf(item), 1);
             setSelectedData([...selectedData, item]);

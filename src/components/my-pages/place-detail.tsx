@@ -72,6 +72,15 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       record.fields.date = getDate(record.fields.date);
       record.fields.updated = getDate(record.fields.updated);
     }
+
+    if (!record.fields.Tags) {
+      // Add the missing records
+      record.fields.Tags = [];
+    }
+    if (!record.fields.Description) {
+      record.fields.Description = "";
+    }
+
     return record;
   }, []);
 
