@@ -179,81 +179,92 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                 {record?.fields &&
                   Object.entries(record.fields).map(([key, value]) => {
                     if (
-                      typeof value === "string" ||
-                      (Array.isArray(value) &&
-                        value.every((value) => typeof value === "string"))
-                    ) {
-                      if (key === "Title") {
-                        return (
-                          <h1
-                            key={key}
-                            className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800"
-                          >
-                            {record?.fields?.Title ?? "Not Available"}
-                          </h1>
-                        );
-                      } else if (key === "Description") {
-                        return (
-                          <EditableText
-                            key={key}
-                            value={value as string}
-                            onSave={(text) => {
-                              updateRecord({ Description: text });
-                            }}
-                          />
-                        );
-                      } else if (key === "Tags") {
-                        return (
-                          <div key={key}>
-                            <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
-                              {key}
-                              {": "}
-                            </span>
-                            <EditableChips
-                              key={key}
-                              label="Tags"
-                              initialTags={value as [string]}
-                              data={tagsQuery.data}
-                              onSubmit={(tags: Tag[]) => {
-                                updateRecord({
-                                  Tags: tags.map((tag) => tag.id),
-                                });
-                              }}
-                            />
-                          </div>
-                        );
-                      }
+                      // Early exit
+                      key === "Image" ||
+                      key === "date" ||
+                      key === "updated" ||
+                      key === "Geocache"
+                    )
+                      return null;
 
+                    if (key === "Title") {
                       return (
-                        <li key={key}>
+                        <h1
+                          key={key}
+                          className="pb-3 text-1xl font-bold tracking-tighter sm:text-2xl xl:text-3xl/none bg-clip-text text-transparent dark:text-zinc-200 text-zinc-800"
+                        >
+                          {record?.fields?.Title ?? "Not Available"}
+                        </h1>
+                      );
+                    } else if (key === "Description") {
+                      return (
+                        <EditableText
+                          key={key}
+                          value={value as string}
+                          onSave={(text) => {
+                            updateRecord({ Description: text });
+                          }}
+                        />
+                      );
+                    } else if (key === "Tags") {
+                      return (
+                        <div key={key}>
                           <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
                             {key}
                             {": "}
                           </span>
-                          <span className="text-sm leading-6 font-normal text-zinc-500 dark:text-zinc-400">
-                            {key === "Coordinates (lat, lng)" && (
-                              <MapIcon cords={value as string} />
-                            )}
-                            {key === "URL" && (
-                              <a
-                                className="text-blue-500"
-                                href={value as string}
-                                target="_blank"
-                              >
-                                {" "}
-                                {value}{" "}
-                              </a>
-                            )}
-                            {Array.isArray(value)
-                              ? value.join(", ")
-                              : key !== "Coordinates (lat, lng)" &&
-                                key !== "URL" &&
-                                value}
+                          <EditableChips
+                            key={key}
+                            label="Tags"
+                            initialTags={value as [string]}
+                            data={tagsQuery.data}
+                            onSubmit={(tags: Tag[]) => {
+                              updateRecord({
+                                Tags: tags.map((tag) => tag.id),
+                              });
+                            }}
+                          />
+                        </div>
+                      );
+                    } else if (key === "Coordinates (lat, lng)") {
+                      return (
+                        <>
+                          <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                            {key}
+                            {": "}
                           </span>
-                        </li>
+                          <MapIcon cords={value as string} />;
+                        </>
+                      );
+                    } else if (key === "URL") {
+                      return (
+                        <>
+                          <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                            {key}
+                            {": "}
+                          </span>
+                          <a
+                            className="text-blue-500"
+                            href={value as string}
+                            target="_blank"
+                          >
+                            {value as string}
+                          </a>
+                        </>
                       );
                     }
-                    return null;
+
+                    return (
+                      <li key={key}>
+                        <span className=" text-base leading-6 font-semibold text-zinc-700 dark:text-zinc-100">
+                          {key}
+                          {": "}
+                        </span>
+                        {Array.isArray(value)
+                          ? value.join(",")
+                          : (value as string)}
+                      </li>
+                    );
                   })}
               </ul>
               <DeleteButton
