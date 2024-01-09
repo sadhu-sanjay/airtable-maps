@@ -6,6 +6,7 @@ import EditableChipsDropdown from "../common/dropdown/editable-chips-dropdown";
 import { toast } from "sonner";
 import SaveButton from "../atoms/save-button";
 import CloseButton from "../resources/icons/close-button";
+import CloseIcon from "../resources/icons/close-icon";
 
 type EditableChipsProps = {
   label: string;
@@ -70,9 +71,8 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
         p-0.5 shadow-lg "
         >
-          <CloseButton className="w-4 h-4" onClick={() => setIsEditing(false)} />
+          <CloseButton onClick={() => setIsEditing(false)} />
           <SaveButton
-            className="w-4 h-4"
             onClick={() => {
               setIsEditing(false);
               onSubmit(selectedData);
