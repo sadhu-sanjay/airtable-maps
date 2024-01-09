@@ -15,7 +15,7 @@ const CloseButton = ({
     dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 
     inline-flex items-center p-1 ${className}`}
   >
-    <CloseIcon  />
+    <CloseIcon width="100%" height="100%" />
   </button>
 );
 
