@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { DropdownItem } from "../../models/types";
+import { Tag } from "~/components/models/types";
 import { useSearchParams } from "next/navigation";
 
 function EditableChipsDropdown({
@@ -14,8 +14,8 @@ function EditableChipsDropdown({
   label: string;
   placeholder: string;
   isLoading: boolean;
-  itemGotSelected: (item: DropdownItem) => void;
-  data: DropdownItem[];
+  itemGotSelected: (item: Tag) => void;
+  data: Tag[];
   error?: any;
   className?: string;
 }) {
@@ -23,19 +23,17 @@ function EditableChipsDropdown({
   const [isOpen, setIsOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedItem, setSelectedItem] = useState<DropdownItem | undefined>(
-    undefined
-  );
+  const [selectedItem, setSelectedItem] = useState<Tag | undefined>(undefined);
   const filteredItems =
     data && data.length > 0
       ? data.filter((item) => {
           if (!item) return;
-          return item.label?.toLowerCase().includes(searchTerm.toLowerCase());
+          return item.name?.toLowerCase().includes(searchTerm.toLowerCase());
         })
       : [];
 
   const doneButtonClicked = useCallback(
-    (item: DropdownItem) => {
+    (item: Tag) => {
       setSelectedItem(item);
       itemGotSelected(item);
     },
@@ -90,8 +88,8 @@ function EditableChipsDropdown({
               className="h-auto w-auto max-h-40 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
-              {filteredItems.map((item: DropdownItem) => (
-                <li key={item.value}>
+              {filteredItems.map((item: Tag) => (
+                <li key={item.id}>
                   <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <label
                       onClick={() => {
@@ -99,7 +97,7 @@ function EditableChipsDropdown({
                       }}
                       className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                     >
-                      {item.label}
+                      {item.name}
                     </label>
                   </div>
                 </li>

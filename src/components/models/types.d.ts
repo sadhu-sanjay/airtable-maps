@@ -37,3 +37,9 @@ type DropdownItem = {
   value: string;
   color: string;
 };
+
+type Tag = {
+  id: string;
+  name: string;
+  color: string;
+}

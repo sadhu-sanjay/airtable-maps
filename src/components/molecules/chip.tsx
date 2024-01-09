@@ -1,10 +1,10 @@
 import EditButton from "../atoms/edit-button";
 import { randomColor } from "../lib/utils";
 
-import { DropdownItem } from "~/components/models/types";
+import { Tag } from "~/components/models/types";
 
 type ChipProps = {
-  item: DropdownItem;
+  item: Tag;
   onDelete: (chip: string) => void;
   isEditing: boolean;
 };
@@ -16,14 +16,14 @@ const Chip: React.FC<ChipProps> = ({ item, onDelete, isEditing }) => {
         id="badge-dismiss-gray"
         className={`inline-flex items-center px-2 py-1 text-sm font-medium text-gray-800 bg-gray-200 rounded dark:bg-gray-900 dark:text-gray-300`}
       >
-        {item.label}
+        {item.name}
         {isEditing && (
           <button
             type="button"
             className="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300"
             data-dismiss-target="#badge-dismiss-gray"
             aria-label="Remove"
-            onClick={() => onDelete(item.value)}
+            onClick={() => onDelete(item.id)}
           >
             <svg
               className="w-2 h-2"
