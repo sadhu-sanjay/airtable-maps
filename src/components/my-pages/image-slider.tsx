@@ -65,7 +65,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           <EditButton
             className={`absolute ${
               !isFullScreen && "w-6 h-6 "
-            } bottom-6 right-6 z-30 opacity-70`}
+            } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
             onClick={(e) => {
               e.stopPropagation();
             }}

@@ -71,7 +71,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         bg-white dark:bg-gray-800 rounded-md border-gray-200 dark:border-gray-600
         p-0.5 shadow-lg "
         >
-          <CloseButton onClick={() => setIsEditing(false)} />
+          <CloseButton className="p-1" onClick={() => setIsEditing(false)} />
           <SaveButton
             onClick={() => {
               setIsEditing(false);

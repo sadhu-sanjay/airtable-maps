@@ -146,7 +146,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          className={`mt-2 z-50 absolute top-4 left-4 rounded-full p-0
+          className={`p-0 mt-2 z-50 opacity-70 hover:opacity-100 absolute top-4 left-4 rounded-full
           ${isFullScreen ? "w-9 h-9" : " w-8 h-8"}
           transition-all `}
           onClick={onClose}
@@ -183,7 +183,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           ${
             isFullScreen
               ? " w-4/12 h-full right-0 "
-              : "left-0 bottom-0 h-2/3 w-full  top-1/3"
+              : "left-0 bottom-0 h-2/3 w-full top-1/3"
           }
           flex flex-col space-y-6 justify-start p-8 overflow-auto hide-scrollbar
           `}
