@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
 import EditButton from "../atoms/edit-button";
+import { ImageEditIcon } from "../resources/icons/image-edit-icons";
+import ImageEditButton from "../atoms/edit-image-button";
 
 type ImageSliderProps = {
   images: any[];
@@ -62,7 +64,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               </div>
             ))}
           {!images && <ImagePlaceHolder />}
-          <EditButton
+          <ImageEditButton
             className={`absolute ${
               !isFullScreen && "w-6 h-6 "
             } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}

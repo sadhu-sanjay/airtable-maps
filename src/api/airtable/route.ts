@@ -12,7 +12,9 @@ export async function GET() {
     // })
 }
 
-// update a airtable record 
+// Update an existing record's image field
+
+
 export async function PATCH(req: { body: { id: string; fields: any } }) {
     const { id, fields } = req.body
 
