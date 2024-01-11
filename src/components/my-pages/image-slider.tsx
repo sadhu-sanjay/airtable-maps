@@ -2,10 +2,18 @@
 
 import { useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image";
+import EditButton from "../atoms/edit-button";
 
-const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
+type ImageSliderProps = {
+  images: any[];
+  isFullScreen: boolean;
+  setIsFullScreen: (isFullScreen: boolean) => void;
+};
+
+const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
   isFullScreen,
+  setIsFullScreen,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // const [isFullScreen, setIsFullScreen] = useState(false);
@@ -20,8 +28,6 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
     );
   };
 
-  if (!images) return <ImagePlaceHolder />;
-
   return (
     <>
       <div
@@ -29,7 +35,10 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
         className={` w-full h-full relative`}
         data-carousel="slide"
       >
-        <div className="relative h-full overflow-hidden cursor-pointer">
+        <div
+          onClick={() => setIsFullScreen(!isFullScreen)}
+          className="relative h-full overflow-hidden cursor-pointer bg-gray-100 dark:bg-gray-900"
+        >
           {images &&
             images?.map((item: any, index: number) => (
               <div
@@ -52,6 +61,15 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
                 />
               </div>
             ))}
+          {!images && <ImagePlaceHolder />}
+          <EditButton
+            className={`absolute ${
+              !isFullScreen && "w-6 h-6 "
+            } bottom-6 right-6 z-30 opacity-70`}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          />
         </div>
 
         <div className={`${images?.length > 1 ? "block" : "hidden"}`}>
@@ -82,7 +100,11 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
               handlePrevClick();
             }}
           >
-            <span className={`${isFullScreen ? "w-10 h-10" : "w-8 h-8"} inline-flex items-center justify-center rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none`}>
+            <span
+              className={`${
+                isFullScreen ? "w-10 h-10" : "w-8 h-8"
+              } inline-flex items-center justify-center rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none`}
+            >
               <svg
                 className="w-4 h-4 text-white dark:text-gray-400"
                 aria-hidden="true"
@@ -110,7 +132,11 @@ const ImageSlider: React.FC<{ images: any[]; isFullScreen: boolean }> = ({
               handleNextClick();
             }}
           >
-            <span className={`${isFullScreen ? "w-10 h-10" : "w-8 h-8"} inline-flex items-center justify-center  rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none`}>
+            <span
+              className={`${
+                isFullScreen ? "w-10 h-10" : "w-8 h-8"
+              } inline-flex items-center justify-center  rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none`}
+            >
               <svg
                 className="w-4 h-4 text-white dark:text-gray-400"
                 aria-hidden="true"

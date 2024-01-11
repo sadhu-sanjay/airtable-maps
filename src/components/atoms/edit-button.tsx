@@ -6,7 +6,7 @@ const EditButton = ({
   btnWidth = 24,
   btnHeight = 24,
 }: {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   className: string;
   btnWidth?: number;
   btnHeight?: number;

@@ -156,7 +156,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         <div
           onClick={() => {
             if (isMobile) return;
-            setIsFullScreen(!isFullScreen);
+            // setIsFullScreen(!isFullScreen);
           }}
           className={` img-container
           ${
@@ -174,6 +174,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
               key={record?.id}
               images={record?.fields?.Image as [any]}
               isFullScreen={isFullScreen}
+              setIsFullScreen={setIsFullScreen}
             />
           )}
         </div>
