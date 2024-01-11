@@ -17,6 +17,7 @@ import { DropdownItem, Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 import Label from "../atoms/labels/label";
 import useMediaQuery from "../lib/hooks/use-media-query";
+import React from "react";
 
 interface ModalProps {
   recordId: string;
@@ -226,7 +227,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                         <div key={key}>
                           <Label>{key}</Label>
                           <EditableChips
-                            key={key}
+                            key={record.id}
                             label="Tags"
                             initialTags={value as [string]}
                             data={tagsQuery.data}
@@ -240,14 +241,14 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                       );
                     } else if (key === "Coordinates (lat, lng)") {
                       return (
-                        <>
+                        <React.Fragment key={key}>
                           <Label>{key}</Label>
                           <MapIcon cords={value as string} />;
-                        </>
+                        </React.Fragment>
                       );
                     } else if (key === "URL") {
                       return (
-                        <>
+                        <React.Fragment key={key}>
                           <Label>{key}</Label>
                           <a
                             className="text-blue-500"
@@ -256,7 +257,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                           >
                             {value as string}
                           </a>
-                        </>
+                        </React.Fragment>
                       );
                     }
 

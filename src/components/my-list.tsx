@@ -6,7 +6,8 @@ import { PageStatus } from "./Paginator";
 import { ShareIcon } from "./resources/icons/share";
 import RefreshCircle from "./resources/icons/refresh-spinner";
 import { Spinner } from "./spinner";
-import { noRecordsTryAgain } from "../config";
+import { RECORD_IMAGE_URL, SERVER_URL, noRecordsTryAgain } from "../config";
+import Image from "next/image";
 
 function MyList({
   isStreamingRecords,
@@ -32,7 +33,16 @@ function MyList({
         style={style}
         className=" border-b p-1.5 sm:p-1  hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
       >
-        <div className=" flex space-x-2">
+        <div className="flex space-x-2 items-center">
+          <div className="0 relative flex-shrink-0 w-10 h-10">
+            <Image
+              fill
+              className=" rounded-full "
+              // src={"/place.svg"}
+              src={RECORD_IMAGE_URL(record.RecordKey)}
+              alt="img"
+            />
+          </div>
           <div className=" flex flex-col items-start space-x-4">
             <div className=" w-64 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
               <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white truncate">

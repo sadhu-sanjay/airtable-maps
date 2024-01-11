@@ -7,7 +7,6 @@ dotenv.config({
 
 
 const nextConfig = {
-  output: 'export',
   images: {
     // load images from localhost:8080/images/
     domains: ['localhost'],
