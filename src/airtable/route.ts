@@ -5,15 +5,6 @@ import { Record } from "~/components/models/types"
 import { NextResponse } from "next/server"
 const baseUrl = "https://api.airtable.com/v0"
 
-export async function GET() {
-    // fetchAirtableRecords()
-    // return new NextResponse(JSON.stringify(globalRecords.length), {
-    //     status: 200,
-    // })
-}
-
-// Update an existing record's image field
-
 
 export async function PATCH(req: { body: { id: string; fields: any } }) {
     const { id, fields } = req.body

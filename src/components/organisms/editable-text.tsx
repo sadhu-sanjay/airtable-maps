@@ -4,7 +4,7 @@ import { SubTitle } from "../atoms/labels/sub-title";
 import SaveButton from "../atoms/save-button";
 import CloseButton from "../resources/icons/close-button";
 import { toast } from "sonner";
-import { PATCH } from "~/api/airtable/route";
+import { PATCH } from "~/airtable/route";
 
 type EditableTextProps = {
   value: string;

@@ -3,20 +3,20 @@ import { fetchRecord } from "../airtable-helper";
 import CloseButton from "../resources/icons/close-button";
 import { MapIcon } from "../resources/icons/map-icon";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
-import { ImagePlaceHolder } from "../resources/placeHolder/image";
+import { ImagePlaceHolder } from "../resources/placeHolder/image-placeholder";
 import ImageSlider from "./image-slider";
-import EditButton from "../atoms/edit-button";
 import EditableText from "../organisms/editable-text";
-import { PATCH } from "~/api/airtable/route";
+import { PATCH } from "~/airtable/route";
 import { toast } from "sonner";
 import DeleteButton from "../resources/icons/delete-button";
 import { DELETE_RECORD_URL, TAGS_FETCH_URL } from "~/config";
 import DeleteConfirmDialog from "../molecules/confirm-dialog";
 import { EditableChips } from "../organisms/editable-chips";
-import { DropdownItem, Tag } from "../models/types";
+import { Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 import Label from "../atoms/labels/label";
 import useMediaQuery from "../lib/hooks/use-media-query";
+import { UploadImageComponent } from "../molecules/upload-image";
 import React from "react";
 
 interface ModalProps {
@@ -146,7 +146,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          className={`p-0 mt-2 z-50 opacity-70 hover:opacity-100 absolute top-4 left-4 rounded-full
+          className={`p-0 z-50 opacity-70 hover:opacity-100 absolute top-6 left-6 rounded-full
           ${isFullScreen ? "w-9 h-9" : " w-8 h-8"}
           transition-all `}
           onClick={onClose}
@@ -164,18 +164,29 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
               ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full"
               : "w-full h-1/2 lg:h-1/3 shadow-lg"
           }
-          transition-all duration-300 ease-in-out
+          transition-all duration-300 ease-in-out relative
           `}
         >
           {record?.fields?.Image?.length === 0 ? (
             <ImagePlaceHolder />
           ) : (
-            <ImageSlider
-              key={record?.id}
-              images={record?.fields?.Image as [any]}
-              isFullScreen={isFullScreen}
-              setIsFullScreen={setIsFullScreen}
-            />
+            <>
+              <ImageSlider
+                key={record?.id}
+                images={record?.fields?.Image as [any]}
+                isFullScreen={isFullScreen}
+                setIsFullScreen={setIsFullScreen}
+              />
+              <UploadImageComponent
+                className={`absolute ${
+                  !isFullScreen && "w-6 h-6 "
+                } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
+                onUpload={(e) => {
+                  console.log("Her");
+                  // e.stopPropagation();
+                }}
+              />
+            </>
           )}
         </div>
         <div
