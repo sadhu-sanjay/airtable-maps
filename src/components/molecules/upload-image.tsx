@@ -32,6 +32,9 @@ const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
       const res = await fetch("/api/upload", {
         method: "POST",
         body: data,
+        headers: {
+          Accept: "application/json",
+        },
       });
       // handle the error
       if (!res.ok) {
@@ -61,6 +64,7 @@ const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
       <input
         id="dropzone-file"
         type="file"
+        accept="image/*"
         className="hidden"
         onChange={onFileSelected}
       />

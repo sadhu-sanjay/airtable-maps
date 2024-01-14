@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "next dev ",
     "build": "NODE_ENV=production next build",
-    "start": "next start",
+    "start": "NODE_ENV=production next start",
     "serve": "npx serve@latest out",
     "lint": "next lint",
     "deploy": "NODE_ENV=production next build && cp -rf ./out ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh ",
-    "deploy:test": "NODE_ENV=test next build && cp -rf ./out ../airtable-maps-server/ && cd ../airtable-maps-server/ && bash transfer.sh test"
+    "deploy:test": "NODE_ENV=test next build && rsync -avz  --exclude node_modules --exclude .git -e 'ssh -i ../keys/aws-test-server.pem' ./ ec2-user@ec2-3-7-72-9.ap-south-1.compute.amazonaws.com:~/airtable-maps"
   },
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.4.0",

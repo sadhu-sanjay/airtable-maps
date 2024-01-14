@@ -146,7 +146,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
-          className={`p-0 z-50 opacity-70 hover:opacity-100 absolute top-6 left-6 rounded-full
+          className={`p-0 z-50 opacity-70 hover:opacity-100 absolute top-4 left-4 rounded-full
           ${isFullScreen ? "w-9 h-9" : " w-8 h-8"}
           transition-all `}
           onClick={onClose}

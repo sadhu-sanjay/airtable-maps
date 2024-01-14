@@ -26,6 +26,7 @@ export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/vie
 export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/${RecordKey}.jpeg`
 export const RECORDS_THRESHHOLD = 12000
 export const DELETE_RECORD_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/api/records/${RecordKey}`
+export const ORIGNAL_IMAGE_SAVE_PATH = (nm: string) => `./images/orignal/${nm}`
 
 // DEFAULT switch
 export let isFirstLoad = true;

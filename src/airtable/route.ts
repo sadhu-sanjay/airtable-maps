@@ -1,8 +1,6 @@
 import {
     AIRTABLE_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_MAP_TABLE_ID
 } from "~/config"
-import { Record } from "~/components/models/types"
-import { NextResponse } from "next/server"
 const baseUrl = "https://api.airtable.com/v0"
 
 
