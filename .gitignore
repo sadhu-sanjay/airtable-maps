@@ -11,6 +11,7 @@
 # next.js
 /.next/
 /out/
+/airtable-maps.zip
 
 # production
 /build
