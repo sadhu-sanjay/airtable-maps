@@ -3,7 +3,6 @@ import {
 } from "~/config"
 const baseUrl = "https://api.airtable.com/v0"
 
-
 export async function PATCH(req: { body: { id: string; fields: any } }) {
     const { id, fields } = req.body
 
