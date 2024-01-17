@@ -30,7 +30,7 @@ export const RECORDS_THRESHHOLD = 12000
 export const DELETE_RECORD_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/api/records/${RecordKey}`
 
 // if development, use local file system, else use server file system
-export const IMAGE_DIRECTORY = `${ isDev ? process.cwd() : SERVER_URL + "/var/www" }/data/images/orignal`
+export const IMAGE_DIRECTORY = `${ isDev ? (process.cwd() + '/data/images/orignal') : '/var/www/data/images/orignal' }`
 
 // DEFAULT switch
 export let isFirstLoad = true;
