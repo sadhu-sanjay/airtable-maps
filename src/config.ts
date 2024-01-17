@@ -15,6 +15,7 @@ export const isDev = process.env.NODE_ENV === 'development'
 
 // URLS
 export const RECORD_GET = (RecordKey: string) => BASE_AIRTABLE_URL + '/' + process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID + "/" + process.env.NEXT_PUBLIC_AIRTABLE_MAP_TABLE_ID + "/" + RecordKey
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL as string
 export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL as string
 export const AIRTABLE_EVENTS_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/sync/events"
 export const RECORDS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/records"
