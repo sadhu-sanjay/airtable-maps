@@ -11,6 +11,7 @@ export const BASE_AIRTABLE_URL = "https://api.airtable.com/v0"
 // SITE CONFIG
 export const SITE_NAME = "Airtable Map"
 export const SITE_DESCRIPTION = "Airtable Map"
+export const isDev = process.env.NODE_ENV === 'development'
 
 // URLS
 export const RECORD_GET = (RecordKey: string) => BASE_AIRTABLE_URL + '/' + process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID + "/" + process.env.NEXT_PUBLIC_AIRTABLE_MAP_TABLE_ID + "/" + RecordKey
@@ -26,7 +27,9 @@ export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/vie
 export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/${RecordKey}.jpeg`
 export const RECORDS_THRESHHOLD = 12000
 export const DELETE_RECORD_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/api/records/${RecordKey}`
-export const ORIGNAL_IMAGE_SAVE_PATH = (nm: string) => `./images/orignal/${nm}`
+
+// if development, use local file system, else use server file system
+export const IMAGE_DIRECTORY = `${ isDev ? process.cwd() : SERVER_URL + "/var/www" }/data/images/orignal`
 
 // DEFAULT switch
 export let isFirstLoad = true;

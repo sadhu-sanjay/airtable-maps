@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from 'fs/promises'
 import { log } from "console";
 import { existsSync, mkdirSync } from "fs";
+import { IMAGE_DIRECTORY } from "~/config";
 
 export async function POST(request: NextRequest) {
     const data = await request.formData()
@@ -19,24 +20,23 @@ export async function POST(request: NextRequest) {
     // With the file data in the buffer, you can do whatever you want with it.
     // For this, we'll just write it to the filesystem in a new location
     const workingDir = process.cwd()
-    const imagesDir = `${workingDir}/data/images/orignal`
-    if (!existsSync(imagesDir)) {
-        mkdirSync(imagesDir, { recursive: true }); // This line creates the directories if they do not exist
+    if (!existsSync(IMAGE_DIRECTORY)) {
+        mkdirSync(IMAGE_DIRECTORY, { recursive: true }); // This line creates the directories if they do not exist
     }
-    const path = `${imagesDir}/${file.name}`
+    const path = `${IMAGE_DIRECTORY}/${file.name}`
 
     await writeFile(path, buffer)
     console.log(`open ${path} to see the uploaded file`)
     await uploadToAirtable({
         body: {
-            id: "recCPzq3DVyHLsMXf",
+            id: "rect3VvKIpUimkGQG",
             fields: {
                 Image: [
                     {
-                        url: `https://v5.airtableusercontent.com/v3/u/24/24/1705341600000/VWW11UBbwtEhY5sN_TYPAg/CD9NSr8qsRxFqfijL5SzNgncvpeqPNB6xYXAnkgMwspQ7Lop2rTONQxWJjpGLth5HMoJS2_pUrqnBf3X6vhzPdK9uBaThlDRVuKmY9MrKUC0M2Tp__xrJyC3CsVu10mh89BLAPYNJ5hdpUTlsuyOmw/Mtj0S9NwQ0KZzEnbnquaGbXQ_7ds8lugfpx9QHbGG0o`,
-                        filename: file.name,
-                        size: file.size,
-                        type: file.type,
+                        url: `https://v5.airtableusercontent.com/v3/u/25/25/1705485600000/Ou2LRg5amgj4-adT6utChw/a-cbWLE_5zqC2m_N8-B0T69wxovfadlFLvLop0rVFclWePes03A2oLbZy676_82pSHyYc4KiKBgIOwJ3IXnnIoeeX4hGFFVH8ciIxZ0ZA9bfEvGXRXShUqVA6U17Ni3Fto1ujTeJH6zSefdktzkTQg/JaNMOK660PteeT2Obo01uPYzQjX628ibnm4dMyOaUD0`,
+                        // filename: file.name,
+                        // size: file.size,
+                        // type: file.type,
                     }
                 ]
             }
