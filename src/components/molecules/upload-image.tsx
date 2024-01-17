@@ -29,7 +29,7 @@ const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
       const data = new FormData();
       data.set("file", file);
 
-      const res = await fetch("/apis/upload", {
+      const res = await fetch("/server/upload", {
         method: "POST",
         body: data,
         headers: {

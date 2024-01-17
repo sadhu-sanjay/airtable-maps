@@ -8,8 +8,20 @@ dotenv.config({
 
 const nextConfig = {
   images: {
-    // load images from localhost:8080/images/
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        // port: [3000, 8080],
+        // pathname: '/account123/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sanjaygoswami.online',
+        // port: [3000, 8080],
+        // pathname: '/data/**',
+      }
+    ],
   },
 }
 
