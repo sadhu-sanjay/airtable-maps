@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
     }
 
     const path = `${IMAGE_DIRECTORY}/${file.name}`
+    const encodedPath = encodeURIComponent(path)
+    console.log("path", encodedPath)
 
     try {
 
