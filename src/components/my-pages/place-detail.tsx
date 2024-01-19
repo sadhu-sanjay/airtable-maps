@@ -3,7 +3,6 @@ import { fetchRecord } from "../airtable-helper";
 import CloseButton from "../resources/icons/close-button";
 import { MapIcon } from "../resources/icons/map-icon";
 import CardPlaceHolder from "../resources/placeHolder/card-placeHolder";
-import { ImagePlaceHolder } from "../resources/placeHolder/image-placeholder";
 import ImageSlider from "./image-slider";
 import EditableText from "../organisms/editable-text";
 import { PATCH } from "~/airtable/route";
@@ -16,7 +15,7 @@ import { Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 import Label from "../atoms/labels/label";
 import useMediaQuery from "../lib/hooks/use-media-query";
-import { UploadImageComponent } from "../molecules/upload-image";
+import { ImagePicker } from "../molecules/image-picker";
 import React from "react";
 
 interface ModalProps {
@@ -34,7 +33,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  const { isMobile } = useMediaQuery();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -53,7 +52,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     };
 
     const response = await PATCH(req);
-
     toast.dismiss(id);
     toast.success("Record Updated");
     console.log(response);
@@ -66,6 +64,41 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       day: "numeric",
     });
   }
+
+  const uploadImage = async (file: File) => {
+    const selectedImageId = record.fields?.Image?.[currentImageIndex]?.id ?? "";
+    console.log("Selected Image Id", selectedImageId);
+
+    const imagesToKeep = record.fields.Image?.filter(
+      (img: any) => img.id != selectedImageId
+    );
+
+    const data = new FormData();
+    data.set("file", file);
+    data.set("recId", record.id);
+    if (imagesToKeep?.length > 0) {
+      data.set("images", JSON.stringify(imagesToKeep));
+    }
+
+    const res = await fetch("/server/upload", {
+      method: "POST",
+      body: data,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    // handle the error
+    if (!res.ok) {
+      const error = await res.text();
+      toast.error(error);
+      throw new Error(error);
+    }
+
+    const respJson = await res.json();
+    console.log(respJson);
+    toast.success("Image Uploaded");
+  };
 
   const cleanRecord = useCallback((record: any) => {
     if (record.fields.Geocache) {
@@ -154,10 +187,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
         {/* Image Container */}
         <div
-          onClick={() => {
-            if (isMobile) return;
-            // setIsFullScreen(!isFullScreen);
-          }}
           className={` img-container
           ${
             isFullScreen
@@ -167,27 +196,20 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           transition-all duration-300 ease-in-out relative
           `}
         >
-          {record?.fields?.Image?.length === 0 ? (
-            <ImagePlaceHolder />
-          ) : (
-            <>
-              <ImageSlider
-                key={record?.id}
-                images={record?.fields?.Image as [any]}
-                isFullScreen={isFullScreen}
-                setIsFullScreen={setIsFullScreen}
-              />
-              <UploadImageComponent
-                className={`absolute ${
-                  !isFullScreen && "w-6 h-6 "
-                } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
-                onUpload={(e) => {
-                  console.log("Her");
-                  // e.stopPropagation();
-                }}
-              />
-            </>
-          )}
+          <ImageSlider
+            key={record?.id}
+            images={record?.fields?.Image as [any]}
+            isFullScreen={isFullScreen}
+            setIsFullScreen={setIsFullScreen}
+            onImageChange={setCurrentImageIndex}
+          />
+          <ImagePicker
+            record={record}
+            className={`absolute ${
+              !isFullScreen && "w-6 h-6 "
+            } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
+            onDonePicking={uploadImage}
+          />
         </div>
         <div
           className={` 

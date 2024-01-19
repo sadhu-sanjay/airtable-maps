@@ -1,19 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image-placeholder";
-
 
 type ImageSliderProps = {
   images: any[];
   isFullScreen: boolean;
   setIsFullScreen: (isFullScreen: boolean) => void;
+  onImageChange?: (index: number) => void;
 };
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
   isFullScreen,
   setIsFullScreen,
+  onImageChange,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // const [isFullScreen, setIsFullScreen] = useState(false);
@@ -27,6 +28,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
       (currentImageIndex - 1 + images.length) % images.length
     );
   };
+
+  useEffect(() => {
+    if (onImageChange) {
+      onImageChange(currentImageIndex);
+    }
+  }, [currentImageIndex, onImageChange]);
 
   return (
     <>
@@ -62,7 +69,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               </div>
             ))}
           {!images && <ImagePlaceHolder />}
-          
         </div>
 
         <div className={`${images?.length > 1 ? "block" : "hidden"}`}>
@@ -101,7 +107,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               dark:group-focus:ring-gray-800/70 group-focus:outline-none`}
             >
               <svg
-                className="w-4 h-4 text-white dark:text-gray-400"
+                className="w-4 h-4 text-white dark:text-gray-200"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -132,7 +138,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               } inline-flex items-center justify-center  rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none`}
             >
               <svg
-                className="w-4 h-4 text-white dark:text-gray-400"
+                className="w-4 h-4 text-white dark:text-gray-200"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

@@ -2,11 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from 'fs/promises'
 import { log } from "console";
 import { existsSync, mkdirSync } from "fs";
-import { IMAGE_DIRECTORY } from "~/config";
+import { IMAGE_DIRECTORY, SERVER_URL } from "~/config";
 
 export async function POST(request: NextRequest) {
     const data = await request.formData()
     const file: File | null = data.get('file') as unknown as File
+    const recId = data.get('recId') as unknown as string
+
+    const images = data.get('images') as unknown
+    let imagesArr = []
+    if (images) {
+        imagesArr = JSON.parse(images as string)
+    }
+
+
 
     if (!file) {
         console.log("No file found")
@@ -22,30 +31,23 @@ export async function POST(request: NextRequest) {
     if (!existsSync(IMAGE_DIRECTORY)) {
         console.log("Creating directory")
         mkdirSync(IMAGE_DIRECTORY, { recursive: true }); // This line creates the directories if they do not exist
-    }else {
+    } else {
         console.log("Directory exists")
     }
 
     const path = `${IMAGE_DIRECTORY}/${file.name}`
-    const encodedPath = encodeURIComponent(path)
-    console.log("path", encodedPath)
-
     try {
 
         await writeFile(path, buffer)
-        console.log(`Sanjay ${path} to see the uploaded file`)
+        const fileUrl = `${SERVER_URL}/images/orignal/${file.name}`
+        const imgObject = { url: fileUrl }
+        imagesArr.push(imgObject)
+
         await uploadToAirtable({
             body: {
-                id: "rect3VvKIpUimkGQG",
+                id: recId,
                 fields: {
-                    Image: [
-                        {
-                            url: `https://v5.airtableusercontent.com/v3/u/25/25/1705485600000/Ou2LRg5amgj4-adT6utChw/a-cbWLE_5zqC2m_N8-B0T69wxovfadlFLvLop0rVFclWePes03A2oLbZy676_82pSHyYc4KiKBgIOwJ3IXnnIoeeX4hGFFVH8ciIxZ0ZA9bfEvGXRXShUqVA6U17Ni3Fto1ujTeJH6zSefdktzkTQg/JaNMOK660PteeT2Obo01uPYzQjX628ibnm4dMyOaUD0`,
-                            // filename: file.name,
-                            // size: file.size,
-                            // type: file.type,
-                        }
-                    ]
+                    Image: imagesArr
                 }
             }
         })

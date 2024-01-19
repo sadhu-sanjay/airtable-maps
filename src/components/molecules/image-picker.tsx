@@ -1,21 +1,22 @@
 import React from "react";
 import { ImageEditIcon } from "../resources/icons/image-edit-icons";
 import { toast } from "sonner";
+import { Record } from "../models/types";
 
-type UploadImageComponentProps = {
-  onUpload: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+type ImagePickerProps = {
+  onDonePicking: (imageFile: File) => void;
   className: string;
+  record: any;
 };
 
-const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
-  onUpload,
+const ImagePicker: React.FC<ImagePickerProps> = ({
+  onDonePicking,
   className,
+  record,
 }) => {
   const onFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    console.log("files", files);
     if (files) {
-      console.log("Pass files", files);
       onFileUpload(files[0]);
     }
   };
@@ -24,29 +25,7 @@ const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
     if (!file) {
       throw new Error("File is undefined");
     }
-
-    try {
-      const data = new FormData();
-      data.set("file", file);
-
-      const res = await fetch("/server/upload", {
-        method: "POST",
-        body: data,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      // handle the error
-      if (!res.ok) {
-        const error = await res.text();
-        toast.error(error);
-        throw new Error(error);
-      }
-    } catch (e: any) {
-      // Handle errors here
-      console.error(e);
-      toast.error("Upload failed");
-    }
+    onDonePicking(file);
   };
 
   return (
@@ -72,4 +51,4 @@ const UploadImageComponent: React.FC<UploadImageComponentProps> = ({
   );
 };
 
-export { UploadImageComponent };
+export { ImagePicker };
