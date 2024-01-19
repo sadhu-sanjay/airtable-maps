@@ -67,7 +67,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
   const uploadImage = async (file: File) => {
     const selectedImageId = record.fields?.Image?.[currentImageIndex]?.id ?? "";
-    console.log("Selected Image Id", selectedImageId);
 
     const imagesToKeep = record.fields.Image?.filter(
       (img: any) => img.id != selectedImageId
@@ -88,11 +87,9 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       },
     });
 
-    // handle the error
     if (!res.ok) {
       const error = await res.text();
-      toast.error(error);
-      throw new Error(error);
+      return toast.error(error);
     }
 
     const respJson = await res.json();

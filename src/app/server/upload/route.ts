@@ -29,11 +29,8 @@ export async function POST(request: NextRequest) {
     // For this, we'll just write it to the filesystem in a new location
     console.log("Writing file to filesystem", IMAGE_DIRECTORY)
     if (!existsSync(IMAGE_DIRECTORY)) {
-        console.log("Creating directory")
         mkdirSync(IMAGE_DIRECTORY, { recursive: true }); // This line creates the directories if they do not exist
-    } else {
-        console.log("Directory exists")
-    }
+    } 
 
     const path = `${IMAGE_DIRECTORY}/${file.name}`
     try {
