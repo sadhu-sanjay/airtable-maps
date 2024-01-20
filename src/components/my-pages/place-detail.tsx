@@ -97,21 +97,24 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         return toast.error(error);
       }
 
-      const respJson = await res.json();
-      console.log(respJson);
+      const resp = await res.json();
+      const updatedImages = resp?.record.fields?.Image ?? [];
+
+      setRecord((prev: any) => ({
+        ...prev,
+        fields: {
+          ...prev.fields,
+          Image: updatedImages,
+        },
+      }));
 
       setUploading(false);
-      toast.success("Image Uploaded");
 
-      getRecord(new AbortController().signal, recordId).then((record) => {
-        if (!record) return;
-        setRecord(record);
-      });
-      
-
+      toast.success("Image Uploaded Successfully");
     } catch (e) {
       console.log(e);
       setUploading(false);
+      toast.error("Error Uploading Image");
     }
   };
 

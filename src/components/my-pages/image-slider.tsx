@@ -58,8 +58,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                 <img
                   src={
                     isFullScreen
-                      ? item.thumbnails?.full.url
-                      : item.thumbnails?.large.url
+                      ? (item.thumbnails?.full.url ? item.thumbnails?.full.url : item.url)
+                      : (item.thumbnails?.large.url ? item.thumbnails?.large.url : item.url)
                   }
                   className={`absolute block w-full h-full 
                   ${isFullScreen ? "object-contain" : "object-cover"}

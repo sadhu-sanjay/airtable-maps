@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
         mkdirSync(IMAGE_DIRECTORY, { recursive: true }); // This line creates the directories if they do not exist
     }
 
+
     const path = `${IMAGE_DIRECTORY}/${file.name}`
     try {
 
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
         const imgObject = { url: fileUrl }
         imagesArr.push(imgObject)
 
-        await uploadToAirtable({
+        const record = await uploadToAirtable({
             body: {
                 id: recId,
                 fields: {
@@ -46,7 +47,8 @@ export async function POST(request: NextRequest) {
             }
         })
 
-        return NextResponse.json({ success: true })
+        const returnObject = { success: true, fileUrl, record }
+        return NextResponse.json(returnObject)
 
     } catch (error) {
 
@@ -74,12 +76,10 @@ async function uploadToAirtable(req: { body: { id: string; fields: any } }) {
             body: JSON.stringify({ fields }),
         })
 
-        const json = await res.json()
-
-        return json
+        return await res.json()
 
     } catch (error) {
         console.error(error)
-        return error
+        throw error
     }
 }
