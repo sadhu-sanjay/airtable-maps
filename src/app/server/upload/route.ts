@@ -15,8 +15,6 @@ export async function POST(request: NextRequest) {
         imagesArr = JSON.parse(images as string)
     }
 
-
-
     if (!file) {
         console.log("No file found")
         return NextResponse.json({ success: false })
@@ -27,10 +25,9 @@ export async function POST(request: NextRequest) {
 
     // With the file data in the buffer, you can do whatever you want with it.
     // For this, we'll just write it to the filesystem in a new location
-    console.log("Writing file to filesystem", IMAGE_DIRECTORY)
     if (!existsSync(IMAGE_DIRECTORY)) {
         mkdirSync(IMAGE_DIRECTORY, { recursive: true }); // This line creates the directories if they do not exist
-    } 
+    }
 
     const path = `${IMAGE_DIRECTORY}/${file.name}`
     try {
@@ -48,12 +45,15 @@ export async function POST(request: NextRequest) {
                 }
             }
         })
+
+        return NextResponse.json({ success: true })
+
     } catch (error) {
 
         console.error("error", error)
+        return NextResponse.json({ success: false })
     }
 
-    return NextResponse.json({ success: true })
 }
 
 import {
@@ -65,8 +65,6 @@ async function uploadToAirtable(req: { body: { id: string; fields: any } }) {
     const { id, fields } = req.body
 
     try {
-        console.log("uploadToAirtable", req.body)
-
         const res = await fetch(`${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_MAP_TABLE_ID}/${id}`, {
             method: "PATCH",
             headers: {
@@ -78,8 +76,10 @@ async function uploadToAirtable(req: { body: { id: string; fields: any } }) {
 
         const json = await res.json()
 
+        return json
 
     } catch (error) {
         console.error(error)
+        return error
     }
 }

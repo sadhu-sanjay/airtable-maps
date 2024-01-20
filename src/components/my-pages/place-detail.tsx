@@ -17,6 +17,7 @@ import Label from "../atoms/labels/label";
 import useMediaQuery from "../lib/hooks/use-media-query";
 import { ImagePicker } from "../molecules/image-picker";
 import React from "react";
+import { Spinner4 } from "../spinner";
 
 interface ModalProps {
   recordId: string;
@@ -34,6 +35,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -66,35 +68,51 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   }
 
   const uploadImage = async (file: File) => {
-    const selectedImageId = record.fields?.Image?.[currentImageIndex]?.id ?? "";
+    try {
+      setUploading(true);
+      const selectedImageId =
+        record.fields?.Image?.[currentImageIndex]?.id ?? "";
 
-    const imagesToKeep = record.fields.Image?.filter(
-      (img: any) => img.id != selectedImageId
-    );
+      const imagesToKeep = record.fields.Image?.filter(
+        (img: any) => img.id != selectedImageId
+      );
 
-    const data = new FormData();
-    data.set("file", file);
-    data.set("recId", record.id);
-    if (imagesToKeep?.length > 0) {
-      data.set("images", JSON.stringify(imagesToKeep));
+      const data = new FormData();
+      data.set("file", file);
+      data.set("recId", record.id);
+      if (imagesToKeep?.length > 0) {
+        data.set("images", JSON.stringify(imagesToKeep));
+      }
+
+      const res = await fetch("/server/upload", {
+        method: "POST",
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        const error = await res.text();
+        return toast.error(error);
+      }
+
+      const respJson = await res.json();
+      console.log(respJson);
+
+      setUploading(false);
+      toast.success("Image Uploaded");
+
+      getRecord(new AbortController().signal, recordId).then((record) => {
+        if (!record) return;
+        setRecord(record);
+      });
+      
+
+    } catch (e) {
+      console.log(e);
+      setUploading(false);
     }
-
-    const res = await fetch("/server/upload", {
-      method: "POST",
-      body: data,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      const error = await res.text();
-      return toast.error(error);
-    }
-
-    const respJson = await res.json();
-    console.log(respJson);
-    toast.success("Image Uploaded");
   };
 
   const cleanRecord = useCallback((record: any) => {
@@ -200,13 +218,18 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
             setIsFullScreen={setIsFullScreen}
             onImageChange={setCurrentImageIndex}
           />
-          <ImagePicker
-            record={record}
-            className={`absolute ${
-              !isFullScreen && "w-6 h-6 "
-            } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
-            onDonePicking={uploadImage}
-          />
+          {!uploading && (
+            <ImagePicker
+              record={record}
+              className={`absolute ${
+                !isFullScreen && "w-6 h-6 "
+              } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
+              onDonePicking={uploadImage}
+            />
+          )}
+          {uploading && (
+            <Spinner4 className="absolute bottom-8 right-6 w-8 h-8" />
+          )}
         </div>
         <div
           className={` 
