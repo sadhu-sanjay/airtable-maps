@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     try {
 
         await writeFile(path, buffer)
-        const fileUrl = `${SERVER_URL}/images/orignal/${file.name}`
+        const fileUrl = `${SERVER_URL}/images/orignals/${file.name}`
         const imgObject = { url: fileUrl }
         imagesArr.push(imgObject)
 

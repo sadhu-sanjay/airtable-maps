@@ -25,12 +25,12 @@ export const REGIONS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/regi
 export const TAGS_FETCH_URL = process.env.NEXT_PUBLIC_SERVER_URL + "/api/tags"
 export const VIEW_DATA_RELOAD = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload"
 export const VIEW_RELOAD_STATUS = process.env.NEXT_PUBLIC_SERVER_URL + "/api/view-reload-status"
-export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/${RecordKey}.jpeg`
+export const RECORD_IMAGE_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/images/thumbnails/${RecordKey}.jpeg`
 export const RECORDS_THRESHHOLD = 12000
 export const DELETE_RECORD_URL = (RecordKey: string) => process.env.NEXT_PUBLIC_SERVER_URL + `/api/records/${RecordKey}`
 
 // if development, use local file system, else use server file system
-export const IMAGE_DIRECTORY = `${ isDev ? (process.cwd() + '/data/images/orignal') : '/var/www/data/images/orignal' }`
+export const IMAGE_DIRECTORY = `${ isDev ? (process.cwd() + '/data/images/orignals') : '/var/www/data/images/orignals' }`
 
 // DEFAULT switch
 export let isFirstLoad = true;

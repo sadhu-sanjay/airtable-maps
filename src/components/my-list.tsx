@@ -35,9 +35,8 @@ function MyList({
       >
         <div className="flex space-x-2 items-center">
           <div className="0 relative flex-shrink-0 w-10 h-10">
-            <Image
-              fill
-              className=" rounded-full "
+            <img
+              className="w-full h-full rounded-full "
               // src={"/place.svg"}
               src={RECORD_IMAGE_URL(record.RecordKey)}
               alt="img"

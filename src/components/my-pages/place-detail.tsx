@@ -93,7 +93,12 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
       });
 
       if (!res.ok) {
-        const error = await res.text();
+        setUploading(false);
+        let error = await res.text();
+        if (res.status === 413) {
+          error =
+            "The uploaded file is too large. Please try again with a smaller file.";
+        }
         return toast.error(error);
       }
 
