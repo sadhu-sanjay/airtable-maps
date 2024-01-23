@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageEditIcon } from "../resources/icons/image-edit-icons";
+import { ImageEditIcon } from "../resources/icons/image-edit-icon";
 import { toast } from "sonner";
 import { Record } from "../models/types";
 
@@ -29,25 +29,27 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   };
 
   return (
-    <label
-      htmlFor="dropzone-file"
-      className={`
+    <>
+      <label
+        htmlFor="dropzone-file"
+        className={`
     cursor-pointer
-    border bg-white shadow-sm p-1 text-sm font-medium text-gray-900 rounded-4px
+    border bg-white shadow-sm p-1.5 text-sm font-medium text-gray-900 rounded-full
     border-gray-200 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4
      focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
       dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700
       inline-flex items-center w-8 h-8 ${className}`}
-    >
-      <ImageEditIcon width="100%" height="100%" />
-      <input
-        id="dropzone-file"
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={onFileSelected}
-      />
-    </label>
+      >
+        <ImageEditIcon width="100%" height="100%" />
+        <input
+          id="dropzone-file"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={onFileSelected}
+        />
+      </label>
+    </>
   );
 };
 

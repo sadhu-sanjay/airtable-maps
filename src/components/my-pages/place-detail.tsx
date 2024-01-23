@@ -14,7 +14,6 @@ import { EditableChips } from "../organisms/editable-chips";
 import { Tag } from "../models/types";
 import { useQuery } from "@tanstack/react-query";
 import Label from "../atoms/labels/label";
-import useMediaQuery from "../lib/hooks/use-media-query";
 import { ImagePicker } from "../molecules/image-picker";
 import React from "react";
 import { Spinner4 } from "../spinner";
@@ -229,9 +228,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           {!uploading && (
             <ImagePicker
               record={record}
-              className={`absolute ${
-                !isFullScreen && "w-6 h-6 "
-              } bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
+              className={`absolute bottom-6 right-6 z-30 opacity-70 hover:opacity-100 `}
               onDonePicking={uploadImage}
             />
           )}

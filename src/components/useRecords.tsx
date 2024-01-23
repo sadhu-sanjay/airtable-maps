@@ -10,6 +10,7 @@ export default function useRecords() {
   const [isStreamingRecords, setIsStreamingRecords] = useState(false);
   const timeoutID = useRef<NodeJS.Timeout | null>(null);
   const retryCount = useRef(0);
+  const [controller, setController] = useState<AbortController | null>(null);
 
   console.log("USE RECORDS RENDER");
 
@@ -19,6 +20,10 @@ export default function useRecords() {
     setStatus("Gettng Records");
     setRecords([]);
 
+    if (controller) {
+      controller.abort();
+    }
+
     try {
       const viewKey = selectedView?.value;
       if (!viewKey) {
@@ -27,7 +32,11 @@ export default function useRecords() {
       }
       const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${viewKey}`;
 
-      fetch(RECORDS_FETCH_URL_WITH_VIEW)
+      const newController = new AbortController();
+      setController(newController);
+      fetch(RECORDS_FETCH_URL_WITH_VIEW, {
+        signal: controller?.signal,
+      })
         .then((res) => {
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);

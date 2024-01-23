@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ImagePlaceHolder } from "../resources/placeHolder/image-placeholder";
+import useMediaQuery from "../lib/hooks/use-media-query";
 
 type ImageSliderProps = {
   images: any[];
@@ -17,7 +18,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   onImageChange,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  // const [isFullScreen, setIsFullScreen] = useState(false);
+  const isMobile = useMediaQuery();
 
   const handleNextClick = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
@@ -43,7 +44,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         data-carousel="slide"
       >
         <div
-          onClick={() => setIsFullScreen(!isFullScreen)}
+          onClick={() => {
+            if (isMobile) {
+              setIsFullScreen(!isFullScreen);
+            }
+          }}
           className="relative h-full overflow-hidden bg-gray-100 dark:bg-gray-900"
         >
           {images &&
@@ -58,8 +63,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                 <img
                   src={
                     isFullScreen
-                      ? (item.thumbnails?.full.url ? item.thumbnails?.full.url : item.url)
-                      : (item.thumbnails?.large.url ? item.thumbnails?.large.url : item.url)
+                      ? item.thumbnails?.full.url
+                        ? item.thumbnails?.full.url
+                        : item.url
+                      : item.thumbnails?.large.url
+                      ? item.thumbnails?.large.url
+                      : item.url
                   }
                   className={`absolute block w-full h-full 
                   ${isFullScreen ? "object-contain" : "object-cover"}

@@ -84,7 +84,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
           onClick={() => {
             setIsEditing(true);
           }}
-          className="w-7 h-7"
+          className="w-6 h-6"
         />
       )}
       {isEditing && (
