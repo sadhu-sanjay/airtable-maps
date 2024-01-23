@@ -81,7 +81,7 @@ export const EditableChips: React.FC<EditableChipsProps> = ({
         </div>
       ) : (
         <EditButton
-          onClick={() => {
+          onClick={(event) => {
             setIsEditing(true);
           }}
           className="w-6 h-6"
