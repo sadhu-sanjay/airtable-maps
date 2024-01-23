@@ -1,7 +1,14 @@
 "use client";
 
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { useCallback, useRef, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+  useState,
+  Suspense,
+} from "react";
 import { Spinner } from "~/components/spinner";
 import { DropdownItem, Record } from "~/components/models/types";
 
@@ -102,11 +109,18 @@ export default function Home() {
     [filterHandler]
   );
 
+  let abortController = useRef<AbortController | null>(null);
   const viewChangedHandler = useCallback(
     (item: DropdownItem) => {
       setSelectedTags([]);
       setSearchTerm("");
-      fetchRecords(item);
+
+      if (abortController.current) {
+        abortController.current.abort();
+      }
+      abortController.current = new AbortController();
+
+      fetchRecords(item, abortController.current.signal);
     },
     [fetchRecords]
   );
@@ -172,13 +186,15 @@ export default function Home() {
             onValueChange={searchHandler}
           />
           <div className="flex justify-between align-middle">
-            <Dropdown
-              label="Views"
-              placeholder="Views"
-              itemGotSelected={viewChangedHandler}
-              fetchUrl={VIEWS_FETCH_URL}
-              labelAndValue={labelAndValues}
-            />
+            <Suspense>
+              <Dropdown
+                label="Views"
+                placeholder="Views"
+                itemGotSelected={viewChangedHandler}
+                fetchUrl={VIEWS_FETCH_URL}
+                labelAndValue={labelAndValues}
+              />
+            </Suspense>
             <DropdownMultiSelect
               label="Tags"
               placeholder="Tags"

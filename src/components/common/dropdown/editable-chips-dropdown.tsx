@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Tag } from "~/components/models/types";
-import { useSearchParams } from "next/navigation";
 
 function EditableChipsDropdown({
   label,
@@ -19,7 +18,6 @@ function EditableChipsDropdown({
   error?: any;
   className?: string;
 }) {
-  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);

@@ -10,98 +10,94 @@ export default function useRecords() {
   const [isStreamingRecords, setIsStreamingRecords] = useState(false);
   const timeoutID = useRef<NodeJS.Timeout | null>(null);
   const retryCount = useRef(0);
-  const [controller, setController] = useState<AbortController | null>(null);
 
   console.log("USE RECORDS RENDER");
 
-  const fetchRecords = useCallback((selectedView: DropdownItem) => {
-    if (timeoutID.current) clearTimeout(timeoutID.current);
-    setIsLoadingRecords(true);
-    setStatus("Gettng Records");
-    setRecords([]);
+  const fetchRecords = useCallback(
+    (selectedView: DropdownItem, signal: AbortSignal) => {
+      if (timeoutID.current) clearTimeout(timeoutID.current);
+      setIsLoadingRecords(true);
+      setStatus("Gettng Records");
+      setRecords([]);
 
-    if (controller) {
-      controller.abort();
-    }
+      try {
+        const viewKey = selectedView?.value;
+        if (!viewKey) {
+          setStatus("No view selected... please select a view.");
+          throw new Error("noKey");
+        }
+        const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${viewKey}`;
 
-    try {
-      const viewKey = selectedView?.value;
-      if (!viewKey) {
-        setStatus("No view selected... please select a view.");
-        throw new Error("noKey");
-      }
-      const RECORDS_FETCH_URL_WITH_VIEW = `${RECORDS_FETCH_URL}?viewKey=${viewKey}`;
-
-      const newController = new AbortController();
-      setController(newController);
-      fetch(RECORDS_FETCH_URL_WITH_VIEW, {
-        signal: controller?.signal,
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.body;
+        fetch(RECORDS_FETCH_URL_WITH_VIEW, {
+          signal,
         })
-        .then(async (body) => {
-          const reader = body?.getReader();
-          const decoder = new TextDecoder("utf-8");
-          let unprocessed = "";
-          const tempRecords: Record[] = [];
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.body;
+          })
+          .then(async (body) => {
+            const reader = body?.getReader();
+            const decoder = new TextDecoder("utf-8");
+            let unprocessed = "";
+            const tempRecords: Record[] = [];
 
-          while (true) {
-            setIsStreamingRecords(true);
-            setIsLoadingRecords(false);
-            const { done, value } = await reader!.read();
+            while (true) {
+              setIsStreamingRecords(true);
+              setIsLoadingRecords(false);
+              const { done, value } = await reader!.read();
 
-            if (done) {
-              console.log("Stream finished");
-              setIsStreamingRecords(false);
-              break;
+              if (done) {
+                console.log("Stream finished");
+                setIsStreamingRecords(false);
+                break;
+              }
+
+              let chunk = unprocessed + decoder.decode(value);
+              const lines = chunk.split("\n");
+              unprocessed = lines.pop() || "";
+
+              setTimeout(() => {
+                const parsedObjects = lines.map((line) => JSON.parse(line));
+                setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
+              }, 0);
             }
 
-            let chunk = unprocessed + decoder.decode(value);
-            const lines = chunk.split("\n");
-            unprocessed = lines.pop() || "";
+            // if (res.status === "Started") {
+            //   retryCount.current += 1;
+            //   if (retryCount.current > 5) {
+            //     // stop trying if after 5 tries still no records
+            //     setStatus(
+            //       "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
+            //     );
+            //     setIsLoadingRecords(false);
+            //     retryCount.current = 0;
+            //   } else {
+            //     setStatus("No Records found, checking again..");
+            //     timeoutID.current = setTimeout(() => {
+            //       fetchRecords(selectedView);
+            //     }, 5000);
+            //   }
+            // } else {
 
-            setTimeout(() => {
-              const parsedObjects = lines.map((line) => JSON.parse(line));
-              setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
-            }, 0);
-          }
-
-          // if (res.status === "Started") {
-          //   retryCount.current += 1;
-          //   if (retryCount.current > 5) {
-          //     // stop trying if after 5 tries still no records
-          //     setStatus(
-          //       "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
-          //     );
-          //     setIsLoadingRecords(false);
-          //     retryCount.current = 0;
-          //   } else {
-          //     setStatus("No Records found, checking again..");
-          //     timeoutID.current = setTimeout(() => {
-          //       fetchRecords(selectedView);
-          //     }, 5000);
-          //   }
-          // } else {
-
-          // setRecords((prevRecords) => [...prevRecords, ...res]);
-          // setIsLoadingRecords(false);
-          // }
-        })
-        .catch((e) => {
-          setStatus("unknown error..please try refresh button");
-          console.error("Error", e);
-          setIsLoadingRecords(false);
-        });
-    } catch (e: any) {
-      console.log("catch Error::", e);
-      setStatus("unknown error..please try refresh button");
-      setIsLoadingRecords(false);
-    }
-  }, []);
+            // setRecords((prevRecords) => [...prevRecords, ...res]);
+            // setIsLoadingRecords(false);
+            // }
+          })
+          .catch((e) => {
+            setStatus("unknown error..please try refresh button");
+            console.error("Error", e);
+            setIsLoadingRecords(false);
+          });
+      } catch (e: any) {
+        console.log("catch Error::", e);
+        setStatus("unknown error..please try refresh button");
+        setIsLoadingRecords(false);
+      }
+    },
+    []
+  );
 
   /**
    * Handle RealTime Events
