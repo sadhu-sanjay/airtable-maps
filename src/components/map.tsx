@@ -23,6 +23,7 @@ function MyMap({
   handleZoom: (record: Record[]) => void;
   onRecordSelected: (recordId: string) => void;
 }) {
+
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);

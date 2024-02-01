@@ -80,7 +80,7 @@ export default function Home() {
       // check if any of the selected tags match with record tags
       if (selectedTags.length > 0) {
         tagMatch = selectedTags.some((tag: DropdownItem) => {
-          return record.SearchString?.includes(tag.label.toLowerCase());
+          return record.Tags?.includes(tag.label);
         });
       } else {
         tagMatch = true;
