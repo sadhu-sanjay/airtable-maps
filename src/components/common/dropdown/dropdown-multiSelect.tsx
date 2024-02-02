@@ -123,7 +123,7 @@ function DropdownMultiSelect({
 
         {isOpen && (
           <div
-            className="absolute z-10 bg-white rounded-4px shadow w-60 dark:bg-gray-700"
+            className="absolute right-0 z-10 bg-white rounded-4px shadow w-60 dark:bg-gray-700"
             id="dropdownSearch"
           >
             <div className="p-3">
@@ -159,7 +159,7 @@ function DropdownMultiSelect({
               </div>
             </div>
             <ul
-              className="h-[30rem] px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="h-24 sm:h-36 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {selectedItems.length > 0 && (
