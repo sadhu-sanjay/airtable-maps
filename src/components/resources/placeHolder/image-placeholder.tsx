@@ -1,5 +1,3 @@
-// pass className to the component
-
 import Image from "next/image";
 import { FronnyFace } from "../icons/fronyface";
 

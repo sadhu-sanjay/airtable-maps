@@ -58,7 +58,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                 className={`duration-700 ease-in-out ${
                   index === currentImageIndex ? "block" : "hidden"
                 }`}
-                data-carousel-item
+              data-carousel-item
               >
                 <img
                   src={
