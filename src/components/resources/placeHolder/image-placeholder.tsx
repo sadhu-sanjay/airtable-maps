@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { FronnyFace } from "../icons/fronyface";
 
 export const ImagePlaceHolder: React.FC<{
   className?: string;
