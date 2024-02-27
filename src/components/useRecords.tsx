@@ -14,7 +14,7 @@ export default function useRecords() {
   console.log("USE RECORDS RENDER");
 
   const fetchRecords = useCallback(
-    (selectedView: DropdownItem, signal: AbortSignal) => {
+    (selectedView: DropdownItem, signal: AbortSignal, cachePolicy: string = 'no-store') => {
       if (timeoutID.current) clearTimeout(timeoutID.current);
       setIsLoadingRecords(true);
       setStatus("Gettng Records");
@@ -30,15 +30,32 @@ export default function useRecords() {
 
         fetch(RECORDS_FETCH_URL_WITH_VIEW, {
           signal,
+          cache: 'no-store'
         })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
+          .then(async (res) => {
+
+            if (res.status === 500) {
+                throw new Error(`HTTP error! status: ${res.status}`)
             }
-            return res.body;
-          })
-          .then(async (body) => {
-            const reader = body?.getReader();
+
+            if (res.status == 300) {
+                retryCount.current += 1;
+                if (retryCount.current > 5) {
+                 // stop trying if after 5 tries still no records
+                 setStatus(
+                   "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
+                 );
+                 setIsLoadingRecords(false);
+                 retryCount.current = 0;
+               } else {
+                 setStatus("No Records found, checking again..");
+                 timeoutID.current = setTimeout(() => {
+                   fetchRecords(selectedView, signal);
+                 }, 5000);
+               }
+            } else {
+
+            const reader = res.body?.getReader();
             const decoder = new TextDecoder("utf-8");
             let unprocessed = "";
             const tempRecords: Record[] = [];
@@ -63,27 +80,8 @@ export default function useRecords() {
                 setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
               }, 0);
             }
+            }
 
-            // if (res.status === "Started") {
-            //   retryCount.current += 1;
-            //   if (retryCount.current > 5) {
-            //     // stop trying if after 5 tries still no records
-            //     setStatus(
-            //       "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
-            //     );
-            //     setIsLoadingRecords(false);
-            //     retryCount.current = 0;
-            //   } else {
-            //     setStatus("No Records found, checking again..");
-            //     timeoutID.current = setTimeout(() => {
-            //       fetchRecords(selectedView);
-            //     }, 5000);
-            //   }
-            // } else {
-
-            // setRecords((prevRecords) => [...prevRecords, ...res]);
-            // setIsLoadingRecords(false);
-            // }
           })
           .catch((e) => {
             setStatus("unknown error..please try refresh button");

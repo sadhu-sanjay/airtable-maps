@@ -12,7 +12,7 @@ else
     PRIVATE_KEY="~/keys/airtable-maps-test.pem"
 fi
 
-SOURCE_DIR="../airtable-maps.zip"
+SOURCE_DIR="../airtable-maps"
 EXCLUDE_FILE="--exclude node_modules --exclude .git --exclude images --exclude key"
 DESTINATION_DIR="~/airtable-maps"
 
