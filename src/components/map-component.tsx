@@ -37,6 +37,8 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
+  const currentItem = useRef<DropdownItem | null>(null)
+
   const {
     isStreamingRecords,
     isLoadingRecords,
@@ -111,9 +113,10 @@ export default function Home() {
 
   let abortController = useRef<AbortController | null>(null);
   const viewChangedHandler = useCallback(
-    (item: DropdownItem) => {
+    (item?: DropdownItem) => {
       setSelectedTags([]);
       setSearchTerm("");
+      currentItem.current = item
 
       if (abortController.current) {
         abortController.current.abort();
@@ -217,6 +220,9 @@ export default function Home() {
             isStreamingRecords={isStreamingRecords}
             onRecordSelect={onRecordSelected}
             status={status}
+            refetchRecords={() => {
+                viewChangedHandler(currentItem.current) 
+            }}
           />
         </div>
       </aside>

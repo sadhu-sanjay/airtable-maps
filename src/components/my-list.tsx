@@ -16,6 +16,7 @@ function MyList({
   records,
   onRecordSelect,
   status,
+  refetchRecords
 }: {
   isStreamingRecords: boolean;
   asideRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -23,6 +24,7 @@ function MyList({
   records: Record[];
   onRecordSelect: (recordId: string) => void;
   status: string;
+  refetchRecords: () => void
 }) {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const record = records[index];
@@ -64,7 +66,7 @@ function MyList({
     <>
       {isLoadingRecords && <Spinner message={status} />}
       {records.length < 1 && !isLoadingRecords && (
-        <EmptyList title="No Recods found" subtitle={status} />
+        <EmptyList title="No Recods found" subtitle={status} onRetryClicked={refetchRecords} />
       )}
       {records && records.length > 0 && (
         <>

@@ -26,6 +26,7 @@ function Dropdown({
   const [selectedItem, setSelectedItem] = useState<DropdownItem | undefined>(
     undefined
   );
+
   const filteredItems =
     items.length > 0
       ? items.filter((item) => {
@@ -236,3 +237,4 @@ const LoadingButton: React.FC<{
     </button>
   );
 };
+

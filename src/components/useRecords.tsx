@@ -66,8 +66,8 @@ export default function useRecords() {
               const { done, value } = await reader!.read();
 
               if (done) {
-                console.log("Stream finished");
                 setIsStreamingRecords(false);
+                setStatus("Streaming Completed")
                 break;
               }
 
