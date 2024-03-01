@@ -17,7 +17,7 @@ export default function useRecords() {
     (selectedView: DropdownItem, signal: AbortSignal, cachePolicy: string = 'no-store') => {
       if (timeoutID.current) clearTimeout(timeoutID.current);
       setIsLoadingRecords(true);
-      setStatus("Gettng Records");
+      setStatus("Fetching Records");
       setRecords([]);
 
       try {
