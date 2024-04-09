@@ -2,6 +2,8 @@
 
 #### Visualize upto 50k airtable records with smooth and robust UX, and beautiful UI.
 
+## [Demo](https://demo.sanjaygoswami.online)
+
 ![Place Detail](https://github.com/sadhu-sanjay/airtable-maps/assets/10679621/135fc8c8-a02a-40c4-aca3-45a70113638d)
 
 ![Preview](https://github.com/sadhu-sanjay/airtable-maps/assets/10679621/d9f53dd8-2714-44a9-9d79-71e1b1eee85b)
