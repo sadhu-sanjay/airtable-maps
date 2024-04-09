@@ -50,6 +50,7 @@ function DropdownMultiSelect({
   }
 
   useEffect(() => {
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -78,7 +79,7 @@ function DropdownMultiSelect({
           type="button"
           className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-4px border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
         >
-          {selectedItems.length > 0 && (
+          {selectedItems && selectedItems.length > 0 && (
             <span className="mr-2 inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
               {selectedItems.length}
             </span>
@@ -193,7 +194,7 @@ function DropdownMultiSelect({
               <div className="flex items-center justify-between">
                 <p className="flex items-center p-3 text-sm font-medium text-slate-600  dark:text-slate-200 ">
                   {/* show how many selected */}
-                  {selectedItems.length === 0
+                  {selectedItems && selectedItems.length === 0
                     ? `Total: ${items && items.length}`
                     : `${selectedItems.length} of ${items.length}`}
                 </p>
