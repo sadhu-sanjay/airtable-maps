@@ -25,6 +25,7 @@ function DropdownMultiSelect({
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const clearAllSelected = () => setSelectedItems([]);
+  const selectAll = () => setSelectedItems(items);
   const filteredItems =
     items && items.length > 0
       ? items.filter((item: any) => {
@@ -33,15 +34,21 @@ function DropdownMultiSelect({
         })
       : [];
 
-  const handleSelected = (item: any) => {
-    if (
-      selectedItems.some((selectedItems) => selectedItems.value === item.value)
-    ) {
-      setSelectedItems(selectedItems.filter((i) => i.value !== item.value));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
+  const handleSelected = (itemsToAdd: [any]) => {
+    const newSelectedArray = [...selectedItems];
 
+    itemsToAdd.forEach((item) => {
+      const findIndex = selectedItems.findIndex(
+        (each) => each.value == item.value
+      );
+
+      if (findIndex !== -1) {
+        newSelectedArray.splice(findIndex, 1);
+      } else {
+        newSelectedArray.push(item);
+      }
+    });
+    setSelectedItems(newSelectedArray);
   };
 
   function doneButtonClicked() {
@@ -49,7 +56,16 @@ function DropdownMultiSelect({
     setIsOpen(!isOpen);
   }
 
+  var startIndex = useRef<number>(0);
   useEffect(() => {
+    {
+      /* since we are changing the way our filter works and we need to support both 
+  sometime when we only want to see few tags plaes and sometime we want to see all but except few tags*/
+    }
+    if (items && selectedItems.length < 1 && startIndex.current == 0) {
+      startIndex.current = 1;
+      handleSelected(items);
+    }
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -64,7 +80,7 @@ function DropdownMultiSelect({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [items]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -163,26 +179,21 @@ function DropdownMultiSelect({
               className="h-24 sm:h-36 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
-              {selectedItems.length > 0 && (
-                <li className="flex items-center justify-between py-2 pl-2 pr-4 mb-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-                  <span>Selected</span>
-                </li>
-              )}
               {filteredItems.map((item: DropdownItem) => (
                 <li key={item.value}>
-                  <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className=" flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                     <input
                       type="checkbox"
                       id={`checkbox-item-${item.value}`}
                       checked={selectedItems.some(
                         (selectedItem) => selectedItem.value === item.value
                       )}
-                      onChange={() => handleSelected(item)}
+                      onChange={() => handleSelected([item])}
                       className="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 rounded focus:ring-gray-500 dark:focus:ring-gray-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
                     <label
                       htmlFor={`checkbox-item-${item.value}`}
-                      className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                      className="cursor-pointer w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                     >
                       {item.label}
                     </label>
@@ -191,25 +202,34 @@ function DropdownMultiSelect({
               ))}
             </ul>
             <div>
-              <div className="flex items-center justify-between">
-                <p className="flex items-center p-3 text-sm font-medium text-slate-600  dark:text-slate-200 ">
+              <div className="grid justify-stretch">
+                <p className="flex items-center px-3 pt-3 text-sm font-medium text-slate-600  dark:text-slate-200 ">
                   {/* show how many selected */}
                   {selectedItems && selectedItems.length === 0
                     ? `Total: ${items && items.length}`
-                    : `${selectedItems.length} of ${items.length}`}
+                    : `${selectedItems.length} of ${items.length} selected`}
                 </p>
-                <p
-                  onClick={clearAllSelected}
-                  className="flex items-center text-sm font-medium text-red-600 border-trounded-b-lg cursor-pointer dark:text-red-500 hover:underline"
-                >
-                  clear all
-                </p>
-                <button
-                  onClick={() => doneButtonClicked()}
-                  className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 m-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                >
-                  Done
-                </button>
+
+                <div className="flex justify-between px-3">
+                  <p
+                    onClick={selectAll}
+                    className="btn  flex items-center text-sm font-medium text-blue-600 border-trounded-b-lg cursor-pointer dark:text-blue-500 hover:underline"
+                  >
+                    select all
+                  </p>
+                  <p
+                    onClick={clearAllSelected}
+                    className="btn flex items-center text-sm font-medium text-red-600 border-trounded-b-lg cursor-pointer dark:text-red-500 hover:underline"
+                  >
+                    clear all
+                  </p>
+                  <button
+                    onClick={() => doneButtonClicked()}
+                    className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 m-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                  >
+                    Done
+                  </button>
+                </div>
               </div>
             </div>
           </div>
