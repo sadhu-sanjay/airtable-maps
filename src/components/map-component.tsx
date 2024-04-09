@@ -80,13 +80,10 @@ export default function Home() {
       let searchMatch = false;
 
       // check if any of the selected tags match with record tags
-      if (selectedTags.length > 0) {
-        tagMatch = selectedTags.some((tag: DropdownItem) => {
-          return record.Tags?.includes(tag.label);
-        });
-      } else {
-        tagMatch = true;
-      }
+      tagMatch = selectedTags.some((tag: DropdownItem) => {
+
+        return record.Tags?.includes(tag.label);
+      });
 
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
@@ -116,7 +113,7 @@ export default function Home() {
     (item?: DropdownItem) => {
       if (!item) return
 
-      setSelectedTags([]);
+      // setSelectedTags([]);
       setSearchTerm("");
       currentItem.current = item 
 
