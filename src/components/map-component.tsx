@@ -81,9 +81,12 @@ export default function Home() {
 
       // check if any of the selected tags match with record tags
       tagMatch = selectedTags.some((tag: DropdownItem) => {
-
         return record.Tags?.includes(tag.label);
       });
+
+      // if (tagsQuery.data.length == selectedTags.length) { // if all tags are selected take all the records
+      //   tagMatch = true
+      // }
 
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
@@ -113,7 +116,7 @@ export default function Home() {
     (item?: DropdownItem) => {
       if (!item) return
 
-      // setSelectedTags([]);
+      setSelectedTags([]);
       setSearchTerm("");
       currentItem.current = item 
 

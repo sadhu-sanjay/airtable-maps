@@ -56,6 +56,9 @@ function MyList({
                 <p className=" truncate text-xs leading-5 font-medium text-gray-500 dark:text-gray-300">
                   {record.Region}
                 </p>{" "}
+                {!record.Tags && <p className=" truncate text-xs leading-5 font-medium text-red-500 dark:text-red-300">
+                  noTags
+                </p>}
               </div>
             </div>
           </div>
