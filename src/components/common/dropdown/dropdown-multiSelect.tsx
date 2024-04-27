@@ -56,17 +56,8 @@ function DropdownMultiSelect({
     setIsOpen(!isOpen);
   }
 
-  var startIndex = useRef<number>(0);
   useEffect(() => {
-    {
-      /* since we are changing the way our filter works and we need to support both 
-  sometime when we only want to see few tags plaes and sometime we want to see all but except few tags*/
-    }
-    if (items && selectedItems.length < 1 && startIndex.current == 0) {
-      startIndex.current = 1;
-      handleSelected(items);
-    }
-
+    
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
