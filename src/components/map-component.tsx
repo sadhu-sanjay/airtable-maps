@@ -31,6 +31,7 @@ import { ShareIcon } from "./resources/icons/share";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+
   const asideRef = useRef<HTMLDivElement>(null);
   const [selectedRecordId, setSelectedRecordId] = useState<string>();
   const [listRecords, setListRecords] = useState<Record[]>([]);
@@ -38,6 +39,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
   const currentItem = useRef<DropdownItem | undefined>(undefined)
+  const shouldInvertTagsFilter = useRef(false)
 
   const {
     isStreamingRecords,
@@ -213,6 +215,7 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
+              shouldInvertFilter={shouldInvertTagsFilter}
             />
           </div>
           <MyList

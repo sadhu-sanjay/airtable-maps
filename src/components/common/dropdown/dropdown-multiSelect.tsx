@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, use, useEffect, useRef, useState } from "react";
 import { DropdownItem } from "../../models/types";
 import { fetchTagsAirtable } from "../../airtable-helper";
 
@@ -11,6 +11,7 @@ function DropdownMultiSelect({
   selectedItems,
   setSelectedItems,
   items,
+  shouldInvertFilter,
 }: {
   label: string;
   placeholder: string;
@@ -20,12 +21,20 @@ function DropdownMultiSelect({
   setSelectedItems: (selectedItems: DropdownItem[]) => void;
   items: any;
   isLoading: boolean;
+  shouldInvertFilter: MutableRefObject<boolean>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const clearAllSelected = () => setSelectedItems([]);
-  const selectAll = () => setSelectedItems(items);
+
+  const clearAllSelected = () => {
+    shouldInvertFilter.current = false
+    setSelectedItems([]);
+  }
+  const selectAll = () => {
+    shouldInvertFilter.current = true 
+    setSelectedItems(items);
+  }
   const filteredItems =
     items && items.length > 0
       ? items.filter((item: any) => {
@@ -33,6 +42,26 @@ function DropdownMultiSelect({
           return item.label?.toLowerCase().includes(searchTerm.toLowerCase());
         })
       : [];
+
+  const getSelectedTagsBasedOnInvertFlag = () => {
+
+    if (shouldInvertFilter.current) {
+
+      const newSelected = items.filter((element: any) => {
+
+        console.log("Here", )
+
+        console.log(selectedItems.every(el => {
+          console.log("ee", el.value , element.value)
+          console.log(el.value === element.value)
+        }))
+
+        return !selectedItems.every(el => el.value === element.value)
+      })
+
+      // console.log("Selected ====>", newSelected)
+    }
+  }
 
   const handleSelected = (itemsToAdd: [any]) => {
     const newSelectedArray = [...selectedItems];
@@ -52,6 +81,7 @@ function DropdownMultiSelect({
   };
 
   function doneButtonClicked() {
+    getSelectedTagsBasedOnInvertFlag()
     doneCallBack(selectedItems);
     setIsOpen(!isOpen);
   }
