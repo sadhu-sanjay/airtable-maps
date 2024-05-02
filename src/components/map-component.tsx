@@ -77,21 +77,25 @@ export default function Home() {
   const filterHandler = useCallback(() => {
     // match allThree selected regions, searchTerms and tags, if any one of them is empty then match with other two,
     // of if 2 are empty then match with the one that is not empty
+    console.log("SElect", selectedTags.length)
+    console.log("Unselected", unSelectedTags.length)
     let newFilteredRecords = records.filter((record) => {
       let tagMatch = false;
       let searchMatch = false;
+      let isExcluded = false
 
       // check if any of the selected tags match with record tags
-      if (selectedTags.length > 0) {
-        tagMatch = selectedTags.some((tag: DropdownItem) => {
-          return record.Tags?.includes(tag.label);
-        });
-      }
+
+      tagMatch = selectedTags.some((tag: DropdownItem) => {
+        return record.Tags?.includes(tag.label);
+      });
 
       if (unSelectedTags.length > 0) {
-        tagMatch = unSelectedTags.some((tag: DropdownItem) => {
+        isExcluded = unSelectedTags.some((tag: DropdownItem) => {
           return !record.Tags?.includes(tag.label);
         });
+      } else {
+        isExcluded = true;
       }
 
       // check if any of the search terms match with record search string
@@ -103,7 +107,7 @@ export default function Home() {
         searchMatch = true;
       }
 
-      return tagMatch && searchMatch;
+      return tagMatch && searchMatch && isExcluded
     });
 
     updateRecords(newFilteredRecords);
