@@ -49,7 +49,7 @@ export default function Home() {
   } = useRecords();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<DropdownItem[]>([]);
-  const [unselectedTags, setunSelectedTags] = useState<DropdownItem[]>([]);
+  const [unSelectedTags, selectUnselectedTags] = useState<DropdownItem[]>([]);
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -82,20 +82,17 @@ export default function Home() {
       let searchMatch = false;
 
       // check if any of the selected tags match with record tags
-      if (unselectedTags.length > 0) {
-
-        
-      }else {
-
+      if (selectedTags.length > 0) {
         tagMatch = selectedTags.some((tag: DropdownItem) => {
           return record.Tags?.includes(tag.label);
         });
       }
 
-
-      // if (tagsQuery.data.length == selectedTags.length) { // if all tags are selected take all the records
-      //   tagMatch = true
-      // }
+      if (unSelectedTags.length > 0) {
+        tagMatch = unSelectedTags.some((tag: DropdownItem) => {
+          return !record.Tags?.includes(tag.label);
+        });
+      }
 
       // check if any of the search terms match with record search string
       if (searchTerms.current.length > 0) {
@@ -110,7 +107,7 @@ export default function Home() {
     });
 
     updateRecords(newFilteredRecords);
-  }, [records, selectedTags, updateRecords]);
+  }, [records, selectedTags, updateRecords, unSelectedTags]);
 
   const searchHandler = useCallback(
     (value: string) => {
@@ -210,12 +207,26 @@ export default function Home() {
               />
             </Suspense>
             <DropdownMultiSelect
-              label="Tags"
-              placeholder="Tags"
+              label="select"
+              placeholder="select tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
               selectedItems={selectedTags}
               setSelectedItems={setSelectedTags}
+              isLoading={tagsQuery.isLoading}
+              items={tagsQuery.data?.map((tag: any) => ({
+                label: tag.name,
+                value: tag.id,
+                color: tag.color,
+              }))}
+            />
+            <DropdownMultiSelect
+              label="unselected"
+              placeholder="unselected tags"
+              doneCallBack={tagsHandler}
+              fetchUrl={TAGS_FETCH_URL}
+              selectedItems={unSelectedTags}
+              setSelectedItems={selectUnselectedTags}
               isLoading={tagsQuery.isLoading}
               items={tagsQuery.data?.map((tag: any) => ({
                 label: tag.name,
