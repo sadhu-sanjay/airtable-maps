@@ -39,7 +39,6 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
   const currentItem = useRef<DropdownItem | undefined>(undefined)
-  const shouldInvertTagsFilter = useRef(false)
 
   const {
     isStreamingRecords,
@@ -49,7 +48,8 @@ export default function Home() {
     status,
   } = useRecords();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTags, setSelectedTags] = useState<any[]>([]);
+  const [selectedTags, setSelectedTags] = useState<DropdownItem[]>([]);
+  const [unselectedTags, setunSelectedTags] = useState<DropdownItem[]>([]);
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -82,9 +82,16 @@ export default function Home() {
       let searchMatch = false;
 
       // check if any of the selected tags match with record tags
-      tagMatch = selectedTags.some((tag: DropdownItem) => {
-        return record.Tags?.includes(tag.label);
-      });
+      if (unselectedTags.length > 0) {
+
+        
+      }else {
+
+        tagMatch = selectedTags.some((tag: DropdownItem) => {
+          return record.Tags?.includes(tag.label);
+        });
+      }
+
 
       // if (tagsQuery.data.length == selectedTags.length) { // if all tags are selected take all the records
       //   tagMatch = true
@@ -215,7 +222,6 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
-              shouldInvertFilter={shouldInvertTagsFilter}
             />
           </div>
           <MyList

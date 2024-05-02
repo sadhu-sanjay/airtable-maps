@@ -11,7 +11,6 @@ function DropdownMultiSelect({
   selectedItems,
   setSelectedItems,
   items,
-  shouldInvertFilter,
 }: {
   label: string;
   placeholder: string;
@@ -21,18 +20,15 @@ function DropdownMultiSelect({
   setSelectedItems: (selectedItems: DropdownItem[]) => void;
   items: any;
   isLoading: boolean;
-  shouldInvertFilter: MutableRefObject<boolean>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const clearAllSelected = () => {
-    shouldInvertFilter.current = false
     setSelectedItems([]);
   }
   const selectAll = () => {
-    shouldInvertFilter.current = true 
     setSelectedItems(items);
   }
   const filteredItems =
@@ -43,25 +39,6 @@ function DropdownMultiSelect({
         })
       : [];
 
-  const getSelectedTagsBasedOnInvertFlag = () => {
-
-    if (shouldInvertFilter.current) {
-
-      const newSelected = items.filter((element: any) => {
-
-        console.log("Here", )
-
-        console.log(selectedItems.every(el => {
-          console.log("ee", el.value , element.value)
-          console.log(el.value === element.value)
-        }))
-
-        return !selectedItems.every(el => el.value === element.value)
-      })
-
-      // console.log("Selected ====>", newSelected)
-    }
-  }
 
   const handleSelected = (itemsToAdd: [any]) => {
     const newSelectedArray = [...selectedItems];
@@ -81,13 +58,13 @@ function DropdownMultiSelect({
   };
 
   function doneButtonClicked() {
-    getSelectedTagsBasedOnInvertFlag()
+
     doneCallBack(selectedItems);
     setIsOpen(!isOpen);
   }
 
   useEffect(() => {
-    
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -98,9 +75,11 @@ function DropdownMultiSelect({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+
   }, [items]);
 
   const toggleDropdown = () => {
