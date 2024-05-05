@@ -87,7 +87,7 @@ export default function Home() {
       // check if any of the selected tags match with record tags
 
       tagMatch = selectedTags.some((tag: DropdownItem) => {
-        return record.Tags?.includes(tag.label);
+        return record.Tags?.split(',').includes(tag.label);
       });
 
       if (unSelectedTags.length > 0 && tagMatch) {
@@ -125,6 +125,7 @@ export default function Home() {
       if (!item) return
 
       setSelectedTags([]);
+      selectUnselectedTags([]);
       setSearchTerm("");
       currentItem.current = item 
 
@@ -209,8 +210,8 @@ export default function Home() {
               />
             </Suspense>
             <DropdownMultiSelect
-              label="select"
-              placeholder="select tags"
+              label="include tags"
+              placeholder="include tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
               selectedItems={selectedTags}
@@ -223,8 +224,8 @@ export default function Home() {
               }))}
             />
             <DropdownMultiSelect
-              label="unselected"
-              placeholder="unselected tags"
+              label="exclude tags"
+              placeholder="exclude tags"
               doneCallBack={tagsHandler}
               fetchUrl={TAGS_FETCH_URL}
               selectedItems={unSelectedTags}
