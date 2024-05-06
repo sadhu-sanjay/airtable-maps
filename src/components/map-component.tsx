@@ -87,12 +87,12 @@ export default function Home() {
       // check if any of the selected tags match with record tags
 
       tagMatch = selectedTags.some((tag: DropdownItem) => {
-        return record.Tags?.split(',').includes(tag.label);
+        return record.Tags?.toLowerCase().split(',').includes(tag.label.toLowerCase());
       });
 
       if (unSelectedTags.length > 0 && tagMatch) {
-        excludeTagMatch = !record.Tags?.split(',').some((tag) => {
-          return unSelectedTags.some((utag) => utag.label === tag)
+        excludeTagMatch = !record.Tags?.toLowerCase().split(',').some((tag) => {
+          return unSelectedTags.some((utag) => utag.label.toLowerCase() === tag.toLowerCase())
         })
       }
 
