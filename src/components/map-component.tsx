@@ -82,18 +82,26 @@ export default function Home() {
     let newFilteredRecords = records.filter((record) => {
       let tagMatch = false;
       let searchMatch = false;
-      let excludeTagMatch = true
+      let excludeTagMatch = false
 
       // check if any of the selected tags match with record tags
 
-      tagMatch = selectedTags.some((tag: DropdownItem) => {
-        return record.Tags?.toLowerCase().split(',').includes(tag.label.toLowerCase());
-      });
+      if (selectedTags.length > 0) {
+        tagMatch = selectedTags.some((tag: DropdownItem) => {
+          return record.Tags?.toLowerCase()
+            .split(",")
+            .includes(tag.label.toLowerCase());
+        });
+      } else {
+        tagMatch = true;
+      }
 
-      if (unSelectedTags.length > 0 && tagMatch) {
+      if (unSelectedTags.length > 0 ) {
         excludeTagMatch = !record.Tags?.toLowerCase().split(',').some((tag) => {
           return unSelectedTags.some((utag) => utag.label.toLowerCase() === tag.toLowerCase())
         })
+      }else {
+        excludeTagMatch = true
       }
 
       // check if any of the search terms match with record search string
