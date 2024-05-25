@@ -191,6 +191,7 @@ export default function Home() {
             handleZoom={handleZoom}
             records={mapRecords}
             onRecordSelected={onRecordSelected}
+            place={place}
           />
         );
     }
@@ -215,58 +216,56 @@ export default function Home() {
         className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          {/* <div className="flex gap-4">
+          <div className="flex gap-4">
             <SearchBar
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               onValueChange={searchHandler}
-            /> */}
+            />
             <PlacePicker
               onPlaceChange={(e) => {
-                console.log("Enter Place id", e.target.value.id)
-                setPlace(e.target.value);
+                  setPlace(e.target.value);
+                console.log("Enter Place id", place?.addressComponents, place?.location)
               }}
               placeholder="Enter a place to see its address"
             />
-          {/* </div> */}
+          </div>
           <div className="flex justify-between align-middle">
             <PlaceOverview
-                  size="x-large"
-                  place={place?.id}
-                  // place="ChIJda54FlRgLxMRD2muipfUwH8"
-                  >
-                  <div slot="action">
-                    <IconButton
-                      slot="action"
-                      variant="filled"
-                      // onClick={() => overlayLayoutRef.current?.showOverlay()}
-                      >
-                      See Reviews
-                    </IconButton>
-                    <IconButton
-                      slot="action"
-                      variant="filled"
-                      onClick={() => setPlace(undefined)}
-                      icon="note_add"
-                      >
-                      to airtable
-                    </IconButton>
-                    <IconButton
-                      slot="action"
-                      variant="filled"
-                      onClick={() => setPlace(undefined)}
-                      icon="cancel"
-                      >
-                    </IconButton>
-                   
-                  </div>
-                  <div slot="action">
-                    <PlaceDirectionsButton slot="action" variant="filled">
-                      Directions
-                    </PlaceDirectionsButton>
-                  </div>
-                  
-                </PlaceOverview>
+              size="x-large"
+              place={place?.id}
+              googleLogoAlreadyDisplayed
+              // place="ChIJda54FlRgLxMRD2muipfUwH8"
+            >
+              <div slot="action">
+                <IconButton
+                  // slot="action"
+                  variant="filled"
+                  // onClick={() => overlayLayoutRef.current?.showOverlay()}
+                >
+                  See Reviews
+                </IconButton>
+                <IconButton
+                  // slot="action"
+                  variant="filled"
+                  onClick={() => setPlace(undefined)}
+                  icon="note_add"
+                >
+                  add to airtable
+                </IconButton>
+              </div>
+              <div slot="action">
+                <PlaceDirectionsButton slot="action" variant="filled">
+                  Directions
+                </PlaceDirectionsButton>
+              </div>
+              <IconButton
+                slot="action"
+                variant="filled"
+                onClick={() => setPlace(undefined)}
+                icon="close"
+              ></IconButton>
+            </PlaceOverview>
             <Suspense>
               <Dropdown
                 label="Views"
@@ -305,7 +304,7 @@ export default function Home() {
               }))}
             /> */}
           </div>
-          <MyList
+          {/* <MyList
             asideRef={asideRef}
             records={listRecords}
             isLoadingRecords={isLoadingRecords}
@@ -315,7 +314,7 @@ export default function Home() {
             refetchRecords={() => {
               viewChangedHandler(currentItem.current);
             }}
-          />
+          /> */}
         </div>
       </aside>
 
@@ -324,11 +323,11 @@ export default function Home() {
       </main>
 
       <aside>
-        {/* <PlaceDetailModal
+        <PlaceDetailModal
           recordId={selectedRecordId ?? ""}
           onClose={closeDetail}
           isOpen={isModalOpen}
-        /> */}
+        />
       </aside>
     </div>
   );

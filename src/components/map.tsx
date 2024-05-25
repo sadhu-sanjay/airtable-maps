@@ -18,10 +18,12 @@ function MyMap({
   records,
   handleZoom,
   onRecordSelected,
+  place
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
   onRecordSelected: (recordId: string) => void;
+  place: google.maps.places.Place | undefined
 }) {
 
   console.log("MAP RENDERED");
@@ -42,6 +44,15 @@ function MyMap({
     if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
   };
+
+  useEffect(() => {
+
+    console.log("Place Change", place?.location)
+
+    mapRef.current?.setCenter(place?.location!)
+    mapRef.current?.setZoom(12)
+
+  }, [place])
 
   useEffect(() => {
     if (!flag || !records) return;
