@@ -11,7 +11,6 @@ import {
 } from "react";
 import { Spinner } from "~/components/spinner";
 import { DropdownItem, Record } from "~/components/models/types";
-
 import {
   MAPS_API_KEY,
   RECORDS_FETCH_URL,
@@ -29,6 +28,12 @@ import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { ShareIcon } from "./resources/icons/share";
 import { useQuery } from "@tanstack/react-query";
+import {
+  PlaceOverview,
+  PlacePicker,
+  IconButton,
+  PlaceDirectionsButton
+} from "@googlemaps/extended-component-library/react";
 
 export default function Home() {
 
@@ -169,6 +174,7 @@ export default function Home() {
   }, []);
 
   const render = (status: Status) => {
+    // return <EmptyList title="Check the Render Function" subtitle="Please  Try refreshing" />
     switch (status) {
       case Status.LOADING:
         return <Spinner message={"Loading.."} />;
@@ -195,6 +201,13 @@ export default function Home() {
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
 
+  const [formattedAddress, setFormattedAddress] = useState('');
+  const handlePlaceChange = (e: any) => {
+    setFormattedAddress(e.target.value?.formattedAddress ?? '');
+  };
+  
+  const [place, setPlace] = useState<google.maps.places.Place | undefined>(undefined);
+
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
       <aside
@@ -202,12 +215,58 @@ export default function Home() {
         className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <SearchBar
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            onValueChange={searchHandler}
-          />
+          {/* <div className="flex gap-4">
+            <SearchBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onValueChange={searchHandler}
+            /> */}
+            <PlacePicker
+              onPlaceChange={(e) => {
+                console.log("Enter Place id", e.target.value.id)
+                setPlace(e.target.value);
+              }}
+              placeholder="Enter a place to see its address"
+            />
+          {/* </div> */}
           <div className="flex justify-between align-middle">
+            <PlaceOverview
+                  size="x-large"
+                  place={place?.id}
+                  // place="ChIJda54FlRgLxMRD2muipfUwH8"
+                  >
+                  <div slot="action">
+                    <IconButton
+                      slot="action"
+                      variant="filled"
+                      // onClick={() => overlayLayoutRef.current?.showOverlay()}
+                      >
+                      See Reviews
+                    </IconButton>
+                    <IconButton
+                      slot="action"
+                      variant="filled"
+                      onClick={() => setPlace(undefined)}
+                      icon="note_add"
+                      >
+                      to airtable
+                    </IconButton>
+                    <IconButton
+                      slot="action"
+                      variant="filled"
+                      onClick={() => setPlace(undefined)}
+                      icon="cancel"
+                      >
+                    </IconButton>
+                   
+                  </div>
+                  <div slot="action">
+                    <PlaceDirectionsButton slot="action" variant="filled">
+                      Directions
+                    </PlaceDirectionsButton>
+                  </div>
+                  
+                </PlaceOverview>
             <Suspense>
               <Dropdown
                 label="Views"
@@ -217,7 +276,7 @@ export default function Home() {
                 labelAndValue={labelAndValues}
               />
             </Suspense>
-            <DropdownMultiSelect
+            {/* <DropdownMultiSelect
               label="include tags"
               placeholder="include tags"
               doneCallBack={tagsHandler}
@@ -244,7 +303,7 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
-            />
+            /> */}
           </div>
           <MyList
             asideRef={asideRef}
@@ -254,7 +313,7 @@ export default function Home() {
             onRecordSelect={onRecordSelected}
             status={status}
             refetchRecords={() => {
-                viewChangedHandler(currentItem.current) 
+              viewChangedHandler(currentItem.current);
             }}
           />
         </div>
@@ -265,11 +324,11 @@ export default function Home() {
       </main>
 
       <aside>
-        <PlaceDetailModal
+        {/* <PlaceDetailModal
           recordId={selectedRecordId ?? ""}
           onClose={closeDetail}
           isOpen={isModalOpen}
-        />
+        /> */}
       </aside>
     </div>
   );

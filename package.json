@@ -13,6 +13,7 @@
     "sendit": "rsync -avz '-e ssh -i ~/keys/hetzner' .next root@5.161.52.123:~/airtable-maps "
   },
   "dependencies": {
+    "@googlemaps/extended-component-library": "^0.6.11",
     "@googlemaps/markerclusterer": "^2.4.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@tanstack/react-query": "^5.17.8",
