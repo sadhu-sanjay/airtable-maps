@@ -223,9 +223,12 @@ export default function Home() {
               onValueChange={searchHandler}
             />
             <PlacePicker
-              onPlaceChange={(e) => {
-                  setPlace(e.target.value);
-                console.log("Enter Place id", place?.addressComponents, place?.location)
+              onPlaceChange={(e: Event) => {
+                const target = e.target 
+                const value = target?.value
+                if (value) {
+                  setPlace(value)
+                }
               }}
               placeholder="Enter a place to see its address"
             />
