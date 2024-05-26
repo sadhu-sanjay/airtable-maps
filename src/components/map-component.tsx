@@ -32,8 +32,11 @@ import {
   PlaceOverview,
   PlacePicker,
   IconButton,
-  PlaceDirectionsButton
+  PlaceDirectionsButton,
+  PlaceDataProvider,
+  PlaceReviews
 } from "@googlemaps/extended-component-library/react";
+import { DEFAULT_LOCATION } from "~/CONST";
 
 export default function Home() {
 
@@ -213,9 +216,9 @@ export default function Home() {
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
       <aside
         ref={asideRef}
-        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px]"
+        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
-        <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
+        {/* <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex gap-4">
             <SearchBar
               searchTerm={searchTerm}
@@ -224,51 +227,16 @@ export default function Home() {
             />
             <PlacePicker
               onPlaceChange={(e: Event) => {
-                const target = e.target 
-                const value = target?.value
+                const target = e.target;
+                const value = target?.value;
                 if (value) {
-                  setPlace(value)
+                  setPlace(value);
                 }
               }}
               placeholder="Enter a place to see its address"
             />
           </div>
-          <div className="flex justify-between align-middle">
-            <PlaceOverview
-              size="x-large"
-              place={place?.id}
-              googleLogoAlreadyDisplayed
-              // place="ChIJda54FlRgLxMRD2muipfUwH8"
-            >
-              <div slot="action">
-                <IconButton
-                  // slot="action"
-                  variant="filled"
-                  // onClick={() => overlayLayoutRef.current?.showOverlay()}
-                >
-                  See Reviews
-                </IconButton>
-                <IconButton
-                  // slot="action"
-                  variant="filled"
-                  onClick={() => setPlace(undefined)}
-                  icon="note_add"
-                >
-                  add to airtable
-                </IconButton>
-              </div>
-              <div slot="action">
-                <PlaceDirectionsButton slot="action" variant="filled">
-                  Directions
-                </PlaceDirectionsButton>
-              </div>
-              <IconButton
-                slot="action"
-                variant="filled"
-                onClick={() => setPlace(undefined)}
-                icon="close"
-              ></IconButton>
-            </PlaceOverview>
+          <div className="flex justify-between align-middle w-[360px]">
             <Suspense>
               <Dropdown
                 label="Views"
@@ -278,7 +246,7 @@ export default function Home() {
                 labelAndValue={labelAndValues}
               />
             </Suspense>
-            {/* <DropdownMultiSelect
+            <DropdownMultiSelect
               label="include tags"
               placeholder="include tags"
               doneCallBack={tagsHandler}
@@ -305,9 +273,9 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
-            /> */}
+            />
           </div>
-          {/* <MyList
+          <MyList
             asideRef={asideRef}
             records={listRecords}
             isLoadingRecords={isLoadingRecords}
@@ -317,8 +285,47 @@ export default function Home() {
             refetchRecords={() => {
               viewChangedHandler(currentItem.current);
             }}
-          /> */}
-        </div>
+          />
+        </div> */}
+        <PlaceOverview
+          // size="x-large"
+          // place={place?.id}
+          // googleLogoAlreadyDisplayed
+          place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
+          // travelOrigin={DEFAULT_LOCATION}
+        >
+          <div slot="action">
+            <IconButton
+              slot="action"
+              variant="filled"
+              // onClick={() => overlayLayoutRef.current?.showOverlay()}
+            >
+              See Reviews
+            </IconButton>
+            <IconButton
+              slot="action"
+              variant="filled"
+              onClick={() => setPlace(undefined)}
+              icon="note_add"
+            >
+              add to airtable
+            </IconButton>
+          </div>
+          <div slot="action">
+            <PlaceDirectionsButton slot="action" variant="filled">
+              Directions
+            </PlaceDirectionsButton>
+          </div>
+          <IconButton
+            slot="action"
+            variant="filled"
+            onClick={() => setPlace(undefined)}
+            icon="close"
+          ></IconButton>
+          <PlaceDataProvider place={place}>
+            <PlaceReviews style={{ height: "100px" }} />
+          </PlaceDataProvider>
+        </PlaceOverview>
       </aside>
 
       <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">

@@ -34,6 +34,7 @@ function MyMap({
   const clusterMap = useRef<Map<string, google.maps.LatLng>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
+  const DEFAULT_ZOOM_WITH_LOCATION = 16
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
@@ -50,7 +51,7 @@ function MyMap({
     console.log("Place Change", place?.location)
 
     mapRef.current?.setCenter(place?.location!)
-    mapRef.current?.setZoom(12)
+    mapRef.current?.setZoom(DEFAULT_ZOOM_WITH_LOCATION)
 
   }, [place])
 
