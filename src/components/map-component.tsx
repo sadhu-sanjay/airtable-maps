@@ -216,9 +216,9 @@ export default function Home() {
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
       <aside
         ref={asideRef}
-        className="h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
+        className="relative h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
-        {/* <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
+        <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex gap-4">
             <SearchBar
               searchTerm={searchTerm}
@@ -236,7 +236,7 @@ export default function Home() {
               placeholder="Enter a place to see its address"
             />
           </div>
-          <div className="flex justify-between align-middle w-[360px]">
+          <div className="flex justify-between align-middle">
             <Suspense>
               <Dropdown
                 label="Views"
@@ -286,46 +286,36 @@ export default function Home() {
               viewChangedHandler(currentItem.current);
             }}
           />
-        </div> */}
-        <PlaceOverview
-          // size="x-large"
-          // place={place?.id}
-          // googleLogoAlreadyDisplayed
-          place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
-          // travelOrigin={DEFAULT_LOCATION}
-        >
-          <div slot="action">
-            <IconButton
-              slot="action"
-              variant="filled"
-              // onClick={() => overlayLayoutRef.current?.showOverlay()}
-            >
-              See Reviews
-            </IconButton>
-            <IconButton
-              slot="action"
-              variant="filled"
-              onClick={() => setPlace(undefined)}
-              icon="note_add"
-            >
-              add to airtable
-            </IconButton>
-          </div>
-          <div slot="action">
-            <PlaceDirectionsButton slot="action" variant="filled">
-              Directions
-            </PlaceDirectionsButton>
-          </div>
-          <IconButton
-            slot="action"
-            variant="filled"
-            onClick={() => setPlace(undefined)}
-            icon="close"
-          ></IconButton>
-          <PlaceDataProvider place={place}>
-            <PlaceReviews style={{ height: "100px" }} />
-          </PlaceDataProvider>
-        </PlaceOverview>
+          <PlaceOverview
+            place={place?.id}
+            // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
+            // travelOrigin={DEFAULT_LOCATION}
+            className="w-full"
+          >
+            <div slot="action">
+              <IconButton
+                slot="action"
+                variant="filled"
+                // onClick={() => overlayLayoutRef.current?.showOverlay()}
+              >
+                See Reviews
+              </IconButton>
+              <IconButton
+                slot="action"
+                variant="filled"
+                onClick={() => setPlace(undefined)}
+                icon="note_add"
+              >
+                add to airtable
+              </IconButton>
+            </div>
+            <div slot="action">
+              <PlaceDirectionsButton slot="action" variant="filled">
+                Directions
+              </PlaceDirectionsButton>
+            </div>
+          </PlaceOverview>
+        </div>
       </aside>
 
       <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
