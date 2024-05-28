@@ -177,7 +177,6 @@ export default function Home() {
   }, []);
 
   const render = (status: Status) => {
-    // return <EmptyList title="Check the Render Function" subtitle="Please  Try refreshing" />
     switch (status) {
       case Status.LOADING:
         return <Spinner message={"Loading.."} />;
@@ -214,7 +213,7 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
-      {/* <aside
+      <aside
         ref={asideRef}
         className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
@@ -277,10 +276,9 @@ export default function Home() {
             }}
           />
         </div>
-      </aside> */}
+      </aside>
 
-      <aside className="absolute right-0 top-0 h-1/2 
-      z-10 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto">
+      {/* <aside className="absolute right-0 top-0 bg-red-900 z-20 md:w-4/12 ">
         <PlacePicker
           onPlaceChange={(e: Event) => {
             const target = e.target;
@@ -290,21 +288,15 @@ export default function Home() {
             }
           }}
           placeholder="Enter a place to see its address"
-          className="w-full p-4 "
+          className="w-full sticky shadow-lg p-4 "
         />
+        </div>
         <PlaceOverview
-          // place={place?.id}
-          place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
+          place={place?.id}
+          // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
           // travelOrigin={DEFAULT_LOCATION}
         >
           <div slot="action">
-            <IconButton
-              slot="action"
-              variant="filled"
-              // onClick={() => overlayLayoutRef.current?.showOverlay()}
-            >
-              See Reviews
-            </IconButton>
             <IconButton
               slot="action"
               variant="filled"
@@ -320,19 +312,68 @@ export default function Home() {
             </PlaceDirectionsButton>
           </div>
         </PlaceOverview>
-      </aside>
+      </aside> */}
 
-      <main className=" w-full h-1/2 sm:h-full sm:w-8/12 lg:w-9/12 ">
+      <main className=" w-full sm:w-8/12 lg:w-9/12 h-1/2 sm:h-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
-      <aside>
+      <aside
+        className="bg-transparent absolute right-0 top-0 h-auto max-h-full
+      w-full sm:w-4/12 lg:w-3/12  overflow-y-auto "
+      >
+        <div className="bg-white w-full p-4 sticky top-0 shadow-lg rounded-lg">
+          <PlacePicker
+            onPlaceChange={(e: Event) => {
+              const target = e.target;
+              const value = target?.value;
+              if (value) {
+                setPlace(value);
+              }
+            }}
+            placeholder="Enter a place to see its address"
+            className="w-full"
+          />
+        </div>
+        <PlaceOverview
+          place={place?.id}
+          // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
+          // travelOrigin={DEFAULT_LOCATION}
+        >
+          <div slot="action">
+            <IconButton
+              slot="action"
+              variant="filled"
+              onClick={() => setPlace(undefined)}
+              icon="note_add"
+            >
+              Add to airtable
+            </IconButton>
+          </div>
+          <div slot="action">
+            <PlaceDirectionsButton slot="action" variant="filled">
+              Directions
+            </PlaceDirectionsButton>
+          </div>
+          <IconButton
+            slot="action"
+            variant="outlined"
+            onClick={() => setPlace(undefined)}
+            icon="close"
+            className="ml-auto shadow-mg"
+          >
+            Close
+          </IconButton>
+        </PlaceOverview>
+      </aside>
+
+      {/* <aside>
         <PlaceDetailModal
           recordId={selectedRecordId ?? ""}
           onClose={closeDetail}
           isOpen={isModalOpen}
         />
-      </aside>
+      </aside> */}
     </div>
   );
 }

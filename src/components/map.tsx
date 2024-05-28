@@ -11,7 +11,7 @@ import { ZoomOutButton } from "./atoms/zoom-out-button";
 import { ShareButton } from "./atoms/share-button";
 import { MyLocationButton } from "./atoms/my-location-button";
 import { toast } from "sonner";
-import cluster from "cluster";
+import { DEFAULT_LOCATION } from "~/CONST";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
@@ -50,7 +50,7 @@ function MyMap({
 
     console.log("Place Change", place?.location)
 
-    mapRef.current?.setCenter(place?.location!)
+    mapRef.current?.setCenter(place?.location ?? DEFAULT_LOCATION)
     mapRef.current?.setZoom(DEFAULT_ZOOM_WITH_LOCATION)
 
   }, [place])
