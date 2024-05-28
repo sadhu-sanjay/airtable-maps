@@ -203,12 +203,6 @@ export default function Home() {
     setIsModalOpen(false);
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
-
-  const [formattedAddress, setFormattedAddress] = useState('');
-  const handlePlaceChange = (e: any) => {
-    setFormattedAddress(e.target.value?.formattedAddress ?? '');
-  };
-  
   const [place, setPlace] = useState<google.maps.places.Place | undefined>(undefined);
 
   return (
@@ -218,11 +212,11 @@ export default function Home() {
         className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-            <SearchBar
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              onValueChange={searchHandler}
-            />
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onValueChange={searchHandler}
+          />
           <div className="flex justify-between align-middle">
             <Suspense>
               <Dropdown
@@ -289,7 +283,7 @@ export default function Home() {
             onPlaceChange={(e: Event) => {
               const target = e.target;
               const value = target?.value;
-              console.log("Place ChangesssSanjay", value)
+              console.log("Place ChangesssSanjay", value);
               if (value) {
                 setPlace(value);
               }
@@ -299,7 +293,7 @@ export default function Home() {
           />
         </div>
         <PlaceOverview
-          place={place?.id} 
+          place={place?.id}
           // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
           // travelOrigin={DEFAULT_LOCATION}
         >
@@ -314,7 +308,7 @@ export default function Home() {
             </IconButton>
           </div>
           <div slot="action">
-            <PlaceDirectionsButton slot="action" variant="filled">
+            <PlaceDirectionsButton slot="action" variant="outlined">
               Directions
             </PlaceDirectionsButton>
           </div>
@@ -323,9 +317,8 @@ export default function Home() {
             variant="filled"
             onClick={() => setPlace(undefined)}
             icon="close"
-            className="ml-auto shadow-mg"
+            className="ml-auto "
           >
-            Close
           </IconButton>
         </PlaceOverview>
       </aside>
