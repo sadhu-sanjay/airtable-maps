@@ -218,13 +218,11 @@ export default function Home() {
         className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <div className="flex gap-4">
             <SearchBar
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               onValueChange={searchHandler}
             />
-          </div>
           <div className="flex justify-between align-middle">
             <Suspense>
               <Dropdown
@@ -278,55 +276,20 @@ export default function Home() {
         </div>
       </aside>
 
-      {/* <aside className="absolute right-0 top-0 bg-red-900 z-20 md:w-4/12 ">
-        <PlacePicker
-          onPlaceChange={(e: Event) => {
-            const target = e.target;
-            const value = target?.value
-            if (value) {
-              setPlace(value);
-            }
-          }}
-          placeholder="Enter a place to see its address"
-          className="w-full sticky shadow-lg p-4 "
-        />
-        </div>
-        <PlaceOverview
-          place={place?.id}
-          // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
-          // travelOrigin={DEFAULT_LOCATION}
-        >
-          <div slot="action">
-            <IconButton
-              slot="action"
-              variant="filled"
-              onClick={() => setPlace(undefined)}
-              icon="note_add"
-            >
-              add to airtable
-            </IconButton>
-          </div>
-          <div slot="action">
-            <PlaceDirectionsButton slot="action" variant="filled">
-              Directions
-            </PlaceDirectionsButton>
-          </div>
-        </PlaceOverview>
-      </aside> */}
-
       <main className=" w-full sm:w-8/12 lg:w-9/12 h-1/2 sm:h-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
       <aside
-        className="bg-transparent absolute right-0 top-0 h-auto max-h-full
-      w-full sm:w-4/12 lg:w-3/12  overflow-y-auto "
+        className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
+      w-full sm:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-white w-full p-4 sticky top-0 shadow-lg rounded-lg">
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
               const value = target?.value;
+              console.log("Place ChangesssSanjay", value)
               if (value) {
                 setPlace(value);
               }
@@ -336,14 +299,14 @@ export default function Home() {
           />
         </div>
         <PlaceOverview
-          place={place?.id}
+          place={place?.id} 
           // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
           // travelOrigin={DEFAULT_LOCATION}
         >
           <div slot="action">
             <IconButton
               slot="action"
-              variant="filled"
+              variant="outlined"
               onClick={() => setPlace(undefined)}
               icon="note_add"
             >
@@ -357,7 +320,7 @@ export default function Home() {
           </div>
           <IconButton
             slot="action"
-            variant="outlined"
+            variant="filled"
             onClick={() => setPlace(undefined)}
             icon="close"
             className="ml-auto shadow-mg"
@@ -367,16 +330,13 @@ export default function Home() {
         </PlaceOverview>
       </aside>
 
-      {/* <aside>
+      <aside>
         <PlaceDetailModal
           recordId={selectedRecordId ?? ""}
           onClose={closeDetail}
           isOpen={isModalOpen}
         />
-      </aside> */}
+      </aside>
     </div>
   );
-}
-function axios(RECORDS_FETCH_URL: any) {
-  throw new Error("Function not implemented.");
 }

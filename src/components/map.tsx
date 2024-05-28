@@ -46,9 +46,12 @@ function MyMap({
     mapRef.current!.fitBounds(bounds);
   };
 
+  /**
+   * if Place Changes and it is a valid place update the map
+   */
   useEffect(() => {
 
-    console.log("Place Change", place?.location)
+    if (!place) return
 
     mapRef.current?.setCenter(place?.location ?? DEFAULT_LOCATION)
     mapRef.current?.setZoom(DEFAULT_ZOOM_WITH_LOCATION)
