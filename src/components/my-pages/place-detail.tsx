@@ -56,6 +56,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     toast.dismiss(id);
     toast.success("Record Updated");
     console.log(response);
+
   }
 
   function getDate(date: string) {

@@ -33,6 +33,7 @@ import {
   PlaceDirectionsButton,
 } from "@googlemaps/extended-component-library/react";
 import { IconLocation } from "./resources/icons/icon-location";
+import { CREATE } from "~/airtable/route";
 
 export default function Home() {
 
@@ -172,6 +173,57 @@ export default function Home() {
     setIsModalOpen(true);
   }, []);
 
+  const addToAirTable = async () => {
+
+  //   await table.updateRecordAsync(recordId, {
+  //     "Address": location['results'][0]['formatted_address'],
+  //     "Street Number": address_components.find(x => x.types.includes('street_number')) ? address_components.find(x => x.types.includes('street_number')).long_name : '',
+  //     "Street": address_components.find(x => x.types.includes('route')) ? address_components.find(x => x.types.includes('route')).long_name : '',
+  //     "Neighborhood": address_components.find(x => x.types.includes('neighborhood')) ? address_components.find(x => x.types.includes('neighborhood')).long_name : '',
+  //     "City": address_components.find(x => x.types.includes('locality')) ? address_components.find(x => x.types.includes('locality')).long_name :
+  //         address_components.find(x => x.types.includes('sublocality')) ? address_components.find(x => x.types.includes('sublocality')).long_name : '',
+  //     "State / AAL1": address_components.find(x => x.types.includes('administrative_area_level_1')) ? address_components.find(x => x.types.includes('administrative_area_level_1')).long_name : '',
+  //     "County / AAL2": address_components.find(x => x.types.includes('administrative_area_level_2')) ? address_components.find(x => x.types.includes('administrative_area_level_2')).long_name : '',
+  //     "Country": address_components.find(x => x.types.includes('country')) ? address_components.find(x => x.types.includes('country')).long_name : '',
+  //     "Postal code": address_components.find(x => x.types.includes('postal_code')) ? address_components.find(x => x.types.includes('postal_code')).long_name : ''
+  // });
+
+    console.log("addressComponents", place?.addressComponents)
+    console.log("adrFormatAddress", place?.adrFormatAddress)
+    console.log("attributions", place?.attributions)
+    console.log("businessStatus", place?.businessStatus)
+    console.log("displayName", place?.displayName)
+    console.log("formattedAddress", place?.formattedAddress)
+    console.log("googleMapsURI", place?.googleMapsURI)
+    console.log("location", place?.location)
+    console.log("iconBackgroundColor", place?.iconBackgroundColor)
+    console.log("id", place?.id)
+    console.log("internationalPhoneNumber", place?.internationalPhoneNumber)
+    console.log("websiteURI", place?.websiteURI)
+    console.log("Photos", place?.photos)
+    console.log("Rating", place?.rating)
+    console.log("Requested Langauge", place?.requestedLanguage)
+    console.log("Reviews", place?.reviews)
+    console.log("Types", place?.types)
+    console.log("userRatingCount", place?.userRatingCount)
+    console.log("pluscode", place?.plusCode)
+    
+    const req = {
+      body: {
+        fields: {
+          Title: place?.displayName,
+          Tags: place?.types
+        }
+      }
+    }
+    console.log("HI", place.types)
+
+    const response = await CREATE(req)
+
+    console.log("Hi Sanjay", response)
+
+  }
+
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
@@ -301,9 +353,7 @@ export default function Home() {
             <IconButton
               slot="action"
               variant="outlined"
-              onClick={() => {
-                console.log("Place", place?.addressComponents);
-              }}
+              onClick={ addToAirTable }
               icon="note_add"
             >
               Add to airtable

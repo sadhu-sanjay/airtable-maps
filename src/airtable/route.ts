@@ -17,6 +17,20 @@ export async function PATCH(req: { body: { id: string; fields: any } }) {
     return res.json()
 }
 
+export async function CREATE(req: { body: { fields: any } }) {
+    const { fields } = req.body
+
+    const res = await fetch(`${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_MAP_TABLE_ID}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({ fields }),
+    })
+    return res.json()
+}
+
 
 // export async function POST() {
 //     return new NextResponse(JSON.stringify(globalRecords), {
