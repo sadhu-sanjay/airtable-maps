@@ -274,11 +274,11 @@ export default function Home() {
 
       <aside
         className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
-      w-full sm:w-4/12 lg:w-3/12 overflow-y-auto "
+      w-full sm:w-5/12 md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-white w-full p-4 sticky top-0 shadow-lg ">
           
-            <h1 className="text-md font-md p-2">Find a location </h1>
+            <h1 className="text-md font-md p-2"> Find a loction </h1>
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
