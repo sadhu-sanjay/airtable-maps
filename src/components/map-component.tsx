@@ -21,20 +21,18 @@ import MyList from "./my-list";
 import MyMap from "./map";
 import DropdownMultiSelect from "./common/dropdown/dropdown-multiSelect";
 import SearchBar from "./search-bar";
-import { myDebounce } from "./lib/utils";
 import EmptyList from "./common/empty-states/empty-list";
 import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
-import { ShareIcon } from "./resources/icons/share";
 import { useQuery } from "@tanstack/react-query";
 import {
   PlaceOverview,
   PlacePicker,
   IconButton,
   PlaceDirectionsButton,
-  PlaceFieldText 
 } from "@googlemaps/extended-component-library/react";
+import { IconLocation } from "./resources/icons/icon-location";
 
 export default function Home() {
 
@@ -277,8 +275,10 @@ export default function Home() {
       w-full sm:w-5/12 md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-white w-full p-4 sticky top-0 shadow-lg ">
-          
-            <h1 className="text-md font-md p-2"> Find a loction </h1>
+          <div className="flex items-center">
+            <IconLocation />
+            <h1 className="text-md font-md p-2"> Find a location to visit </h1>
+          </div>
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
@@ -301,7 +301,9 @@ export default function Home() {
             <IconButton
               slot="action"
               variant="outlined"
-              onClick={() => setPlace(undefined)}
+              onClick={() => {
+                console.log("Place", place?.addressComponents);
+              }}
               icon="note_add"
             >
               Add to airtable
@@ -315,10 +317,12 @@ export default function Home() {
           <IconButton
             slot="action"
             variant="filled"
+            condensed={true}
             onClick={() => setPlace(undefined)}
             icon="close"
             className="ml-auto "
           >
+            Close
           </IconButton>
         </PlaceOverview>
       </aside>
