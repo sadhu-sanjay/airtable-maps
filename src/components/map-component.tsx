@@ -191,6 +191,10 @@ export default function Home() {
   // });
 
     console.log("addressComponents", place?.addressComponents)
+
+    const country = place?.addressComponents?.find(each => each.types.includes("country"));
+    console.log("Country", country)
+
     console.log("adrFormatAddress", place?.adrFormatAddress)
     console.log("attributions", place?.attributions)
     console.log("businessStatus", place?.businessStatus)
@@ -210,12 +214,15 @@ export default function Home() {
     console.log("userRatingCount", place?.userRatingCount)
     console.log("pluscode", place?.plusCode)
     
-    
     const req = {
       body: {
         fields: {
           Title: place?.displayName,
-          Tags: place?.types?.map(capitalizeFirstLetter)
+          // Tags: place?.types?.map(capitalizeFirstLetter),
+          'Coordinates (lat, lng)': place?.location?.toUrlValue(),
+           Country: place?.addressComponents?.find(each => each.types.includes("country"))?.longText,
+          'Recommended By': 'sanjaygoswami60@gmail.com'
+
         }
       }
     }
@@ -330,7 +337,7 @@ export default function Home() {
       w-full sm:w-5/12 md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-white w-full p-4 sticky top-0 shadow-lg ">
-          <div className="flex items-center">
+          <div className="flex items-center mb-1">
             <IconLocation />
             <h1 className="text-md font-md p-2"> Find a location to visit </h1>
           </div>
