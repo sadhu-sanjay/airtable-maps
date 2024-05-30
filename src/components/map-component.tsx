@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import {
   useCallback,
@@ -26,12 +27,12 @@ import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { useQuery } from "@tanstack/react-query";
-import {
-  PlaceOverview,
-  PlacePicker,
-  IconButton,
-  PlaceDirectionsButton,
-} from "@googlemaps/extended-component-library/react";
+const PlaceOverview = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlaceOverview), { ssr: false });
+const PlacePicker = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlacePicker), { ssr: false });
+const IconButton = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.IconButton), { ssr: false });
+const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlaceDirectionsButton), { ssr: false });
+
+
 import { IconLocation } from "./resources/icons/icon-location";
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
@@ -177,6 +178,8 @@ export default function Home() {
 
   const addToAirTable = async () => {
 
+    const toastId = toast.loading('Please wait')
+
   //   await table.updateRecordAsync(recordId, {
   //     "Address": location['results'][0]['formatted_address'],
   //     "Street Number": address_components.find(x => x.types.includes('street_number')) ? address_components.find(x => x.types.includes('street_number')).long_name : '',
@@ -235,8 +238,13 @@ export default function Home() {
 
     const response = await CREATE(req)
 
-    toast.success("Record Updated");
-    console.log("Hi Sanjay", response)
+    toast.dismiss(toastId)
+
+    if (response) {
+      toast.success("Successfully Added Place to Airtable");
+    }else {
+      toast.error("Error Adding Place to Airtable")
+    }
 
   }
 
@@ -359,18 +367,19 @@ export default function Home() {
             }}
             placeholder="Enter a place to see its address"
             className="w-full"
-          />
+          ></PlacePicker>
         </div>
         <PlaceOverview
           place={place?.id}
           // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
           // travelOrigin={DEFAULT_LOCATION}
+          googleLogoAlreadyDisplayed
         >
           <div slot="action">
             <IconButton
               slot="action"
               variant="outlined"
-              onClick={ addToAirTable }
+              onClick={addToAirTable}
               icon="note_add"
             >
               Add to airtable
@@ -384,9 +393,7 @@ export default function Home() {
           <IconButton
             slot="action"
             variant="filled"
-            condensed={true}
             onClick={() => setPlace(undefined)}
-            icon="close"
             className="ml-auto sticky top-0 "
           >
             Close

@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReactQueryProvider>
-          <Toaster richColors position="bottom-center" />
+          <Toaster richColors position="top-center" />
           {children}
         </ReactQueryProvider>
       </body>
