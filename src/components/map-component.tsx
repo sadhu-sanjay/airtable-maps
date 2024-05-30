@@ -350,6 +350,7 @@ export default function Home() {
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
+              // @ts-ignore
               const value = target?.value;
               console.log("Place ChangesssSanjay", value);
               if (value) {
