@@ -34,6 +34,8 @@ import {
 } from "@googlemaps/extended-component-library/react";
 import { IconLocation } from "./resources/icons/icon-location";
 import { CREATE } from "~/airtable/route";
+import { toast } from "sonner";
+import { capitalizeFirstLetter } from "./lib/utils";
 
 export default function Home() {
 
@@ -208,18 +210,19 @@ export default function Home() {
     console.log("userRatingCount", place?.userRatingCount)
     console.log("pluscode", place?.plusCode)
     
+    
     const req = {
       body: {
         fields: {
           Title: place?.displayName,
-          Tags: place?.types
+          Tags: place?.types?.map(capitalizeFirstLetter)
         }
       }
     }
-    console.log("HI", place.types)
 
     const response = await CREATE(req)
 
+    toast.success("Record Updated");
     console.log("Hi Sanjay", response)
 
   }
@@ -370,7 +373,7 @@ export default function Home() {
             condensed={true}
             onClick={() => setPlace(undefined)}
             icon="close"
-            className="ml-auto "
+            className="ml-auto sticky top-0 "
           >
             Close
           </IconButton>

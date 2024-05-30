@@ -1,5 +1,7 @@
 import defaultColors from 'tailwindcss/colors';
 
+export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
+
 export const randomColor = () => {
   const colors = Object.keys(defaultColors);
   const color = colors[Math.floor(Math.random() * colors.length)];
