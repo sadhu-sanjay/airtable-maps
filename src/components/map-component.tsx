@@ -220,9 +220,15 @@ export default function Home() {
           Title: place?.displayName,
           // Tags: place?.types?.map(capitalizeFirstLetter),
           'Coordinates (lat, lng)': place?.location?.toUrlValue(),
-           Country: place?.addressComponents?.find(each => each.types.includes("country"))?.longText,
-          'Recommended By': 'sanjaygoswami60@gmail.com'
-
+          'Postal code': place?.addressComponents?.find(each => each.types.includes("postal_code"))?.longText,
+          'Country': place?.addressComponents?.find(each => each.types.includes("country"))?.longText,
+          'State / AAL1': place?.addressComponents?.find(each => each.types.includes("administrative_area_level_1"))?.longText,
+          'City': place?.addressComponents?.find(each => each.types.includes("locality"))?.longText,
+          'Recommended By': 'sanjaygoswami60@gmail.com',
+          Address: place?.formattedAddress,
+          Image: place?.photos ? place.photos.slice(0, 3).map(photo => ({ url: photo.getURI() })) : [],
+          URL: place?.websiteURI,
+          Description: place?.googleMapsURI,
         }
       }
     }
