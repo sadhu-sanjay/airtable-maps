@@ -238,6 +238,7 @@ export default function Home() {
 
     const response = await CREATE(req)
 
+    console.log("RESPOnse", response)
     toast.dismiss(toastId)
 
     if (response) {
