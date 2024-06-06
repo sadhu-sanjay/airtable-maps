@@ -1,6 +1,8 @@
 import defaultColors from 'tailwindcss/colors';
 
+export const replaceUnderScoreWithSpace = (str: string) => str.replace(/_/g, ' ')
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
+
 
 export const randomColor = () => {
   const colors = Object.keys(defaultColors);

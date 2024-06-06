@@ -36,10 +36,9 @@ const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-compone
 import { IconLocation } from "./resources/icons/icon-location";
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
-import { capitalizeFirstLetter } from "./lib/utils";
+import { capitalizeFirstLetter, replaceUnderScoreWithSpace } from "./lib/utils";
 
 export default function Home() {
-
   const asideRef = useRef<HTMLDivElement>(null);
   const [selectedRecordId, setSelectedRecordId] = useState<string>();
   const [listRecords, setListRecords] = useState<Record[]>([]);
@@ -85,12 +84,12 @@ export default function Home() {
   const filterHandler = useCallback(() => {
     // match allThree selected regions, searchTerms and tags, if any one of them is empty then match with other two,
     // of if 2 are empty then match with the one that is not empty
-    console.log("SElect", selectedTags.length)
-    console.log("Unselected", unSelectedTags.length)
+    console.log("SElect", selectedTags.length);
+    console.log("Unselected", unSelectedTags.length);
     let newFilteredRecords = records.filter((record) => {
       let tagMatch = false;
       let searchMatch = false;
-      let excludeTagMatch = false
+      let excludeTagMatch = false;
 
       // check if any of the selected tags match with record tags
 
@@ -104,12 +103,16 @@ export default function Home() {
         tagMatch = true;
       }
 
-      if (unSelectedTags.length > 0 ) {
-        excludeTagMatch = !record.Tags?.toLowerCase().split(',').some((tag) => {
-          return unSelectedTags.some((utag) => utag.label.toLowerCase() === tag.toLowerCase())
-        })
-      }else {
-        excludeTagMatch = true
+      if (unSelectedTags.length > 0) {
+        excludeTagMatch = !record.Tags?.toLowerCase()
+          .split(",")
+          .some((tag) => {
+            return unSelectedTags.some(
+              (utag) => utag.label.toLowerCase() === tag.toLowerCase()
+            );
+          });
+      } else {
+        excludeTagMatch = true;
       }
 
       // check if any of the search terms match with record search string
@@ -121,7 +124,7 @@ export default function Home() {
         searchMatch = true;
       }
 
-      return tagMatch && searchMatch && excludeTagMatch
+      return tagMatch && searchMatch && excludeTagMatch;
     });
 
     updateRecords(newFilteredRecords);
@@ -138,12 +141,12 @@ export default function Home() {
   let abortController = useRef<AbortController | null>(null);
   const viewChangedHandler = useCallback(
     (item?: DropdownItem) => {
-      if (!item) return
+      if (!item) return;
 
       setSelectedTags([]);
       selectUnselectedTags([]);
       setSearchTerm("");
-      currentItem.current = item 
+      currentItem.current = item;
 
       if (abortController.current) {
         abortController.current.abort();
@@ -177,77 +180,97 @@ export default function Home() {
   }, []);
 
   const addToAirTable = async () => {
+    const toastId = toast.loading("Please wait");
+    // Fetch Additional Ddetail
+    place?.fetchFields({ fields: ["editorialSummary", "websiteURI"] });
 
-    const toastId = toast.loading('Please wait')
+    //   await table.updateRecordAsync(recordId, {
+    //     "Address": location['results'][0]['formatted_address'],
+    //     "Street Number": address_components.find(x => x.types.includes('street_number')) ? address_components.find(x => x.types.includes('street_number')).long_name : '',
+    //     "Street": address_components.find(x => x.types.includes('route')) ? address_components.find(x => x.types.includes('route')).long_name : '',
+    //     "Neighborhood": address_components.find(x => x.types.includes('neighborhood')) ? address_components.find(x => x.types.includes('neighborhood')).long_name : '',
+    //     "City": address_components.find(x => x.types.includes('locality')) ? address_components.find(x => x.types.includes('locality')).long_name :
+    //         address_components.find(x => x.types.includes('sublocality')) ? address_components.find(x => x.types.includes('sublocality')).long_name : '',
+    //     "State / AAL1": address_components.find(x => x.types.includes('administrative_area_level_1')) ? address_components.find(x => x.types.includes('administrative_area_level_1')).long_name : '',
+    //     "County / AAL2": address_components.find(x => x.types.includes('administrative_area_level_2')) ? address_components.find(x => x.types.includes('administrative_area_level_2')).long_name : '',
+    //     "Country": address_components.find(x => x.types.includes('country')) ? address_components.find(x => x.types.includes('country')).long_name : '',
+    //     "Postal code": address_components.find(x => x.types.includes('postal_code')) ? address_components.find(x => x.types.includes('postal_code')).long_name : ''
+    // });
 
-  //   await table.updateRecordAsync(recordId, {
-  //     "Address": location['results'][0]['formatted_address'],
-  //     "Street Number": address_components.find(x => x.types.includes('street_number')) ? address_components.find(x => x.types.includes('street_number')).long_name : '',
-  //     "Street": address_components.find(x => x.types.includes('route')) ? address_components.find(x => x.types.includes('route')).long_name : '',
-  //     "Neighborhood": address_components.find(x => x.types.includes('neighborhood')) ? address_components.find(x => x.types.includes('neighborhood')).long_name : '',
-  //     "City": address_components.find(x => x.types.includes('locality')) ? address_components.find(x => x.types.includes('locality')).long_name :
-  //         address_components.find(x => x.types.includes('sublocality')) ? address_components.find(x => x.types.includes('sublocality')).long_name : '',
-  //     "State / AAL1": address_components.find(x => x.types.includes('administrative_area_level_1')) ? address_components.find(x => x.types.includes('administrative_area_level_1')).long_name : '',
-  //     "County / AAL2": address_components.find(x => x.types.includes('administrative_area_level_2')) ? address_components.find(x => x.types.includes('administrative_area_level_2')).long_name : '',
-  //     "Country": address_components.find(x => x.types.includes('country')) ? address_components.find(x => x.types.includes('country')).long_name : '',
-  //     "Postal code": address_components.find(x => x.types.includes('postal_code')) ? address_components.find(x => x.types.includes('postal_code')).long_name : ''
-  // });
+    console.log("addressComponents", place?.addressComponents);
+    console.log("editorialSummary", place?.editorialSummary);
+    console.log("adrFormatAddress", place?.adrFormatAddress);
+    console.log("attributions", place?.attributions);
+    console.log("businessStatus", place?.businessStatus);
+    console.log("displayName", place?.displayName);
+    console.log("formattedAddress", place?.formattedAddress);
+    console.log("googleMapsURI", place?.googleMapsURI);
+    console.log("location", place?.location);
+    console.log("iconBackgroundColor", place?.iconBackgroundColor);
+    console.log("id", place?.id);
+    console.log("internationalPhoneNumber", place?.internationalPhoneNumber);
+    console.log("websiteURI", place?.websiteURI);
+    console.log("Photos", place?.photos);
+    console.log("Rating", place?.rating);
+    console.log("Requested Langauge", place?.requestedLanguage);
+    console.log("Reviews", place?.reviews);
+    console.log("Types", place?.types);
+    console.log("userRatingCount", place?.userRatingCount);
+    console.log("pluscode", place?.plusCode);
+    console.log(
+      "Processed Tags ",
+      place?.types?.map(replaceUnderScoreWithSpace).map(capitalizeFirstLetter)
+    );
 
-    console.log("addressComponents", place?.addressComponents)
-
-    const country = place?.addressComponents?.find(each => each.types.includes("country"));
-    console.log("Country", country)
-
-    console.log("adrFormatAddress", place?.adrFormatAddress)
-    console.log("attributions", place?.attributions)
-    console.log("businessStatus", place?.businessStatus)
-    console.log("displayName", place?.displayName)
-    console.log("formattedAddress", place?.formattedAddress)
-    console.log("googleMapsURI", place?.googleMapsURI)
-    console.log("location", place?.location)
-    console.log("iconBackgroundColor", place?.iconBackgroundColor)
-    console.log("id", place?.id)
-    console.log("internationalPhoneNumber", place?.internationalPhoneNumber)
-    console.log("websiteURI", place?.websiteURI)
-    console.log("Photos", place?.photos)
-    console.log("Rating", place?.rating)
-    console.log("Requested Langauge", place?.requestedLanguage)
-    console.log("Reviews", place?.reviews)
-    console.log("Types", place?.types)
-    console.log("userRatingCount", place?.userRatingCount)
-    console.log("pluscode", place?.plusCode)
-    
     const req = {
       body: {
+        typecast: true,
         fields: {
           Title: place?.displayName,
-          // Tags: place?.types?.map(capitalizeFirstLetter),
-          'Coordinates (lat, lng)': place?.location?.toUrlValue(),
-          'Postal code': place?.addressComponents?.find(each => each.types.includes("postal_code"))?.longText,
-          'Country': place?.addressComponents?.find(each => each.types.includes("country"))?.longText,
-          'State / AAL1': place?.addressComponents?.find(each => each.types.includes("administrative_area_level_1"))?.longText,
-          'City': place?.addressComponents?.find(each => each.types.includes("locality"))?.longText,
-          'Recommended By': 'sanjaygoswami60@gmail.com',
+          Tags: place?.types
+            ?.map(replaceUnderScoreWithSpace)
+            .map(capitalizeFirstLetter),
+          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
+          "Postal code": place?.addressComponents?.find((each) =>
+            each.types.includes("postal_code")
+          )?.longText,
+          Country: place?.addressComponents?.find((each) =>
+            each.types.includes("country")
+          )?.longText,
+          "State / AAL1": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_1")
+          )?.longText,
+          City: place?.addressComponents?.find(
+            (each) =>
+              each.types.includes("locality") ||
+              each.types.includes("sublocality")
+          )?.longText,
+          "Recommended By": "sanjaygoswami60@gmail.com",
           Address: place?.formattedAddress,
-          Image: place?.photos ? place.photos.slice(0, 3).map(photo => ({ url: photo.getURI() })) : [],
+          Image: place?.photos
+            ? place.photos.slice(0, 3).map((photo) => ({ url: photo.getURI() }))
+            : [],
           URL: place?.websiteURI,
-          Description: place?.googleMapsURI,
-        }
-      }
-    }
+          Description:
+            place?.editorialSummary ??
+            "" + place?.googleMapsURI ??
+            "" + place?.internationalPhoneNumber ??
+            "",
+          GooglePlacesID: place?.id,
+        },
+      },
+    };
 
-    const response = await CREATE(req)
+    const response = await CREATE(req); // create record in airtable
 
-    console.log("RESPOnse", response)
-    toast.dismiss(toastId)
+    toast.dismiss(toastId);
 
     if (response) {
       toast.success("Successfully Added Place to Airtable");
-    }else {
-      toast.error("Error Adding Place to Airtable")
+    } else {
+      toast.error("Error Adding Place to Airtable");
     }
-
-  }
+  };
 
   const render = (status: Status) => {
     switch (status) {
@@ -276,7 +299,9 @@ export default function Home() {
     setIsModalOpen(false);
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
-  const [place, setPlace] = useState<google.maps.places.Place | undefined>(undefined);
+  const [place, setPlace] = useState<google.maps.places.Place | undefined>(
+    undefined
+  );
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
