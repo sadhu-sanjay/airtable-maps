@@ -45,7 +45,7 @@ export default function Home() {
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
-  const currentItem = useRef<DropdownItem | undefined>(undefined)
+  const currentItem = useRef<DropdownItem | undefined>(undefined);
 
   const {
     isStreamingRecords,
@@ -180,9 +180,11 @@ export default function Home() {
   }, []);
 
   const addToAirTable = async () => {
+    console.log("Place", place)
     const toastId = toast.loading("Please wait");
-    // Fetch Additional Ddetail
-    place?.fetchFields({ fields: ["editorialSummary", "websiteURI"] });
+
+    // Fetch Additional Detail Required
+    await place?.fetchFields({ fields: ["editorialSummary", "websiteURI", "requestedRegion"] });
 
     //   await table.updateRecordAsync(recordId, {
     //     "Address": location['results'][0]['formatted_address'],
@@ -200,7 +202,6 @@ export default function Home() {
     console.log("addressComponents", place?.addressComponents);
     console.log("editorialSummary", place?.editorialSummary);
     console.log("adrFormatAddress", place?.adrFormatAddress);
-    console.log("attributions", place?.attributions);
     console.log("businessStatus", place?.businessStatus);
     console.log("displayName", place?.displayName);
     console.log("formattedAddress", place?.formattedAddress);
@@ -209,6 +210,7 @@ export default function Home() {
     console.log("iconBackgroundColor", place?.iconBackgroundColor);
     console.log("id", place?.id);
     console.log("internationalPhoneNumber", place?.internationalPhoneNumber);
+    console.log("national Phone Number", place?.nationalPhoneNumber);
     console.log("websiteURI", place?.websiteURI);
     console.log("Photos", place?.photos);
     console.log("Rating", place?.rating);
@@ -217,19 +219,16 @@ export default function Home() {
     console.log("Types", place?.types);
     console.log("userRatingCount", place?.userRatingCount);
     console.log("pluscode", place?.plusCode);
-    console.log(
-      "Processed Tags ",
-      place?.types?.map(replaceUnderScoreWithSpace).map(capitalizeFirstLetter)
-    );
+    console.log("Attributions", place?.attributions)
+    console.log("Requested Region", place?.requestedRegion)
+
 
     const req = {
       body: {
         typecast: true,
         fields: {
           Title: place?.displayName,
-          Tags: place?.types
-            ?.map(replaceUnderScoreWithSpace)
-            .map(capitalizeFirstLetter),
+          Tags: place?.types,
           "Coordinates (lat, lng)": place?.location?.toUrlValue(),
           "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
@@ -245,7 +244,7 @@ export default function Home() {
               each.types.includes("locality") ||
               each.types.includes("sublocality")
           )?.longText,
-          "Recommended By": "sanjaygoswami60@gmail.com",
+          "Recommended By": "travel.lbd.ventures",
           Address: place?.formattedAddress,
           Image: place?.photos
             ? place.photos.slice(0, 3).map((photo) => ({ url: photo.getURI() }))

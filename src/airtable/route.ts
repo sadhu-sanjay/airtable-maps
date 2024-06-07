@@ -4,6 +4,7 @@ import {
 const baseUrl = "https://api.airtable.com/v0"
 
 export async function PATCH(req: { body: { id: string; fields: any } }) {
+
     const { id, fields } = req.body
 
     const res = await fetch(`${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_MAP_TABLE_ID}/${id}`, {
@@ -17,8 +18,8 @@ export async function PATCH(req: { body: { id: string; fields: any } }) {
     return res.json()
 }
 
-export async function CREATE(req: { body: { fields: any } }) {
-    const { fields } = req.body
+export async function CREATE(req: { body: any }) {
+    const body = req.body
 
     const res = await fetch(`${baseUrl}/${AIRTABLE_BASE_ID}/${AIRTABLE_MAP_TABLE_ID}`, {
         method: "POST",
@@ -26,7 +27,7 @@ export async function CREATE(req: { body: { fields: any } }) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${AIRTABLE_ACCESS_TOKEN}`,
         },
-        body: JSON.stringify({ fields }),
+        body: JSON.stringify(body),
     })
     return res.json()
 }
