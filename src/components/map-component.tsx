@@ -234,35 +234,39 @@ export default function Home() {
         typecast: true,
         fields: {
           Title: place?.displayName,
-          Tags: place?.types,
-          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
-          "Postal code": place?.addressComponents?.find((each) =>
-            each.types.includes("postal_code")
-          )?.longText,
-          Country: place?.addressComponents?.find((each) =>
-            each.types.includes("country")
-          )?.longText,
-          "State / AAL1": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_1")
+          Tags: place?.types, 
+          Address: place?.formattedAddress,
+          URL: place?.websiteURI,
+          Description: place?.editorialSummary ??  "" + place?.googleMapsURI, 
+          GooglePlacesID: place?.id,
+          Phone: place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
+          Image: place?.photos
+            ? place.photos.slice(0, 10).map((photo) => ({ url: photo.getURI() }))
+            : [],
+          Neighborhood: place?.addressComponents?.find((each) =>
+            each.types.includes("neighborhood")
           )?.longText,
           City: place?.addressComponents?.find(
             (each) =>
               each.types.includes("locality") ||
               each.types.includes("sublocality")
           )?.longText,
+          Country: place?.addressComponents?.find((each) =>
+            each.types.includes("country")
+          )?.longText,
+          "Street Number": place?.addressComponents?.find((each) =>
+            each.types.includes("street_number")
+          )?.longText,
+          "Street": place?.addressComponents?.find((each) =>
+            each.types.includes("route")
+          )?.longText,
           "Recommended By": "travel.lbd.ventures",
-          Address: place?.formattedAddress,
-          Image: place?.photos
-            ? place.photos.slice(0, 3).map((photo) => ({ url: photo.getURI() }))
-            : [],
-          URL: place?.websiteURI,
-          Description:
-            place?.editorialSummary ??
-            "" + place?.googleMapsURI ??
-            "" + place?.internationalPhoneNumber ??
-            "" + place?.nationalPhoneNumber,
-          GooglePlacesID: place?.id,
-          Phone: place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
+          "State / AAL1": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_1")
+          )?.longText,
+          "Coordinates (lat, lng)": place?.location?.toUrlValue(), "Postal code": place?.addressComponents?.find((each) =>
+            each.types.includes("postal_code")
+          )?.longText,
         },
       },
     };
