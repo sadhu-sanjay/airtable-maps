@@ -267,7 +267,7 @@ export default function Home() {
           )?.longText,
           "Region": getSubRegion(place?.addressComponents?.find((each) =>
             each.types.includes("country")
-          )?.shortText),
+          )?.shortText ?? "") ,
         },
       },
     };
