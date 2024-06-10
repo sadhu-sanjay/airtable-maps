@@ -180,11 +180,18 @@ export default function Home() {
   }, []);
 
   const addToAirTable = async () => {
-    console.log("Place", place)
+    console.log("Place", place);
     const toastId = toast.loading("Please wait");
 
     // Fetch Additional Detail Required
-    await place?.fetchFields({ fields: ["editorialSummary", "websiteURI", "requestedRegion"] });
+    await place?.fetchFields({
+      fields: [
+        "editorialSummary",
+        "websiteURI",
+        "internationalPhoneNumber",
+        "nationalPhoneNumber",
+      ],
+    });
 
     //   await table.updateRecordAsync(recordId, {
     //     "Address": location['results'][0]['formatted_address'],
@@ -219,9 +226,8 @@ export default function Home() {
     console.log("Types", place?.types);
     console.log("userRatingCount", place?.userRatingCount);
     console.log("pluscode", place?.plusCode);
-    console.log("Attributions", place?.attributions)
-    console.log("Requested Region", place?.requestedRegion)
-
+    console.log("Attributions", place?.attributions);
+    console.log("Requested Region", place?.requestedRegion);
 
     const req = {
       body: {
@@ -254,8 +260,9 @@ export default function Home() {
             place?.editorialSummary ??
             "" + place?.googleMapsURI ??
             "" + place?.internationalPhoneNumber ??
-            "",
+            "" + place?.nationalPhoneNumber,
           GooglePlacesID: place?.id,
+          Phone: place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
         },
       },
     };
@@ -306,7 +313,7 @@ export default function Home() {
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
       <aside
         ref={asideRef}
-        className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
+        className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[375px] overflow-y-auto"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar
@@ -371,9 +378,10 @@ export default function Home() {
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
+
       <aside
         className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
-      w-full sm:w-5/12 md:w-4/12 lg:w-3/12 overflow-y-auto "
+      w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-white w-full p-4 sticky top-0 shadow-lg ">
           <div className="flex items-center mb-1">
