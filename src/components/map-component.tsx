@@ -226,7 +226,7 @@ export default function Home() {
     console.log("Types", place?.types);
     console.log("userRatingCount", place?.userRatingCount);
     console.log("pluscode", place?.plusCode);
-    console.log("Attributions", place?.attributions);
+    console.log("Afr Format Address", place?.adrFormatAddress);
     console.log("Requested Region", place?.requestedRegion);
 
     const req = {
@@ -264,12 +264,10 @@ export default function Home() {
           "State / AAL1": place?.addressComponents?.find((each) =>
             each.types.includes("administrative_area_level_1")
           )?.longText,
-          "County / AAL2": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_2")
-          )?.longText,
           "Coordinates (lat, lng)": place?.location?.toUrlValue(), "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
+
         },
       },
     };
@@ -385,16 +383,15 @@ export default function Home() {
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
-
       <aside
         className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
       w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
-        <div className="bg-white w-full p-4 sticky top-0 shadow-lg ">
-          <div className="flex items-center mb-1">
+        <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
+          {/* <div className="flex items-center mb-1">
             <IconLocation />
             <h1 className="text-md font-md p-2"> Find a location to visit </h1>
-          </div>
+          </div> */}
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
@@ -405,8 +402,9 @@ export default function Home() {
                 setPlace(value);
               }
             }}
-            placeholder="Enter a place to see its address"
-            className="w-full"
+            placeholder="Find a location to visit"
+            className="w-full "
+            
           ></PlacePicker>
         </div>
         <PlaceOverview

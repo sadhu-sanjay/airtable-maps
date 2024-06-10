@@ -7,6 +7,10 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
+  /* I need a background color for surface of a search bar element */
+  --background-surface: 243 244 246;
+
+
   /* padding */
   --lg: 1.5rem;
   --xl: 2rem;
@@ -22,6 +26,8 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+
+    --background-surface: 31 41 55;
   }
 
 
