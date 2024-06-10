@@ -264,6 +264,9 @@ export default function Home() {
           "State / AAL1": place?.addressComponents?.find((each) =>
             each.types.includes("administrative_area_level_1")
           )?.longText,
+          "County / AAL2": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_2")
+          )?.longText,
           "Coordinates (lat, lng)": place?.location?.toUrlValue(), "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
