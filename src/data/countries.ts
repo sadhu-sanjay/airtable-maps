@@ -3239,7 +3239,12 @@ const countries = [
   }
 ]
 
-function getCountryName(countryCode) {
-  const country = countries.find(c => c['alpha-3'] === countryCode)
-  return country ? country.name : ''
+/**
+ *  return the sub-region of a country based on the alpha-2 code 
+ * @param {Country ShortHand code} alpha2 
+ * @returns the sub-region of the country
+ */
+export const getSubRegion = (alpha2) => {
+  const country = countries.find(country => country['alpha-2'] === alpha2)
+  return country ? country['sub-region'] : ''
 }

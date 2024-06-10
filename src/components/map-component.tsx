@@ -33,10 +33,9 @@ const IconButton = dynamic(() => import("@googlemaps/extended-component-library/
 const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlaceDirectionsButton), { ssr: false });
 
 
-import { IconLocation } from "./resources/icons/icon-location";
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
-import { capitalizeFirstLetter, replaceUnderScoreWithSpace } from "./lib/utils";
+import { getSubRegion } from "~/data/countries";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -189,7 +188,6 @@ export default function Home() {
         "editorialSummary",
         "websiteURI",
         "internationalPhoneNumber",
-        "nationalPhoneNumber",
       ],
     });
 
@@ -267,7 +265,9 @@ export default function Home() {
           "Coordinates (lat, lng)": place?.location?.toUrlValue(), "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
-
+          "Region": getSubRegion(place?.addressComponents?.find((each) =>
+            each.types.includes("country")
+          )?.shortText),
         },
       },
     };
