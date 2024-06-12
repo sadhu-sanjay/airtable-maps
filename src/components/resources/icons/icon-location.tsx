@@ -1,5 +1,5 @@
 
-export const IconLocation = () => (
+export const IconLocation = ({...props}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -8,6 +8,7 @@ export const IconLocation = () => (
     stroke="currentColor"
     width={24}
     height={24}
+    {...props}
   >
     <path
       strokeLinecap="round"

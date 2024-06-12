@@ -113,6 +113,8 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         },
       }));
 
+      
+
       setUploading(false);
 
       toast.success("Image Uploaded Successfully");

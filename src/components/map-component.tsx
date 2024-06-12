@@ -37,7 +37,7 @@ const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-compone
 
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
-import { getSubRegion } from "~/data/countries";
+import { getSubRegion, getRegion } from "~/data/countries";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -226,8 +226,12 @@ export default function Home() {
     console.log("Types", place?.types);
     console.log("userRatingCount", place?.userRatingCount);
     console.log("pluscode", place?.plusCode);
-    console.log("Afr Format Address", place?.adrFormatAddress);
+    console.log("Afr Format Address", typeof place?.adrFormatAddress);
     console.log("Requested Region", place?.requestedRegion);
+
+    const country = place?.addressComponents?.find((each) =>
+      each.types.includes("country")
+    )
 
     const req = {
       body: {
@@ -237,7 +241,7 @@ export default function Home() {
           Tags: place?.types, 
           Address: place?.formattedAddress,
           URL: place?.websiteURI,
-          Description: place?.editorialSummary ??  "" + place?.googleMapsURI, 
+          Description: place?.editorialSummary,
           GooglePlacesID: place?.id,
           Phone: place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
           Image: place?.photos
@@ -250,10 +254,8 @@ export default function Home() {
             (each) =>
               each.types.includes("locality") ||
               each.types.includes("sublocality")
-          )?.longText,
-          Country: place?.addressComponents?.find((each) =>
-            each.types.includes("country")
-          )?.longText,
+          )?.longText ?? place?.addressComponents?.find((each) => each.types.includes("postal_town"))?.longText ,
+          Country: country?.longText,
           "Street Number": place?.addressComponents?.find((each) =>
             each.types.includes("street_number")
           )?.longText,
@@ -264,12 +266,16 @@ export default function Home() {
           "State / AAL1": place?.addressComponents?.find((each) =>
             each.types.includes("administrative_area_level_1")
           )?.longText,
-          "Coordinates (lat, lng)": place?.location?.toUrlValue(), "Postal code": place?.addressComponents?.find((each) =>
+          "County / AAL2": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_2")
+          )?.longText,
+          "Coordinates (lat, lng)": place?.location?.toUrlValue(), 
+          "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
-          "Region": getSubRegion(place?.addressComponents?.find((each) =>
-            each.types.includes("country")
-          )?.shortText ?? "") ,
+          "Region": getRegion(country?.shortText ?? "") ,
+          "Sub-region": getSubRegion(country?.shortText ?? ""), 
+          "Google Maps URL": place?.googleMapsURI,
         },
       },
     };
@@ -390,10 +396,10 @@ export default function Home() {
       w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
         <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
-          {/* <div className="flex items-center mb-1">
-            <IconLocation />
-            <h1 className="text-md font-md p-2"> Find a location to visit </h1>
-          </div> */}
+          <div className="flex items-center mb-1 rounded-full">
+            <IconLocation stroke="black" />
+            <h1 className=" text-md font-md p-2 text-gray-800"> Find a location to visit </h1>
+          </div> 
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
@@ -404,7 +410,7 @@ export default function Home() {
                 setPlace(value);
               }
             }}
-            placeholder="Find a location to visit"
+            placeholder="Search Google Maps"
             className="w-full "
             
           ></PlacePicker>

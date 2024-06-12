@@ -3240,6 +3240,16 @@ const countries = [
 ]
 
 /**
+ * return the region of a country based on the alpha-2 code
+ * @param {Country ShortHand code} alpha2
+ * @returns the region of the country
+ */
+export const getRegion = (alpha2: string) => {
+  const country = countries.find(country => country['alpha-2'] === alpha2)
+  return country ? country['region'] : ''
+}
+
+/**
  *  return the sub-region of a country based on the alpha-2 code 
  * @param {Country ShortHand code} alpha2 
  * @returns the sub-region of the country
