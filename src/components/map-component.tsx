@@ -281,13 +281,14 @@ export default function Home() {
     };
 
     const response = await CREATE(req); // create record in airtable
-
     toast.dismiss(toastId);
 
-    if (response) {
+    if(response.id)  {
       toast.success("Successfully Added Place to Airtable");
-    } else {
+    }else if (response.error) {
       toast.error("Error Adding Place to Airtable");
+    }else {
+      toast.warning("Something went wrong...record not added");
     }
   };
 
