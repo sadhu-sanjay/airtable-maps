@@ -56,7 +56,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
     toast.dismiss(id);
     toast.success("Record Updated");
     console.log(response);
-
   }
 
   function getDate(date: string) {
@@ -112,8 +111,6 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           Image: updatedImages,
         },
       }));
-
-      
 
       setUploading(false);
 
@@ -259,9 +256,8 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
                     if (
                       // Don't show These fields
                       key === "Image" ||
-                      key === "date" ||
-                      key === "updated" ||
-                      key === "Geocache"
+                      key === "Geocache" || 
+                      key === "Action"
                     )
                       return null;
 
@@ -325,11 +321,13 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
 
                     return (
                       <li key={key}>
-                        <Label>{key}</Label>
+
+                        {/* capitilize first word */}
+                        <Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
                         <span className="pr-2 text-base leading-6 text-zinc-500 dark:text-zinc-400">
                           {Array.isArray(value)
                             ? value.join(",")
-                            : (value as string)}
+                            : value?.toString() ?? "Not Available"}
                         </span>
                       </li>
                     );
