@@ -37,7 +37,6 @@ const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-compone
 
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
-import { getSubRegion, getRegion } from "~/data/countries";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -273,8 +272,6 @@ export default function Home() {
           "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
-          "Region": getRegion(country?.shortText ?? "") ,
-          "Sub-region": getSubRegion(country?.shortText ?? ""), 
           "Google Maps URL": place?.googleMapsURI,
         },
       },
