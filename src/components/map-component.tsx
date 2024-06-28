@@ -28,12 +28,34 @@ import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { useQuery } from "@tanstack/react-query";
 import { IconLocation } from "~/components/resources/icons/icon-location";
-const PlaceOverview = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlaceOverview), { ssr: false });
-const PlacePicker = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlacePicker), { ssr: false });
-const IconButton = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.IconButton), { ssr: false });
-const PlaceDirectionsButton = dynamic(() => import("@googlemaps/extended-component-library/react").then(mod => mod.PlaceDirectionsButton), { ssr: false });
-
-
+const PlaceOverview = dynamic(
+  () =>
+    import("@googlemaps/extended-component-library/react").then(
+      (mod) => mod.PlaceOverview
+    ),
+  { ssr: false }
+);
+const PlacePicker = dynamic(
+  () =>
+    import("@googlemaps/extended-component-library/react").then(
+      (mod) => mod.PlacePicker
+    ),
+  { ssr: false }
+);
+const IconButton = dynamic(
+  () =>
+    import("@googlemaps/extended-component-library/react").then(
+      (mod) => mod.IconButton
+    ),
+  { ssr: false }
+);
+const PlaceDirectionsButton = dynamic(
+  () =>
+    import("@googlemaps/extended-component-library/react").then(
+      (mod) => mod.PlaceDirectionsButton
+    ),
+  { ssr: false }
+);
 
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
@@ -185,11 +207,7 @@ export default function Home() {
 
     // Fetch Additional Detail Required
     await place?.fetchFields({
-      fields: [
-        "editorialSummary",
-        "websiteURI",
-        "internationalPhoneNumber",
-      ],
+      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
     });
 
     //   await table.updateRecordAsync(recordId, {
@@ -230,35 +248,42 @@ export default function Home() {
 
     const country = place?.addressComponents?.find((each) =>
       each.types.includes("country")
-    )
+    );
 
     const req = {
       body: {
         typecast: true,
         fields: {
           Title: place?.displayName,
-          Tags: place?.types, 
+          Tags: place?.types,
           Address: place?.formattedAddress,
           URL: place?.websiteURI,
           Description: place?.editorialSummary,
           GooglePlacesID: place?.id,
-          Phone: place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
+          Phone:
+            place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
           Image: place?.photos
-            ? place.photos.slice(0, 10).map((photo) => ({ url: photo.getURI() }))
+            ? place.photos
+                .slice(0, 10)
+                .map((photo) => ({ url: photo.getURI() }))
             : [],
           Neighborhood: place?.addressComponents?.find((each) =>
             each.types.includes("neighborhood")
           )?.longText,
-          City: place?.addressComponents?.find(
-            (each) =>
-              each.types.includes("locality") ||
-              each.types.includes("sublocality")
-          )?.longText ?? place?.addressComponents?.find((each) => each.types.includes("postal_town"))?.longText ,
+          City:
+            place?.addressComponents?.find(
+              (each) =>
+                each.types.includes("locality") ||
+                each.types.includes("sublocality")
+            )?.longText ??
+            place?.addressComponents?.find((each) =>
+              each.types.includes("postal_town")
+            )?.longText,
           Country: country?.longText,
           "Street Number": place?.addressComponents?.find((each) =>
             each.types.includes("street_number")
           )?.longText,
-          "Street": place?.addressComponents?.find((each) =>
+          Street: place?.addressComponents?.find((each) =>
             each.types.includes("route")
           )?.longText,
           "Recommended By": "travel.lbd.ventures",
@@ -268,7 +293,7 @@ export default function Home() {
           "County / AAL2": place?.addressComponents?.find((each) =>
             each.types.includes("administrative_area_level_2")
           )?.longText,
-          "Coordinates (lat, lng)": place?.location?.toUrlValue(), 
+          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
           "Postal code": place?.addressComponents?.find((each) =>
             each.types.includes("postal_code")
           )?.longText,
@@ -280,11 +305,11 @@ export default function Home() {
     const response = await CREATE(req); // create record in airtable
     toast.dismiss(toastId);
 
-    if(response.id)  {
+    if (response.id) {
       toast.success("Successfully Added Place to Airtable");
-    }else if (response.error) {
+    } else if (response.error) {
       toast.error("Error Adding Place to Airtable");
-    }else {
+    } else {
       toast.warning("Something went wrong...record not added");
     }
   };
@@ -396,8 +421,11 @@ export default function Home() {
         <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
           <div className="flex items-center mb-1 rounded-full">
             <IconLocation stroke="black" />
-            <h1 className=" text-md font-md p-2 text-gray-800"> Find a location to visit </h1>
-          </div> 
+            <h1 className=" text-md font-md p-2 text-gray-800">
+              {" "}
+              Find a location to visit{" "}
+            </h1>
+          </div>
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
@@ -410,7 +438,6 @@ export default function Home() {
             }}
             placeholder="Search Google Maps"
             className="w-full "
-            
           ></PlacePicker>
         </div>
         <PlaceOverview
