@@ -237,6 +237,7 @@ export default function Home() {
     console.log("national Phone Number", place?.nationalPhoneNumber);
     console.log("websiteURI", place?.websiteURI);
     console.log("Photos", place?.photos);
+    console.log("Photos Url", place?.photos?.map((photo) => photo.getURI()));
     console.log("Rating", place?.rating);
     console.log("Requested Langauge", place?.requestedLanguage);
     console.log("Reviews", place?.reviews);
@@ -264,7 +265,7 @@ export default function Home() {
             place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
           Image: place?.photos
             ? place.photos
-                .slice(0, 10)
+                .slice(0, 1)
                 .map((photo) => ({ url: photo.getURI() }))
             : [],
           Neighborhood: place?.addressComponents?.find((each) =>
