@@ -1,5 +1,4 @@
 "use client";
-
 import dynamic from "next/dynamic";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import {
@@ -79,6 +78,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<DropdownItem[]>([]);
   const [unSelectedTags, selectUnselectedTags] = useState<DropdownItem[]>([]);
+  const [place, setPlace] = useState<google.maps.places.Place | google.maps.places.PlaceResult | undefined>(undefined);
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -205,114 +205,79 @@ export default function Home() {
     console.log("Place", place);
     const toastId = toast.loading("Please wait");
 
-    // Fetch Additional Detail Required
-    await place?.fetchFields({
-      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
-    });
 
-    //   await table.updateRecordAsync(recordId, {
-    //     "Address": location['results'][0]['formatted_address'],
-    //     "Street Number": address_components.find(x => x.types.includes('street_number')) ? address_components.find(x => x.types.includes('street_number')).long_name : '',
-    //     "Street": address_components.find(x => x.types.includes('route')) ? address_components.find(x => x.types.includes('route')).long_name : '',
-    //     "Neighborhood": address_components.find(x => x.types.includes('neighborhood')) ? address_components.find(x => x.types.includes('neighborhood')).long_name : '',
-    //     "City": address_components.find(x => x.types.includes('locality')) ? address_components.find(x => x.types.includes('locality')).long_name :
-    //         address_components.find(x => x.types.includes('sublocality')) ? address_components.find(x => x.types.includes('sublocality')).long_name : '',
-    //     "State / AAL1": address_components.find(x => x.types.includes('administrative_area_level_1')) ? address_components.find(x => x.types.includes('administrative_area_level_1')).long_name : '',
-    //     "County / AAL2": address_components.find(x => x.types.includes('administrative_area_level_2')) ? address_components.find(x => x.types.includes('administrative_area_level_2')).long_name : '',
-    //     "Country": address_components.find(x => x.types.includes('country')) ? address_components.find(x => x.types.includes('country')).long_name : '',
-    //     "Postal code": address_components.find(x => x.types.includes('postal_code')) ? address_components.find(x => x.types.includes('postal_code')).long_name : ''
+    // Fetch Additional Detail Required
+    // await place?.fetchFields({
+    //   fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
     // });
 
-    console.log("addressComponents", place?.addressComponents);
-    console.log("editorialSummary", place?.editorialSummary);
-    console.log("adrFormatAddress", place?.adrFormatAddress);
-    console.log("businessStatus", place?.businessStatus);
-    console.log("displayName", place?.displayName);
-    console.log("formattedAddress", place?.formattedAddress);
-    console.log("googleMapsURI", place?.googleMapsURI);
-    console.log("location", place?.location);
-    console.log("iconBackgroundColor", place?.iconBackgroundColor);
-    console.log("id", place?.id);
-    console.log("internationalPhoneNumber", place?.internationalPhoneNumber);
-    console.log("national Phone Number", place?.nationalPhoneNumber);
-    console.log("websiteURI", place?.websiteURI);
-    console.log("Photos", place?.photos);
-    console.log("Photos Url", place?.photos?.map((photo) => photo.getURI()));
-    console.log("Rating", place?.rating);
-    console.log("Requested Langauge", place?.requestedLanguage);
-    console.log("Reviews", place?.reviews);
-    console.log("Types", place?.types);
-    console.log("userRatingCount", place?.userRatingCount);
-    console.log("pluscode", place?.plusCode);
-    console.log("Afr Format Address", typeof place?.adrFormatAddress);
-    console.log("Requested Region", place?.requestedRegion);
+    // const country = place?.addressComponents?.find((each) =>
+    //   each.types.includes("country")
+    // );
 
-    const country = place?.addressComponents?.find((each) =>
-      each.types.includes("country")
-    );
 
-    const req = {
-      body: {
-        typecast: true,
-        fields: {
-          Title: place?.displayName,
-          Tags: place?.types,
-          Address: place?.formattedAddress,
-          URL: place?.websiteURI,
-          Description: place?.editorialSummary,
-          GooglePlacesID: place?.id,
-          Phone:
-            place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
-          Image: place?.photos
-            ? place.photos
-                .slice(0, 1)
-                .map((photo) => ({ url: photo.getURI() }))
-            : [],
-          Neighborhood: place?.addressComponents?.find((each) =>
-            each.types.includes("neighborhood")
-          )?.longText,
-          City:
-            place?.addressComponents?.find(
-              (each) =>
-                each.types.includes("locality") ||
-                each.types.includes("sublocality")
-            )?.longText ??
-            place?.addressComponents?.find((each) =>
-              each.types.includes("postal_town")
-            )?.longText,
-          Country: country?.longText,
-          "Street Number": place?.addressComponents?.find((each) =>
-            each.types.includes("street_number")
-          )?.longText,
-          Street: place?.addressComponents?.find((each) =>
-            each.types.includes("route")
-          )?.longText,
-          "Recommended By": "travel.lbd.ventures",
-          "State / AAL1": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_1")
-          )?.longText,
-          "County / AAL2": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_2")
-          )?.longText,
-          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
-          "Postal code": place?.addressComponents?.find((each) =>
-            each.types.includes("postal_code")
-          )?.longText,
-          "Google Maps URL": place?.googleMapsURI,
-        },
-      },
-    };
+    // const req = {
+    //   body: {
+    //     typecast: true,
+    //     fields: {
+    //       Title: (place instanceof google.maps.places.Place) ? place?.displayName : place?.name,
+    //       Tags: (place instanceof google.maps.places.Place) ? place?.types : place?.types?.,"),
+    //       Address: place?.formattedAddress,
+    //       URL: place?.websiteURI,
+    //       Description: place?.editorialSummary,
+    //       GooglePlacesID: place?.id,
+    //       Phone:
+    //         place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
+    //       Image: place?.photos
+    //         ? place.photos
+    //             .slice(0, 1)
+    //             .map((photo) => ({ url: photo.getURI() }))
+    //         : [],
+    //       Neighborhood: place?.addressComponents?.find((each) =>
+    //         each.types.includes("neighborhood")
+    //       )?.longText,
+    //       City:
+    //         place?.addressComponents?.find(
+    //           (each) =>
+    //             each.types.includes("locality") ||
+    //             each.types.includes("sublocality")
+    //         )?.longText ??
+    //         place?.addressComponents?.find((each) =>
+    //           each.types.includes("postal_town")
+    //         )?.longText,
+    //       Country: country?.longText,
+    //       "Street Number": place?.addressComponents?.find((each) =>
+    //         each.types.includes("street_number")
+    //       )?.longText,
+    //       Street: place?.addressComponents?.find((each) =>
+    //         each.types.includes("route")
+    //       )?.longText,
+    //       "Recommended By": "travel.lbd.ventures",
+    //       "State / AAL1": place?.addressComponents?.find((each) =>
+    //         each.types.includes("administrative_area_level_1")
+    //       )?.longText,
+    //       "County / AAL2": place?.addressComponents?.find((each) =>
+    //         each.types.includes("administrative_area_level_2")
+    //       )?.longText,
+    //       "Coordinates (lat, lng)": place?.location?.toUrlValue(),
+    //       "Postal code": place?.addressComponents?.find((each) =>
+    //         each.types.includes("postal_code")
+    //       )?.longText,
+    //       "Google Maps URL": place?.googleMapsURI,
+    //     },
+    //   },
+    // };
 
-    const response = await CREATE(req); // create record in airtable
-    toast.dismiss(toastId);
+    // const response = await CREATE(req); // create record in airtable
+    // toast.dismiss(toastId);
 
-    if (response.id) {
-      toast.success("Successfully Added Place to Airtable");
-    } else if (response.error) {
-      toast.error("Error Adding Place to Airtable");
-    } else {
-      toast.warning("Something went wrong...record not added");
-    }
+    // if (response.id) {
+    //   toast.success("Successfully Added Place to Airtable");
+    // } else if (response.error) {
+    //   toast.error("Error Adding Place to Airtable");
+    // } else {
+    //   toast.warning("Something went wrong...record not added");
+    // }
   };
 
   const render = (status: Status) => {
@@ -332,7 +297,7 @@ export default function Home() {
             handleZoom={handleZoom}
             records={mapRecords}
             onRecordSelected={onRecordSelected}
-            place={place}
+            setPlace={setPlace}
           />
         );
     }
@@ -342,9 +307,6 @@ export default function Home() {
     setIsModalOpen(false);
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
-  const [place, setPlace] = useState<google.maps.places.Place | undefined>(
-    undefined
-  );
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
@@ -430,9 +392,11 @@ export default function Home() {
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
+
               // @ts-ignore
               const value = target?.value;
               console.log("Place ChangesssSanjay", value);
+              console
               if (value) {
                 setPlace(value);
               }
@@ -442,7 +406,7 @@ export default function Home() {
           ></PlacePicker>
         </div>
         <PlaceOverview
-          place={place?.id}
+          place={place}
           // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
           // travelOrigin={DEFAULT_LOCATION}
           googleLogoAlreadyDisplayed

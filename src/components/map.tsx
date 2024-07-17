@@ -12,29 +12,30 @@ import { ShareButton } from "./atoms/share-button";
 import { MyLocationButton } from "./atoms/my-location-button";
 import { toast } from "sonner";
 import { DEFAULT_LOCATION } from "~/CONST";
+import { MapClickEventHandler } from "./map-click-eventHandler";
 type AdvancedMarker = google.maps.marker.AdvancedMarkerElement;
 
 function MyMap({
   records,
   handleZoom,
   onRecordSelected,
-  place
+  setPlace,
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
   onRecordSelected: (recordId: string) => void;
-  place: google.maps.places.Place | undefined
+  setPlace: (place: google.maps.places.Place | google.maps.places.PlaceResult ) => void;
 }) {
-
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const clusterRef = useRef<MarkerClusterer | null>(null);
   const markerMap = useRef<Map<string, AdvancedMarker>>(new Map());
   const clusterMap = useRef<Map<string, google.maps.LatLng>>(new Map());
+  const mapClickEventHandler = useRef<MapClickEventHandler | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
-  const DEFAULT_ZOOM_WITH_LOCATION = 16
+  const DEFAULT_ZOOM_WITH_LOCATION = 16;
 
   const updateBounds = () => {
     const bounds = new google.maps.LatLngBounds();
@@ -45,18 +46,6 @@ function MyMap({
     if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
   };
-
-  /**
-   * if Place Changes and it is a valid place update the map
-   */
-  useEffect(() => {
-
-    if (!place) return
-
-    mapRef.current?.setCenter(place?.location ?? DEFAULT_LOCATION)
-    mapRef.current?.setZoom(DEFAULT_ZOOM_WITH_LOCATION)
-
-  }, [place])
 
   useEffect(() => {
     if (!flag || !records) return;
@@ -186,6 +175,15 @@ function MyMap({
         });
         handleZoom(recordsInViewport || []);
       });
+
+      if (!mapClickEventHandler.current) {
+        mapClickEventHandler.current = new MapClickEventHandler(
+          mapRef.current,
+          new google.maps.LatLng(DEFAULT_LOCATION),
+          setPlace
+        );
+      }
+
       return () => {
         google.maps.event.removeListener(listener);
       };
