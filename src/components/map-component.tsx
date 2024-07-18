@@ -216,7 +216,12 @@ export default function Home() {
 
     // Fetch Additional Detail Required
     await place?.fetchFields({
-      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber", "addressComponents" ]
+      fields: [
+        "editorialSummary",
+        "websiteURI",
+        "internationalPhoneNumber",
+        "addressComponents",
+      ],
     });
 
     const country = place?.addressComponents?.find((each) =>
@@ -387,59 +392,67 @@ export default function Home() {
         className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
       w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
       >
-        <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
-          <div className="flex items-center mb-1 rounded-full">
-            <IconLocation stroke="black" />
-            <h1 className=" text-md font-md p-2 text-gray-800">
-              {" "}
-              Find a location to visit{" "}
-            </h1>
+        <>
+          <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
+            <div className="flex items-center mb-1 rounded-full">
+              <IconLocation stroke="black" />
+              <h1 className=" text-md font-md p-2 text-gray-800">
+                {" "}
+                Find a location to visit{" "}
+              </h1>
+            </div>
+            <PlacePicker
+              onPlaceChange={(e: Event) => {
+                const target = e.target;
+                // @ts-ignore
+                const value = target?.value;
+                if (value) {
+                  setPlace(value);
+                }
+              }}
+              placeholder="Search Google Maps"
+              className="w-full "
+            ></PlacePicker>
           </div>
-          <PlacePicker
-            onPlaceChange={(e: Event) => {
-              const target = e.target;
-              // @ts-ignore
-              const value = target?.value;
-              if (value) {
-                setPlace(value);
-              }
-            }}
-            placeholder="Search Google Maps"
-            className="w-full "
-          ></PlacePicker>
-        </div>
-        <PlaceOverview
-          place={place}
-          // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
-          // travelOrigin={DEFAULT_LOCATION}
-          googleLogoAlreadyDisplayed
-        >
-          <div slot="action">
+          <PlaceOverview
+            place={place}
+            // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
+            // travelOrigin={DEFAULT_LOCATION}
+            googleLogoAlreadyDisplayed
+          >
+            <div slot="action">
+              <IconButton
+                slot="action"
+                variant="outlined"
+                onClick={addToAirTable}
+                icon="note_add"
+              >
+                Add to airtable
+              </IconButton>
+              <PlaceFieldLink
+                slot="action"
+                hrefField="googleMapsURI"
+                className="no-underline"
+              >
+                <IconButton variant="outlined" icon="map">
+                  View on Google Maps
+                </IconButton>
+              </PlaceFieldLink>
+            </div>
+            <div slot="action">
+              <PlaceDirectionsButton slot="action" variant="outlined">
+                Directions
+              </PlaceDirectionsButton>
+            </div>
             <IconButton
               slot="action"
-              variant="outlined"
-              onClick={addToAirTable}
-              icon="note_add"
-            >
-              Add to airtable
-            </IconButton>
-            <IconButton variant="outlined" icon="map"> 
-              <PlaceFieldLink hrefField="googleMapsURI" />
-            </IconButton>
-          </div>
-          <div slot="action">
-            <PlaceDirectionsButton slot="action" variant="outlined">
-              Directions
-            </PlaceDirectionsButton>
-          </div>
-          <IconButton
-            slot="action"
-            variant="filled"
-            onClick={() => setPlace(undefined)}
-            className="ml-auto sticky top-0 "
-            icon="close"
-          />
-        </PlaceOverview>
+              variant="filled"
+              onClick={() => setPlace(undefined)}
+              className="ml-auto sticky top-0 "
+              icon="close"
+            />
+          </PlaceOverview>
+        </>
       </aside>
 
       <aside>
