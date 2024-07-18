@@ -20,11 +20,13 @@ function MyMap({
   handleZoom,
   onRecordSelected,
   setPlace,
+  place,
 }: {
   records?: Record[];
   handleZoom: (record: Record[]) => void;
   onRecordSelected: (recordId: string) => void;
-  setPlace: (place: google.maps.places.Place | google.maps.places.PlaceResult ) => void;
+  setPlace: (place: google.maps.places.Place) => void;
+  place?: google.maps.places.Place;
 }) {
   console.log("MAP RENDERED");
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -46,6 +48,25 @@ function MyMap({
     if (bounds.isEmpty()) return;
     mapRef.current!.fitBounds(bounds);
   };
+
+  /**
+   * run when place changes and create a marker on the map at the place
+   **/
+  useEffect(() => {
+    if (!place || !mapRef.current || !place.location) return;
+    const marker = new google.maps.Marker({
+      map: mapRef.current,
+      position: place.location
+    });
+    mapRef.current.setCenter(place.location);
+    mapRef.current.setZoom(12);
+
+    return () => {
+      marker.setMap(null);
+    };
+  }
+  , [place]);
+  
 
   useEffect(() => {
     if (!flag || !records) return;

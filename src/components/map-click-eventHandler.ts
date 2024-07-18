@@ -5,16 +5,12 @@ export class MapClickEventHandler {
   origin?: google.maps.LatLng;
   map: google.maps.Map;
   placesService: google.maps.places.PlacesService | undefined;
-  onPlaceChanged: (
-    place: google.maps.places.Place | google.maps.places.PlaceResult
-  ) => void;
+  onPlaceChanged: (place: google.maps.places.Place) => void;
 
   constructor(
     map: google.maps.Map,
     origin: google.maps.LatLng,
-    setPlace: (
-      place: google.maps.places.Place | google.maps.places.PlaceResult
-    ) => void
+    setPlace: (placeId: google.maps.places.Place) => void
   ) {
     this.origin = origin;
     this.map = map;
@@ -36,14 +32,7 @@ export class MapClickEventHandler {
   ) => {
     if (this.isIconMouseEvent(event) && event.placeId) {
       event.stop();
-
-      this.placesService?.getDetails(
-        { placeId: event.placeId },
-        (place, status) => {
-          if (!place) return console.error("Place not found");
-          this.onPlaceChanged(place);
-        }
-      );
+      this.onPlaceChanged(new google.maps.places.Place({ id: event.placeId }));
     }
   };
 }

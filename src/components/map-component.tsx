@@ -55,6 +55,13 @@ const PlaceDirectionsButton = dynamic(
     ),
   { ssr: false }
 );
+const PlaceFieldLink = dynamic(
+  () =>
+    import("@googlemaps/extended-component-library/react").then(
+      (mod) => mod.PlaceFieldLink
+    ),
+  { ssr: false }
+);
 
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
@@ -78,7 +85,9 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<DropdownItem[]>([]);
   const [unSelectedTags, selectUnselectedTags] = useState<DropdownItem[]>([]);
-  const [place, setPlace] = useState<google.maps.places.Place | google.maps.places.PlaceResult | undefined>(undefined);
+  const [place, setPlace] = useState<google.maps.places.Place | undefined>(
+    undefined
+  );
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -205,79 +214,75 @@ export default function Home() {
     console.log("Place", place);
     const toastId = toast.loading("Please wait");
 
-
     // Fetch Additional Detail Required
-    // await place?.fetchFields({
-    //   fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
-    // });
+    await place?.fetchFields({
+      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
+    });
 
-    // const country = place?.addressComponents?.find((each) =>
-    //   each.types.includes("country")
-    // );
+    const country = place?.addressComponents?.find((each) =>
+      each.types.includes("country")
+    );
 
+    const req = {
+      body: {
+        typecast: true,
+        fields: {
+          Title: place?.displayName,
+          Tags: place?.types,
+          Address: place?.formattedAddress,
+          URL: place?.websiteURI,
+          Description: place?.editorialSummary,
+          GooglePlacesID: place?.id,
+          Phone:
+            place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
+          Image: place?.photos
+            ? place.photos.slice(0, 1).map((photo) => ({ url: photo.getURI() }))
+            : [],
+          Neighborhood: place?.addressComponents?.find((each) =>
+            each.types.includes("neighborhood")
+          )?.longText,
+          City:
+            place?.addressComponents?.find(
+              (each) =>
+                each.types.includes("locality") ||
+                each.types.includes("sublocality")
+            )?.longText ??
+            place?.addressComponents?.find((each) =>
+              each.types.includes("postal_town")
+            )?.longText,
+          Country: country?.longText,
+          "Street Number": place?.addressComponents?.find((each) =>
+            each.types.includes("street_number")
+          )?.longText,
+          Street: place?.addressComponents?.find((each) =>
+            each.types.includes("route")
+          )?.longText,
+          "Recommended By": "travel.lbd.ventures",
+          "State / AAL1": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_1")
+          )?.longText,
+          "County / AAL2": place?.addressComponents?.find((each) =>
+            each.types.includes("administrative_area_level_2")
+          )?.longText,
+          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
+          "Postal code": place?.addressComponents?.find((each) =>
+            each.types.includes("postal_code")
+          )?.longText,
+          "Google Maps URL": place?.googleMapsURI,
+        },
+      },
+    };
 
-    // const req = {
-    //   body: {
-    //     typecast: true,
-    //     fields: {
-    //       Title: (place instanceof google.maps.places.Place) ? place?.displayName : place?.name,
-    //       Tags: (place instanceof google.maps.places.Place) ? place?.types : place?.types?.,"),
-    //       Address: place?.formattedAddress,
-    //       URL: place?.websiteURI,
-    //       Description: place?.editorialSummary,
-    //       GooglePlacesID: place?.id,
-    //       Phone:
-    //         place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
-    //       Image: place?.photos
-    //         ? place.photos
-    //             .slice(0, 1)
-    //             .map((photo) => ({ url: photo.getURI() }))
-    //         : [],
-    //       Neighborhood: place?.addressComponents?.find((each) =>
-    //         each.types.includes("neighborhood")
-    //       )?.longText,
-    //       City:
-    //         place?.addressComponents?.find(
-    //           (each) =>
-    //             each.types.includes("locality") ||
-    //             each.types.includes("sublocality")
-    //         )?.longText ??
-    //         place?.addressComponents?.find((each) =>
-    //           each.types.includes("postal_town")
-    //         )?.longText,
-    //       Country: country?.longText,
-    //       "Street Number": place?.addressComponents?.find((each) =>
-    //         each.types.includes("street_number")
-    //       )?.longText,
-    //       Street: place?.addressComponents?.find((each) =>
-    //         each.types.includes("route")
-    //       )?.longText,
-    //       "Recommended By": "travel.lbd.ventures",
-    //       "State / AAL1": place?.addressComponents?.find((each) =>
-    //         each.types.includes("administrative_area_level_1")
-    //       )?.longText,
-    //       "County / AAL2": place?.addressComponents?.find((each) =>
-    //         each.types.includes("administrative_area_level_2")
-    //       )?.longText,
-    //       "Coordinates (lat, lng)": place?.location?.toUrlValue(),
-    //       "Postal code": place?.addressComponents?.find((each) =>
-    //         each.types.includes("postal_code")
-    //       )?.longText,
-    //       "Google Maps URL": place?.googleMapsURI,
-    //     },
-    //   },
-    // };
+    const response = await CREATE(req); // create record in airtable
+    toast.dismiss(toastId);
 
-    // const response = await CREATE(req); // create record in airtable
-    // toast.dismiss(toastId);
-
-    // if (response.id) {
-    //   toast.success("Successfully Added Place to Airtable");
-    // } else if (response.error) {
-    //   toast.error("Error Adding Place to Airtable");
-    // } else {
-    //   toast.warning("Something went wrong...record not added");
-    // }
+    if (response.id) {
+      toast.success("Successfully Added Place to Airtable");
+    } else if (response.error) {
+      toast.error("Error Adding Place to Airtable");
+    } else {
+      toast.warning("Something went wrong...record not added");
+    }
   };
 
   const render = (status: Status) => {
@@ -298,6 +303,7 @@ export default function Home() {
             records={mapRecords}
             onRecordSelected={onRecordSelected}
             setPlace={setPlace}
+            place={place}
           />
         );
     }
@@ -392,11 +398,8 @@ export default function Home() {
           <PlacePicker
             onPlaceChange={(e: Event) => {
               const target = e.target;
-
               // @ts-ignore
               const value = target?.value;
-              console.log("Place ChangesssSanjay", value);
-              console
               if (value) {
                 setPlace(value);
               }
@@ -420,6 +423,9 @@ export default function Home() {
             >
               Add to airtable
             </IconButton>
+            <IconButton variant="outlined" icon="map"> 
+              <PlaceFieldLink hrefField="googleMapsURI" />
+            </IconButton>
           </div>
           <div slot="action">
             <PlaceDirectionsButton slot="action" variant="outlined">
@@ -431,9 +437,8 @@ export default function Home() {
             variant="filled"
             onClick={() => setPlace(undefined)}
             className="ml-auto sticky top-0 "
-          >
-            Close
-          </IconButton>
+            icon="close"
+          />
         </PlaceOverview>
       </aside>
 
