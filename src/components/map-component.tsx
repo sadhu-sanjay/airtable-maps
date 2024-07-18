@@ -65,6 +65,8 @@ const PlaceFieldLink = dynamic(
 
 import { CREATE } from "~/airtable/route";
 import { toast } from "sonner";
+import { usePosition } from "./atoms/my-location-button";
+import { DEFAULT_LOCATION } from "~/CONST";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -318,6 +320,7 @@ export default function Home() {
     setIsModalOpen(false);
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
+  const { isGeolocationAvailable, isGeolocationEnabled, coords } = usePosition();
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
@@ -415,10 +418,15 @@ export default function Home() {
             ></PlacePicker>
           </div>
           <PlaceOverview
+            size="x-large" 
             place={place}
             // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
-            // travelOrigin={DEFAULT_LOCATION}
+            travelOrigin={coords}
             googleLogoAlreadyDisplayed
+            onRequestError={(e) => {
+              console.error(e);
+            }}
+            
           >
             <div slot="action">
               <IconButton
@@ -435,15 +443,13 @@ export default function Home() {
                 className="no-underline"
               >
                 <IconButton variant="outlined" icon="map">
-                  View on Google Maps
+                  View on Google 
                 </IconButton>
               </PlaceFieldLink>
             </div>
-            <div slot="action">
               <PlaceDirectionsButton slot="action" variant="outlined">
                 Directions
               </PlaceDirectionsButton>
-            </div>
             <IconButton
               slot="action"
               variant="filled"

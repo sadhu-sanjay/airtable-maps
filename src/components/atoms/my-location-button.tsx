@@ -86,7 +86,7 @@ export const MyLocationButton = (
   return controlDiv;
 };
 
-function usePosition(): {
+export function usePosition(): {
   isGeolocationAvailable: any;
   isGeolocationEnabled: any;
   coords: any;
@@ -97,8 +97,8 @@ function usePosition(): {
 
   const onChange = ({ coords }: { coords: any }) => {
     setCoords({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
+      lat: coords.latitude,
+      lng: coords.longitude,
     });
   };
 

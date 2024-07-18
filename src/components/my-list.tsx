@@ -33,7 +33,7 @@ function MyList({
         key={record.RecordKey}
         onClick={() => onRecordSelect(record.RecordKey)}
         style={style}
-        className=" border-b p-1.5 sm:p-1  hover:scale-95 transition-transform ease-in-out 0.5s cursor-pointer"
+        className=" border-b p-1.5 sm:p-1  cursor-pointer"
       >
         <div className="flex space-x-2 items-center">
           <div className="0 relative flex-shrink-0 w-10 h-10">
