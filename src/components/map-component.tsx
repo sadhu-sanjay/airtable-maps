@@ -216,7 +216,7 @@ export default function Home() {
 
     // Fetch Additional Detail Required
     await place?.fetchFields({
-      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber"],
+      fields: ["editorialSummary", "websiteURI", "internationalPhoneNumber", "addressComponents" ]
     });
 
     const country = place?.addressComponents?.find((each) =>
