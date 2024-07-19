@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { Record } from "~/components/models/types";
 import { SpinnerWithoutBackground } from "./spinner";
 import Marker from "./Marker";
-import { RECORDS_THRESHHOLD } from "../config";
+import { MAP_ID, RECORDS_THRESHHOLD } from "../config";
 import { ZoomOutButton } from "./atoms/zoom-out-button";
 import { ShareButton } from "./atoms/share-button";
 import { MyLocationButton } from "./atoms/my-location-button";
@@ -59,7 +59,7 @@ function MyMap({
       position: place.location
     });
     mapRef.current.setCenter(place.location);
-    mapRef.current.setZoom(12);
+    mapRef.current.setZoom(DEFAULT_ZOOM_WITH_LOCATION);
 
     return () => {
       marker.setMap(null);
@@ -131,7 +131,7 @@ function MyMap({
       center: { lat: 40.710553322002546, lng: -74.0085778809653 },
       zoom: 2,
       minZoom: 0,
-      mapId: "eb7b69cef73330bc",
+      mapId: MAP_ID
     });
 
     // return if map is not initialized yet or cluster is already initialized

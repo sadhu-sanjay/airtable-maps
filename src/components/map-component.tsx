@@ -320,7 +320,8 @@ export default function Home() {
     setIsModalOpen(false);
   }, []);
   const labelAndValues = useMemo(() => ({ label: "name", value: "id" }), []);
-  const { isGeolocationAvailable, isGeolocationEnabled, coords } = usePosition();
+  const { isGeolocationAvailable, isGeolocationEnabled, coords } =
+    usePosition();
 
   return (
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
@@ -415,10 +416,10 @@ export default function Home() {
               }}
               placeholder="Search Google Maps"
               className="w-full "
-            ></PlacePicker>
+            />
           </div>
           <PlaceOverview
-            size="x-large" 
+            size="x-large"
             place={place}
             // place="ChIJbf8C1yFxdDkR3n12P4DkKt0"
             travelOrigin={coords}
@@ -426,37 +427,29 @@ export default function Home() {
             onRequestError={(e) => {
               console.error(e);
             }}
-            
+            className="relative"
           >
-            <div slot="action">
-              <IconButton
-                slot="action"
-                variant="outlined"
-                onClick={addToAirTable}
-                icon="note_add"
-              >
-                Add to airtable
-              </IconButton>
-              <PlaceFieldLink
-                slot="action"
-                hrefField="googleMapsURI"
-                className="no-underline"
-              >
-                <IconButton variant="outlined" icon="map">
-                  View on Google 
-                </IconButton>
-              </PlaceFieldLink>
-            </div>
-              <PlaceDirectionsButton slot="action" variant="outlined">
-                Directions
-              </PlaceDirectionsButton>
             <IconButton
-              slot="action"
+            slot="action"
               variant="filled"
               onClick={() => setPlace(undefined)}
-              className="ml-auto sticky top-0 "
+              className="ml-auto absolute top-3 right-2"
+              // hidden={!place}
               icon="close"
-            />
+            >close</IconButton>
+            <div slot="action" className="flex flex-row gap-2 p-2">
+              <IconButton onClick={addToAirTable} icon="note_add">
+                Airtable
+              </IconButton>
+              <PlaceDirectionsButton>Directions</PlaceDirectionsButton>
+              <IconButton
+                href={place?.googleMapsURI!}
+                className="no-underline"
+                icon="map"
+              >
+                Maps
+              </IconButton>
+            </div>
           </PlaceOverview>
         </>
       </aside>
