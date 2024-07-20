@@ -1,6 +1,7 @@
 import { IconLocation } from "~/components/resources/icons/icon-location";
 import dynamic from "next/dynamic";
 import { PlaceFieldLink } from "@googlemaps/extended-component-library/react";
+
 const PlaceOverview = dynamic(
   () =>
     import("@googlemaps/extended-component-library/react").then(
