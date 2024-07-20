@@ -79,7 +79,7 @@ export const GooglePlaceOverview = ({ place, setPlace, coords, onPlaceSave }: Pl
       >
         close
       </IconButton>
-      <div slot="action" className="flex flex-row gap-2 p-2">
+      <div slot="action" className="w-full flex flex-row gap-2 ">
         <IconButton onClick={onPlaceSave} icon="note_add">
           Airtable
         </IconButton>
