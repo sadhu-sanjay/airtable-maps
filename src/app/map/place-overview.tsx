@@ -1,5 +1,6 @@
 import { IconLocation } from "~/components/resources/icons/icon-location";
 import dynamic from "next/dynamic";
+import { PlaceFieldLink } from "@googlemaps/extended-component-library/react";
 const PlaceOverview = dynamic(
   () =>
     import("@googlemaps/extended-component-library/react").then(
@@ -83,13 +84,10 @@ export const GooglePlaceOverview = ({ place, setPlace, coords, onPlaceSave }: Pl
           Airtable
         </IconButton>
         <PlaceDirectionsButton>Directions</PlaceDirectionsButton>
-        <IconButton
-          href={place?.googleMapsURI!}
-          className="no-underline"
-          icon="map"
-        >
-          Maps
-        </IconButton>
+
+        <PlaceFieldLink hrefField="googleMapsURI" className=" no-underline">
+          <IconButton icon="open_in_new">Google Maps</IconButton>
+        </PlaceFieldLink>
       </div>
     </PlaceOverview>
   </>

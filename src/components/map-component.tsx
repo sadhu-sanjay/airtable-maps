@@ -26,41 +26,10 @@ import useRecords from "./useRecords";
 import PlaceDetailModal from "./my-pages/place-detail";
 import Dropdown from "./common/dropdown/dropdown";
 import { useQuery } from "@tanstack/react-query";
-import { IconLocation } from "~/components/resources/icons/icon-location";
-const PlaceOverview = dynamic(
-  () =>
-    import("@googlemaps/extended-component-library/react").then(
-      (mod) => mod.PlaceOverview
-    ),
-  { ssr: false }
-);
-const PlacePicker = dynamic(
-  () =>
-    import("@googlemaps/extended-component-library/react").then(
-      (mod) => mod.PlacePicker
-    ),
-  { ssr: false }
-);
-const IconButton = dynamic(
-  () =>
-    import("@googlemaps/extended-component-library/react").then(
-      (mod) => mod.IconButton
-    ),
-  { ssr: false }
-);
-const PlaceDirectionsButton = dynamic(
-  () =>
-    import("@googlemaps/extended-component-library/react").then(
-      (mod) => mod.PlaceDirectionsButton
-    ),
-  { ssr: false }
-);
-
-import { CREATE } from "~/airtable/route";
-import { toast } from "sonner";
 import { usePosition } from "./atoms/my-location-button";
 import { DEFAULT_LOCATION } from "~/CONST";
 import { GooglePlaceOverview } from "~/app/map/place-overview";
+import { addToAirTable } from "~/app/map/map-service";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -206,85 +175,7 @@ export default function Home() {
     setIsModalOpen(true);
   }, []);
 
-  const addToAirTable = async () => {
-    console.log("Place", place);
-    const toastId = toast.loading("Please wait");
-
-    // Fetch Additional Detail Required
-    await place?.fetchFields({
-      fields: [
-        "editorialSummary",
-        "websiteURI",
-        "internationalPhoneNumber",
-        "addressComponents",
-      ],
-    });
-
-    const country = place?.addressComponents?.find((each) =>
-      each.types.includes("country")
-    );
-
-    const req = {
-      body: {
-        typecast: true,
-        fields: {
-          Title: place?.displayName,
-          Tags: place?.types,
-          Address: place?.formattedAddress,
-          URL: place?.websiteURI,
-          Description: place?.editorialSummary,
-          GooglePlacesID: place?.id,
-          Phone:
-            place?.internationalPhoneNumber ?? place?.nationalPhoneNumber ?? "",
-          Image: place?.photos
-            ? place.photos.slice(0, 1).map((photo) => ({ url: photo.getURI() }))
-            : [],
-          Neighborhood: place?.addressComponents?.find((each) =>
-            each.types.includes("neighborhood")
-          )?.longText,
-          City:
-            place?.addressComponents?.find(
-              (each) =>
-                each.types.includes("locality") ||
-                each.types.includes("sublocality")
-            )?.longText ??
-            place?.addressComponents?.find((each) =>
-              each.types.includes("postal_town")
-            )?.longText,
-          Country: country?.longText,
-          "Street Number": place?.addressComponents?.find((each) =>
-            each.types.includes("street_number")
-          )?.longText,
-          Street: place?.addressComponents?.find((each) =>
-            each.types.includes("route")
-          )?.longText,
-          "Recommended By": "travel.lbd.ventures",
-          "State / AAL1": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_1")
-          )?.longText,
-          "County / AAL2": place?.addressComponents?.find((each) =>
-            each.types.includes("administrative_area_level_2")
-          )?.longText,
-          "Coordinates (lat, lng)": place?.location?.toUrlValue(),
-          "Postal code": place?.addressComponents?.find((each) =>
-            each.types.includes("postal_code")
-          )?.longText,
-          "Google Maps URL": place?.googleMapsURI,
-        },
-      },
-    };
-
-    const response = await CREATE(req); // create record in airtable
-    toast.dismiss(toastId);
-
-    if (response.id) {
-      toast.success("Successfully Added Place to Airtable");
-    } else if (response.error) {
-      toast.error("Error Adding Place to Airtable");
-    } else {
-      toast.warning("Something went wrong...record not added");
-    }
-  };
+  
 
   const render = (status: Status) => {
     switch (status) {
@@ -394,7 +285,7 @@ export default function Home() {
           place={place}
           setPlace={setPlace}
           coords={coords}
-          onPlaceSave={addToAirTable}
+          onPlaceSave={() => addToAirTable(place)}
         />
       </aside>
 
