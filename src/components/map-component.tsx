@@ -175,8 +175,6 @@ export default function Home() {
     setIsModalOpen(true);
   }, []);
 
-  
-
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
@@ -212,7 +210,7 @@ export default function Home() {
     <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
       <aside
         ref={asideRef}
-        className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[375px] overflow-y-auto"
+        className=" h-1/2 sm:h-full w-full md:w-4/12 lg:w-3/12 sm:min-w-[320px] overflow-y-auto"
       >
         <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar
@@ -220,7 +218,8 @@ export default function Home() {
             setSearchTerm={setSearchTerm}
             onValueChange={searchHandler}
           />
-          <div className="flex justify-between align-middle">
+          {/* Dropdowns  */}
+          <div className="w-full flex justify-between align-middle">
             <Suspense>
               <Dropdown
                 label="Views"
@@ -243,6 +242,7 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
+              classList="-left-1/2"
             />
             <DropdownMultiSelect
               label="exclude tags"
@@ -257,6 +257,7 @@ export default function Home() {
                 value: tag.id,
                 color: tag.color,
               }))}
+              classList="right-0"
             />
           </div>
           <MyList

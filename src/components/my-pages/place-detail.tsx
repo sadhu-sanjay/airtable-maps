@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, use, useCallback, useEffect, useState } from "react";
 import { fetchRecord } from "../airtable-helper";
 import CloseButton from "../resources/icons/close-button";
 import { MapIcon } from "../resources/icons/map-icon";
@@ -17,6 +17,7 @@ import Label from "../atoms/labels/label";
 import { ImagePicker } from "../molecules/image-picker";
 import React from "react";
 import { Spinner4 } from "../spinner";
+import useMediaQuery from "../lib/hooks/use-media-query";
 
 interface ModalProps {
   recordId: string;
@@ -35,6 +36,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const isDesktop = useMediaQuery()
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -212,7 +214,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           className={` img-container
           ${
             isFullScreen
-              ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full"
+              ? "w-full sm:w-1/2 md:w-full lg:w-8/12 h-full "
               : "w-full h-1/2 lg:h-1/3 shadow-lg"
           }
           transition-all duration-300 ease-in-out relative

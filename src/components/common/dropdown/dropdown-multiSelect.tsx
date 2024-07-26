@@ -11,6 +11,7 @@ function DropdownMultiSelect({
   selectedItems,
   setSelectedItems,
   items,
+  classList
 }: {
   label: string;
   placeholder: string;
@@ -20,6 +21,7 @@ function DropdownMultiSelect({
   setSelectedItems: (selectedItems: DropdownItem[]) => void;
   items: any;
   isLoading: boolean;
+  classList: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,12 +90,12 @@ function DropdownMultiSelect({
 
   return (
     <>
-      <div className="relative inline-block text-left" ref={dropdownRef}>
+      <div className={`relative inline-block text-left `} ref={dropdownRef}>
         <button
           disabled={isLoading}
           onClick={toggleDropdown}
           type="button"
-          className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-4px border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
+          className="py-2 px-2 text-sm font-medium text-gray-900 bg-white rounded-4px border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
         >
           {selectedItems && selectedItems.length > 0 && (
             <span className="mr-2 inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
@@ -140,7 +142,7 @@ function DropdownMultiSelect({
 
         {isOpen && (
           <div
-            className="absolute right-0 z-10 bg-white rounded-4px shadow w-60 dark:bg-gray-700"
+            className={`absolute ${classList}  z-10 bg-white rounded-4px shadow w-60 dark:bg-gray-700`}
             id="dropdownSearch"
           >
             <div className="p-3">
