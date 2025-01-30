@@ -1,5 +1,6 @@
-import { IconLocation } from "~/components/resources/icons/icon-location";
+import { BurgerIcon } from "~/components/resources/icons/burger-icon";
 import dynamic from "next/dynamic";
+
 const PlaceFieldLink = dynamic(
   () =>
     import("@googlemaps/extended-component-library/react").then(
@@ -43,28 +44,32 @@ type PlaceOverviewProps = {
   onPlaceSave: () => void;
 };
 
-export const GooglePlaceOverview = ({ place, setPlace, coords, onPlaceSave }: PlaceOverviewProps) => (
+export const GooglePlaceOverview = ({
+  place,
+  setPlace,
+  coords,
+  onPlaceSave,
+}: PlaceOverviewProps) => (
   <>
-    <div className="bg-gray-100 w-full p-2 sticky top-0 shadow-lg ">
-      <div className="flex items-center mb-1 rounded-full">
-        <IconLocation stroke="black" />
-        <h1 className=" text-md font-md p-2 text-gray-800">
-          {" "}
-          Find a location to visit{" "}
-        </h1>
+    <div className="bg-gray-100 w-full p-2 sm:p-0 sticky top-0 shadow-lg ">
+      <div className="flex p-2 gap-4 items-center rounded-full">
+        <button className=" sm:hidden border-1">
+          <BurgerIcon height={24} stroke="black" />
+        </button>
+
+        <PlacePicker
+          onPlaceChange={(e: Event) => {
+            const target = e.target;
+            // @ts-ignore
+            const value = target?.value;
+            if (value) {
+              setPlace(value);
+            }
+          }}
+          placeholder="Find a Place on Google "
+          className="w-full "
+        />
       </div>
-      <PlacePicker
-        onPlaceChange={(e: Event) => {
-          const target = e.target;
-          // @ts-ignore
-          const value = target?.value;
-          if (value) {
-            setPlace(value);
-          }
-        }}
-        placeholder="Search Google Maps"
-        className="w-full "
-      />
     </div>
     <PlaceOverview
       size="x-large"
