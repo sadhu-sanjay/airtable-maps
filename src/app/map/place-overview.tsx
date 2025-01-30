@@ -42,6 +42,7 @@ type PlaceOverviewProps = {
   setPlace: (place?: google.maps.places.Place) => void;
   coords: google.maps.LatLng;
   onPlaceSave: () => void;
+  onMenuClick: () => void;
 };
 
 export const GooglePlaceOverview = ({
@@ -49,11 +50,12 @@ export const GooglePlaceOverview = ({
   setPlace,
   coords,
   onPlaceSave,
+  onMenuClick
 }: PlaceOverviewProps) => (
   <>
     <div className="bg-gray-100 w-full p-2 sm:p-0 sticky top-0 shadow-lg ">
       <div className="flex p-2 gap-4 items-center rounded-full">
-        <button className=" sm:hidden border-1">
+        <button onClick={onMenuClick} className=" sm:hidden border-1">
           <BurgerIcon height={24} stroke="black" />
         </button>
 

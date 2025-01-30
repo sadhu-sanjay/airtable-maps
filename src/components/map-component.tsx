@@ -207,12 +207,17 @@ export default function Home() {
     usePosition();
 
   return (
-    <div className="h-screen flex flex-col-reverse sm:flex-row relative ">
+    <div className="h-screen sm:flex sm:flex-row-reverse relative ">
+
+      <main className=" w-full sm:w-8/12 lg:w-9/12 h-full">
+        <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
+      </main>
+
       <aside
         ref={asideRef}
-        className=" h-1/2 sm:h-full w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
+        className="absolute top-[8%] left-0 sm:static w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
       >
-        <div className="relative shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
+        <div className="relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <SearchBar
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
@@ -274,10 +279,6 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className=" w-full sm:w-8/12 lg:w-9/12 h-1/2 sm:h-full">
-        <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
-      </main>
-
       <aside
         className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
       w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
@@ -287,6 +288,7 @@ export default function Home() {
           setPlace={setPlace}
           coords={coords}
           onPlaceSave={() => addToAirTable(place)}
+          onMenuClick={() => asideRef.current?.classList.toggle("hidden")}
         />
       </aside>
 
