@@ -208,7 +208,7 @@ export default function Home() {
     usePosition();
 
   return (
-    <div className="h-screen sm:flex sm:flex-row-reverse relative ">
+    <div className="h-[100dvh] sm:flex sm:flex-row-reverse relative ">
       <main className=" w-full sm:w-8/12 lg:w-9/12 h-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
@@ -249,7 +249,6 @@ export default function Home() {
               />
             </div>
           </div>
-          {/* Dropdowns  */}
           <div className="w-full flex justify-between align-middle">
             <Suspense>
               <Dropdown
@@ -312,6 +311,7 @@ export default function Home() {
           isOpen={isModalOpen}
         />
       </aside>
+
     </div>
   );
 }
