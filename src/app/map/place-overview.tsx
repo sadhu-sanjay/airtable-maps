@@ -69,7 +69,7 @@ export const GooglePlaceOverview = ({
               setPlace(value);
             }
           }}
-          placeholder="Find a Place on Google "
+          placeholder="Find place on google "
           className="w-full "
         />
 
