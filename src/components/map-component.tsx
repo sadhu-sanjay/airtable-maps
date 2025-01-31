@@ -30,6 +30,7 @@ import { usePosition } from "./atoms/my-location-button";
 import { DEFAULT_LOCATION } from "~/CONST";
 import { GooglePlaceOverview } from "~/app/map/place-overview";
 import { addToAirTable } from "~/app/map/map-service";
+import { BurgerIcon } from "./resources/icons/burger-icon";
 
 export default function Home() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -208,21 +209,46 @@ export default function Home() {
 
   return (
     <div className="h-screen sm:flex sm:flex-row-reverse relative ">
-
       <main className=" w-full sm:w-8/12 lg:w-9/12 h-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
 
       <aside
+        className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
+      w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
+      >
+        <GooglePlaceOverview
+          place={place}
+          setPlace={setPlace}
+          coords={coords}
+          onPlaceSave={() => addToAirTable(place)}
+          onMenuClick={() => asideRef.current?.classList.toggle("hidden")}
+        />
+      </aside>
+
+      <aside
         ref={asideRef}
-        className="absolute top-[8%] left-0 sm:static w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
+        className="absolute top-0 sm:static w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
       >
         <div className="relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
-          <SearchBar
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            onValueChange={searchHandler}
-          />
+
+          <div className="flex flex-row justify-between gap-4 ">
+
+            <button
+              onClick={() => asideRef.current?.classList.toggle("hidden")}
+              className=" sm:hidden border-1"
+            >
+              <BurgerIcon height={24} stroke="black" />
+            </button>
+
+            <div  className="flex-1">
+              <SearchBar
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                onValueChange={searchHandler}
+              />
+            </div>
+          </div>
           {/* Dropdowns  */}
           <div className="w-full flex justify-between align-middle">
             <Suspense>
@@ -277,19 +303,6 @@ export default function Home() {
             }}
           />
         </div>
-      </aside>
-
-      <aside
-        className="bg-transparent absolute top-0 sm:right-0  h-auto max-h-full
-      w-full sm:w-5/12 sm:min-w-[375px] md:w-4/12 lg:w-3/12 overflow-y-auto "
-      >
-        <GooglePlaceOverview
-          place={place}
-          setPlace={setPlace}
-          coords={coords}
-          onPlaceSave={() => addToAirTable(place)}
-          onMenuClick={() => asideRef.current?.classList.toggle("hidden")}
-        />
       </aside>
 
       <aside>
