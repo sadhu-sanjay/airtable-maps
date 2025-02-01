@@ -228,7 +228,7 @@ export default function Home() {
 
       <aside
         ref={asideRef}
-        className="hidden absolute top-0 sm:static w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
+        className="hidden sm:block absolute left-0 top-0 w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
       >
         <div className="relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex flex-row justify-between gap-4 ">

@@ -9,7 +9,7 @@
     "serve": "npx serve@latest out",
     "lint": "next lint",
     "deploy:test": "NODE_ENV=test next build && rsync -avz '-e ssh -i ~/keys/aws-test-server.pem' .next ubuntu@3.7.72.9:~/airtable-maps",
-    "deploy": "NODE_ENV=production next build && rsync -avz '-e ssh -i ~/keys/hetzner' .next root@5.161.52.123:~/airtable-maps ",
+    "deploy": "NODE_ENV=production next build && rsync -avz '-e ssh -i ~/keys/hetzner' .next root@5.161.52.123:~/airtable-maps && ssh -i ~/keys/hetzner root@5.161.52.123 'sudo systemctl restart airmaps-site.service'",
     "sendit": "rsync -avz '-e ssh -i ~/keys/hetzner' .next root@5.161.52.123:~/airtable-maps "
   },
   "dependencies": {
