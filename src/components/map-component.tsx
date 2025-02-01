@@ -38,6 +38,7 @@ export default function Home() {
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ isListViewOpen, setIsListViewOpen] = useState(false);
   const searchTerms = useRef<string[]>([]);
   const currentItem = useRef<DropdownItem | undefined>(undefined);
 
@@ -209,6 +210,7 @@ export default function Home() {
 
   return (
     <div className="h-[100dvh] sm:flex sm:flex-row-reverse relative ">
+
       <main className=" w-full sm:w-8/12 lg:w-9/12 h-full">
         <Wrapper libraries={["marker"]} apiKey={MAPS_API_KEY} render={render} />
       </main>
@@ -222,19 +224,23 @@ export default function Home() {
           setPlace={setPlace}
           coords={coords}
           onPlaceSave={() => addToAirTable(place)}
-          onMenuClick={() => asideRef.current?.classList.toggle("hidden")}
+          onMenuClick={() => setIsListViewOpen(!isListViewOpen)}
         />
       </aside>
 
       <aside
         ref={asideRef}
-        className="hidden sm:block absolute left-0 top-0 w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
+        className={`absolute left-0 top-0 w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] h-[100dvh]
+        transition-transform duration-300 ease-in-out ${
+          isListViewOpen ? "translate-x-0" : "-translate-x-full"
+        } 
+          `}
       >
         <div className=" relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex flex-row justify-between gap-4 ">
 
             <button
-              onClick={() => asideRef.current?.classList.toggle("hidden")}
+              onClick={() => setIsListViewOpen(!isListViewOpen)}
               className=" dark:fill-gray-100 sm:hidden border-1"
             >
               <BurgerIcon  height={24} />
