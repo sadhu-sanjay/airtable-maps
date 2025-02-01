@@ -237,7 +237,7 @@ export default function Home() {
               onClick={() => asideRef.current?.classList.toggle("hidden")}
               className=" sm:hidden border-1"
             >
-              <BurgerIcon height={24} stroke="black" />
+              <BurgerIcon fill="red" height={24} stroke="blue" />
             </button>
 
             <div className="flex-1">
