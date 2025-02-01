@@ -232,6 +232,7 @@ export default function Home() {
       >
         <div className="relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex flex-row justify-between gap-4 ">
+
             <button
               onClick={() => asideRef.current?.classList.toggle("hidden")}
               className=" sm:hidden border-1"

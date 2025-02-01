@@ -14,6 +14,8 @@
   /* padding */
   --lg: 1.5rem;
   --xl: 2rem;
+
+  --gmpx-font-size-base: 1rem;
 }
 
 .map-container {
