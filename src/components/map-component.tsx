@@ -230,14 +230,14 @@ export default function Home() {
         ref={asideRef}
         className="hidden sm:block absolute left-0 top-0 w-full md:w-4/12 xl:w-3/12  sm:min-w-[320px] overflow-y-auto"
       >
-        <div className="relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
+        <div className=" relative transition-all shadow-lg bg-gray-100 dark:bg-gray-800 flex w-full h-full flex-col gap-3 justify-start p-4 ">
           <div className="flex flex-row justify-between gap-4 ">
 
             <button
               onClick={() => asideRef.current?.classList.toggle("hidden")}
-              className=" sm:hidden border-1"
+              className=" dark:fill-gray-100 sm:hidden border-1"
             >
-              <BurgerIcon fill="red" height={24} stroke="blue" />
+              <BurgerIcon  height={24} />
             </button>
 
             <div className="flex-1">
