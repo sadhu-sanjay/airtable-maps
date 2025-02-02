@@ -57,7 +57,7 @@ export const GooglePlaceOverview = ({
       <div className="flex p-2 gap-4 items-center rounded-full ">
 
         <button onClick={onMenuClick} className="sm:hidden border-1">
-          <BurgerIcon height={24}  />
+          <BurgerIcon width={24}  />
         </button>
 
         <PlacePicker
