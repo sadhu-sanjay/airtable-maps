@@ -38,7 +38,7 @@ export default function Home() {
   const [listRecords, setListRecords] = useState<Record[]>([]);
   const [mapRecords, setMapRecods] = useState<Record[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ isListViewOpen, setIsListViewOpen] = useState(false);
+  const [ isListViewOpen, setIsListViewOpen] = useState(true);
   const searchTerms = useRef<string[]>([]);
   const currentItem = useRef<DropdownItem | undefined>(undefined);
 
@@ -241,7 +241,7 @@ export default function Home() {
 
             <button
               onClick={() => setIsListViewOpen(!isListViewOpen)}
-              className=" dark:fill-gray-100 sm:hidden border-1"
+              className=" dark:fill-gray-100 sm:hidden "
             >
               <BurgerIcon  height={24} />
             </button>
