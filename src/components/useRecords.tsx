@@ -14,7 +14,11 @@ export default function useRecords() {
   console.log("USE RECORDS RENDER");
 
   const fetchRecords = useCallback(
-    (selectedView: DropdownItem, signal: AbortSignal, cachePolicy: string = 'no-store') => {
+    (
+      selectedView: DropdownItem,
+      signal: AbortSignal,
+      cachePolicy: string = "no-store"
+    ) => {
       if (timeoutID.current) clearTimeout(timeoutID.current);
       setIsLoadingRecords(true);
       setStatus("Fetching Records");
@@ -30,58 +34,71 @@ export default function useRecords() {
 
         fetch(RECORDS_FETCH_URL_WITH_VIEW, {
           signal,
-          cache: 'no-store'
+          cache: "no-store",
         })
           .then(async (res) => {
-
             if (res.status === 500) {
-                throw new Error(`HTTP error! status: ${res.status}`)
+              throw new Error(`HTTP error! status: ${res.status}`);
             }
 
             if (res.status == 300) {
-                retryCount.current += 1;
-                if (retryCount.current > 5) {
-                 // stop trying if after 5 tries still no records
-                 setStatus(
-                   "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
-                 );
-                 setIsLoadingRecords(false);
-                 retryCount.current = 0;
-               } else {
-                 setStatus("No Records found, checking again..");
-                 timeoutID.current = setTimeout(() => {
-                   fetchRecords(selectedView, signal);
-                 }, 5000);
-               }
-            } else {
-
-            const reader = res.body?.getReader();
-            const decoder = new TextDecoder("utf-8");
-            let unprocessed = "";
-            const tempRecords: Record[] = [];
-
-            while (true) {
-              setIsStreamingRecords(true);
-              setIsLoadingRecords(false);
-              const { done, value } = await reader!.read();
-
-              if (done) {
-                setIsStreamingRecords(false);
-                setStatus("Streaming Completed")
-                break;
+              retryCount.current += 1;
+              if (retryCount.current > 5) {
+                // stop trying if after 5 tries still no records
+                setStatus(
+                  "No records found. if too many records in the view it might take few mintues to update or check your airtable view to see if any records present."
+                );
+                setIsLoadingRecords(false);
+                retryCount.current = 0;
+              } else {
+                setStatus("No Records found, checking again..");
+                timeoutID.current = setTimeout(() => {
+                  fetchRecords(selectedView, signal);
+                }, 5000);
               }
+            } else {
+              const reader = res.body?.getReader();
+              const decoder = new TextDecoder("utf-8");
+              let unprocessed = "";
+              const tempRecords: Record[] = [];
 
-              let chunk = unprocessed + decoder.decode(value);
-              const lines = chunk.split("\n");
-              unprocessed = lines.pop() || "";
+              while (true) {
+                setIsStreamingRecords(true);
+                setIsLoadingRecords(false);
+                const { done, value } = await reader!.read();
 
-              setTimeout(() => {
-                const parsedObjects = lines.map((line) => JSON.parse(line));
-                setRecords((prevRecords) => [...prevRecords, ...parsedObjects]);
-              }, 0);
+                if (done) {
+                  setIsStreamingRecords(false);
+                  setStatus("Streaming Completed");
+
+                  // Sort & set after streaming is completed
+                  setTimeout(() => {
+                    setRecords((prevRecords) => {
+                      const sortedRecords = [...prevRecords].sort((a, b) => {
+                        const titleA = a.Title?.toLowerCase() || "";
+                        const titleB = b.Title?.toLowerCase() || "";
+                        return titleA.localeCompare(titleB);
+                      });
+                      return sortedRecords;
+                    });
+                  }, 0);
+
+                  break;
+                }
+
+                let chunk = unprocessed + decoder.decode(value);
+                const lines = chunk.split("\n");
+                unprocessed = lines.pop() || "";
+
+                setTimeout(() => {
+                  const parsedObjects = lines.map((line) => JSON.parse(line));
+                  setRecords((prevRecords) => [
+                    ...prevRecords,
+                    ...parsedObjects,
+                  ]);
+                }, 0);
+              }
             }
-            }
-
           })
           .catch((e) => {
             setStatus("unknown error..please try refresh button");
