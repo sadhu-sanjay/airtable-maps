@@ -199,7 +199,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
         className={`
         fixed left-0 top-0 z-40 h-full sm:min-w-[363px] w-full
         ${isOpen ? "block" : "-translate-x-full"}
-        ${isFullScreen ? "w-full flex-row sm:w-full" : "md:w-full lg:w-1/4 flex-col "}
+        ${isFullScreen ? "w-full flex-col sm:flex-row " : "md:w-full lg:w-1/4 flex-col "}
         flex shadow-lg bg-gray-100 dark:bg-gray-800 transition-all duration-300 ease-in-out `}
       >
         <CloseButton
@@ -242,7 +242,7 @@ const PlaceDetailModal: React.FC<ModalProps> = ({
           className={` 
           ${
             isFullScreen
-              ? " w-4/12 h-full right-0 "
+              ? "w-full sm:w-4/12 h-full right-0 "
               : "left-0 bottom-0 h-2/3 w-full top-1/3"
           }
           flex flex-col space-y-6 justify-start p-8 overflow-auto hide-scrollbar
