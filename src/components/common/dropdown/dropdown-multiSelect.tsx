@@ -90,7 +90,7 @@ function DropdownMultiSelect({
 
   return (
     <>
-      <div className={`relative inline-block text-left `} ref={dropdownRef}>
+      <div className={` relative inline-block text-left`} ref={dropdownRef}>
         <button
           disabled={isLoading}
           onClick={toggleDropdown}
@@ -178,7 +178,7 @@ function DropdownMultiSelect({
               </div>
             </div>
             <ul
-              className="h-24 sm:h-36 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              className="max-h-[50dvh] sm:h-36 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSearchButton"
             >
               {filteredItems.map((item: DropdownItem) => (
